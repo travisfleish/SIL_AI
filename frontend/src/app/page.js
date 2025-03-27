@@ -509,8 +509,6 @@ export default function Home() {
           }}
         ></div>
 
-        {/* Removed blue radial lines since they're already in the background image */}
-
         {/* Content container - all content must be above the background layers */}
         <div style={{ position: 'relative', zIndex: 3 }}>
           {/* Top: Logo + Hamburger + Nav */}
@@ -634,7 +632,7 @@ export default function Home() {
       <SponsorCarousel sponsors={SPONSORS} />
 
       {/* Replace the Category Selection section with this */}
-      <section className="p-4 pt-8 flex justify-center bg-gray-100">
+      <section className="p-4 pt-8 flex justify-center bg-gray-100 mt-2">
         <div className="inline-flex flex-wrap rounded-md shadow-sm">
           {CATEGORIES.map((category, index) => (
             <button
@@ -820,7 +818,7 @@ export default function Home() {
           }}
         ></div>
 
-        <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between relative z-10">
+        <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between relative z-10 mt-20 mb-20">
           <div className="md:w-1/2 mb-6 md:mb-0 md:pr-8 text-center md:text-left text-white">
             <h2 className={`${inter.className} text-2xl md:text-3xl font-bold`}>
               Get the SIL AI Playbook!
@@ -969,7 +967,7 @@ export default function Home() {
       }}
     >
       {/* Follow us Header & YouTube Link */}
-      <div className="text-center mb-6 px-4 flex flex-col items-center mt-5 mb-10">
+      <div className="text-center mb-6 px-4 flex flex-col items-center mt-15 mb-20">
         <a
           href="https://www.youtube.com/@sportsinnovationlab"
           target="_blank"
