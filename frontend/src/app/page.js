@@ -360,7 +360,6 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [showSponsorCarousel, setShowSponsorCarousel] = useState(false);
 
   // Ref for the dropdown to detect clicks outside
   const dropdownRef = useRef(null);
@@ -475,7 +474,7 @@ export default function Home() {
       {/* Header Section with Sports Innovation Lab-inspired styling */}
       <header
         ref={headerRef}
-        className="relative w-full text-white shadow-lg px-4 pt-2 pb-8 md:pt-4 md:pb-16"
+        className="relative w-full text-white shadow-lg px-4 pt-1 pb-8 md:pt-2 md:pb-16"  // Reduced pt-2 to pt-1
         style={{
           position: 'relative',
           overflow: 'hidden'
@@ -516,38 +515,34 @@ export default function Home() {
         <div style={{ position: 'relative', zIndex: 3 }}>
           {/* Top: Logo + Hamburger + Nav */}
           <div className="flex items-center justify-between w-full mb-6 md:mb-8">
-            {/* Left: Combined Logos */}
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-xs tracking-wider text-white font-semibold leading-tight text-center">
-                POWERED BY:
-              </span>
-              <div className="flex items-center space-x-3">
-                <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer">
-                  <Image
-                    src="/logo_transparent.png"
-                    alt="TwinBrain Logo"
-                    width={isMobile ? 60 : 90}
-                    height={isMobile ? 30 : 45}
-                  />
-                </a>
-                <span className="text-white font-bold">×</span>
-                <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer">
-                  <Image
-                    src="/sil-logo.png"
-                    alt="Sports Innovation Lab Logo"
-                    width={isMobile ? 70 : 100}
-                    height={isMobile ? 30 : 40}
-                  />
-                </a>
-              </div>
+          {/* Left: Combined Logos */}
+          <div className="flex flex-col items-center gap-1 mt-1">
+            <div className="flex items-center space-x-3 ml-5">
+              <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer">
+                <Image
+                  src="/logo_transparent.png"
+                  alt="TwinBrain Logo"
+                  width={isMobile ? 80 : 160}
+                  height={isMobile ? 40 : 80}
+                />
+              </a>
+              <span className="text-white font-bold mr-10">×</span>
+              <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer">
+                <Image
+                  src="/sil-logo.png"
+                  alt="Sports Innovation Lab Logo"
+                  width={isMobile ? 90 : 140}
+                  height={isMobile ? 40 : 60}
+                />
+              </a>
             </div>
+          </div>
 
             {/* Desktop Nav */}
-            <nav className="hidden sm:flex gap-6 text-sm sm:text-base text-white font-semibold">
+            <nav className="hidden sm:flex gap-6 text-sm sm:text-base text-white font-semibold mr-15">
               <a href="https://www.sportsilab.com/" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Sports Innovation Lab</a>
               <a href="/submit-tool" className="hover:underline">AI Playbook</a>
-              <a href="/advertise" className="hover:underline">Advertise</a>
-              <a href="#" onClick={(e) => { e.preventDefault(); setShowSponsorCarousel(true); }} className="hover:underline">Our Sponsors</a>
+              <a href="/advertise" className="hover:underline">AI Lumascape</a>
             </nav>
 
             {/* Mobile Hamburger */}
@@ -567,7 +562,7 @@ export default function Home() {
               <span className="font-bold text-yellow-300">AI</span>
             </h1>
             <p className={`${poppins.className} hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light`}>
-              Discover the best AI tools for sports innovation
+              Discover the best AI tools for sports professionals
             </p>
             <p className={`${poppins.className} text-md sm:text-lg mt-3 mb-4 text-white/90 font-light`}>
               Curated by Sports Innovation Lab & TwinBrain AI
@@ -637,13 +632,6 @@ export default function Home() {
       </header>
       {/* Sponsor Carousel Section - New Addition */}
       <SponsorCarousel sponsors={SPONSORS} />
-
-      {/* Full-screen Sponsor Carousel Modal */}
-      <FullScreenSponsorCarousel
-        isOpen={showSponsorCarousel}
-        onClose={() => setShowSponsorCarousel(false)}
-        sponsors={SPONSORS}
-      />
 
       {/* Replace the Category Selection section with this */}
       <section className="p-4 pt-8 flex justify-center bg-gray-100">
@@ -835,13 +823,12 @@ export default function Home() {
         <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between relative z-10">
           <div className="md:w-1/2 mb-6 md:mb-0 md:pr-8 text-center md:text-left text-white">
             <h2 className={`${inter.className} text-2xl md:text-3xl font-bold`}>
-              Sports Technology Insights! 🏆
+              Get the SIL AI Playbook!
             </h2>
             <p className="mt-2 text-lg">
-              <span className="font-semibold">Join industry leaders</span> receiving weekly updates on the latest sports innovation tools and trends.
+              <span className="font-semibold">Join industry leaders</span> discovering game-changing AI tools.
             </p>
             <p className="mt-1 text-sm text-yellow-200 font-medium">
-              <span className="inline-block bg-blue-800 rounded-full px-2 py-1 mr-2">⚡ EXCLUSIVE</span>
               Curated by Sports Innovation Lab & TwinBrain AI
             </p>
           </div>
@@ -860,15 +847,12 @@ export default function Home() {
                 type="submit"
                 className="px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap"
               >
-                Subscribe Now
+                Request Now
               </button>
             </form>
             {message && (
               <p className="text-lg mt-2 font-medium text-center sm:text-left text-white">{message}</p>
             )}
-            <p className="text-xs mt-2 text-white/80 text-center sm:text-left">
-              Get insights from both Sports Innovation Lab and TwinBrain AI experts.
-            </p>
           </div>
         </div>
       </section>
@@ -898,13 +882,11 @@ export default function Home() {
 
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between relative z-10">
           <div className="md:w-1/2 mb-4 md:mb-0 md:pr-8">
-            <h2 className={`${inter.className} text-2xl md:text-3xl font-bold`}>Sports Tech Updates! 🏆</h2>
+            <h2 className={`${inter.className} text-2xl md:text-3xl font-bold`}>Get the SIL AI playbook!</h2>
             <p className="mt-2 text-lg">
-              <span className="font-semibold">Join industry leaders</span> discovering game-changing sports tech tools weekly.
-              <span className="hidden md:inline"> Stay ahead with premier sports innovation insights.</span>
+              <span className="font-semibold">Join industry leaders</span> discovering game-changing AI tools.
             </p>
             <p className="mt-1 text-sm text-yellow-200 font-medium">
-              <span className="inline-block bg-blue-800 rounded-full px-2 py-1 mr-2">⚡ EXCLUSIVE</span>
               Curated by Sports Innovation Lab & TwinBrain AI
             </p>
           </div>
@@ -926,13 +908,12 @@ export default function Home() {
                   animation: 'pulse 2s infinite',
                 }}
               >
-                Subscribe Now
+                Request Now
               </button>
             </form>
             {message && (
               <p className="text-lg mt-2 font-medium text-center sm:text-left text-white">{message}</p>
             )}
-            <p className="text-xs mt-2 text-white/80 text-center sm:text-left">Get insights from both Sports Innovation Lab and TwinBrain AI experts.</p>
           </div>
 
           <button
@@ -977,44 +958,69 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Embedded YouTube Videos Section - Improved for mobile */}
-      <div className="w-full flex flex-col items-center py-8">
-        {/* Follow us Header & YouTube Link */}
-        <div className="text-center mb-6 px-4">
-          <h2 className={`${inter.className} text-2xl font-semibold mb-2`}>Sports Innovation Highlights</h2>
-          <p className="text-gray-600">Watch the latest discussions on sports technology</p>
-        </div>
-
-        {/* YouTube Videos - Removed excessive black space on mobile */}
-        <section className="w-full flex flex-wrap justify-center gap-6 px-4">
-          {/* First Video - Enhanced mobile ratio */}
-          <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
-            <iframe
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/ccrj9qymiUs"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
-
-          {/* Second Video - Enhanced mobile ratio */}
-          <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
-            <iframe
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/NxOyVYW_8Qs"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
-        </section>
+    {/* Embedded YouTube Videos Section - Improved for mobile */}
+    <div
+      className="w-full flex flex-col items-center py-8 relative border-b-0"
+      style={{
+        backgroundImage: "url('/BGpattern05.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Follow us Header & YouTube Link */}
+      <div className="text-center mb-6 px-4 flex flex-col items-center mt-5 mb-10">
+        <a
+          href="https://www.youtube.com/@sportsinnovationlab"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center space-x-2 mb-2 hover:opacity-80 transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="red"
+          >
+            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.246 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+          </svg>
+          <h2 className={`${inter.className} text-2xl font-semibold text-gray-100`}>
+            Follow Sports Innovation Lab on YouTube
+          </h2>
+        </a>
       </div>
 
+      {/* YouTube Videos - Removed excessive black space on mobile */}
+      <section className="w-full flex flex-wrap justify-center gap-6 px-4 mb-20">
+        {/* First Video - Enhanced mobile ratio */}
+        <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/ccrj9qymiUs"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+
+        {/* Second Video - Enhanced mobile ratio */}
+        <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/NxOyVYW_8Qs"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </section>
+    </div>
+
       {/* Updated Footer with Darker Background */}
-      <footer className="w-full bg-gray-500 text-white border-t mt-10 py-8 flex flex-col items-center space-y-4">
+      <footer className="w-full bg-gray-500 text-white py-8 flex flex-col items-center space-y-4">
         {/* Combined Logos */}
         <div className="flex items-center space-x-8">
           <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center">
@@ -1025,47 +1031,6 @@ export default function Home() {
             <Image src="/sil-logo.png" alt="Sports Innovation Lab Logo" width={120} height={50} />
           </a>
         </div>
-
-        {/* Social Media Links */}
-        <div className="flex space-x-4 mt-4">
-          <a
-            href="https://www.linkedin.com/company/twinbrain-ai/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn - TwinBrain AI"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              fill="#ffffff"
-            >
-              <title>LinkedIn - TwinBrain AI</title>
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.937v5.669H9.351V9h3.414v1.561h.049c.476-.9 1.637-1.852 3.368-1.852 3.6 0 4.266 2.368 4.266 5.452v6.291zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.977 20.452H3.696V9h3.281v11.452zM22.225 0H1.771C.792 0 0 .771 0 1.723v20.555C0 23.229.792 24 1.771 24h20.451C23.2 24 24 23.229 24 22.278V1.723C24 .771 23.2 0 22.222 0z"/>
-            </svg>
-          </a>
-          <a
-            href="https://www.linkedin.com/company/sportsinnovationlab/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn - Sports Innovation Lab"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              fill="#ffffff"
-            >
-              <title>LinkedIn - Sports Innovation Lab</title>
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.937v5.669H9.351V9h3.414v1.561h.049c.476-.9 1.637-1.852 3.368-1.852 3.6 0 4.266 2.368 4.266 5.452v6.291zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.977 20.452H3.696V9h3.281v11.452zM22.225 0H1.771C.792 0 0 .771 0 1.723v20.555C0 23.229.792 24 1.771 24h20.451C23.2 24 24 23.229 24 22.278V1.723C24 .771 23.2 0 22.222 0z"/>
-            </svg>
-          </a>
-        </div>
-
         <p className="text-xs text-gray-300">
           &copy; {new Date().getFullYear()} | A collaboration between TwinBrain AI & Sports Innovation Lab
         </p>
