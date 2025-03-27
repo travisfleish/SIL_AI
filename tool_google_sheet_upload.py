@@ -9,7 +9,6 @@ load_dotenv()
 # CSV file path - update this to your file's location
 csv_file_path = '/Users/travisfleisher/Desktop/ToolCurator.AI - Sheet1.csv'
 
-
 def get_db_connection():
     return psycopg2.connect(
         dbname=os.getenv("DB_NAME"),
@@ -18,7 +17,6 @@ def get_db_connection():
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT"),
     )
-
 
 def import_csv_to_postgres():
     # Read CSV file
@@ -46,6 +44,7 @@ def import_csv_to_postgres():
         full_description = row.get('full_description', '').strip() or None
         screenshot_url = row.get('screenshot_url', '').strip() or None
         tool_type = row.get('type', '').strip() or None
+        event_category = row.get('event_category', '').strip() or None
 
         # Skip rows with empty name or source
         if not name or not source:
@@ -70,7 +69,8 @@ def import_csv_to_postgres():
                     short_description = %s,
                     full_description = %s,
                     screenshot_url = %s,
-                    type = %s
+                    type = %s,
+                    event_category = %s
                     WHERE name = %s AND source = %s
                 """, (
                     category,
@@ -79,6 +79,7 @@ def import_csv_to_postgres():
                     full_description,
                     screenshot_url,
                     tool_type,
+                    event_category,
                     name,
                     source
                 ))
@@ -87,8 +88,8 @@ def import_csv_to_postgres():
                 # Insert new row, ignoring any source URL constraints
                 cur.execute("""
                     INSERT INTO ai_tools 
-                    (name, category, source, source_url, short_description, full_description, screenshot_url, type)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    (name, category, source, source_url, short_description, full_description, screenshot_url, type, event_category)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
                     name,
                     category,
@@ -97,65 +98,34 @@ def import_csv_to_postgres():
                     short_description,
                     full_description,
                     screenshot_url,
-                    tool_type
+                    tool_type,
+                    event_category
                 ))
                 print(f"Added new tool: {name} from {source}")
 
             conn.commit()
             processed_count += 1
-        except psycopg2.errors.UniqueViolation:
-            # If there's a unique constraint violation (e.g., on source_url)
-            conn.rollback()
-            duplicate_url_count += 1
-            print(f"Forced insertion of tool with duplicate URL: {name} from {source}")
-
-            # Force insert by modifying the URL slightly
-            modified_source_url = f"{source_url}_{processed_count}"
-
-            try:
-                cur.execute("""
-                    INSERT INTO ai_tools 
-                    (name, category, source, source_url, short_description, full_description, screenshot_url, type)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                """, (
-                    name,
-                    category,
-                    source,
-                    modified_source_url,
-                    short_description,
-                    full_description,
-                    screenshot_url,
-                    tool_type
-                ))
-                conn.commit()
-                print(f"Inserted tool with modified URL: {name}")
-            except Exception as e:
-                conn.rollback()
-                print(f"Error force inserting {name}: {e}")
         except Exception as e:
             conn.rollback()
             print(f"Error processing {name}: {e}")
 
     print(f"Successfully processed {processed_count} rows")
     print(f"Skipped {skipped_count} rows")
-    print(f"Handled {duplicate_url_count} rows with duplicate URLs")
 
     # Close connection
     cur.close()
     conn.close()
 
-
 def verify_data():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT id, name, source, source_url, type FROM ai_tools ORDER BY id DESC LIMIT 10")
+    cur.execute("SELECT id, name, source, event_category FROM ai_tools ORDER BY id DESC LIMIT 10")
     rows = cur.fetchall()
     print("\nRecent entries in database:")
     for row in rows:
-        print(f"ID: {row[0]} | Name: {row[1]} | Source: {row[2]} | URL: {row[3]} | Type: {row[4]}")
+        print(f"ID: {row[0]} | Name: {row[1]} | Source: {row[2]} | Event Category: {row[3]}")
     cur.close()
     conn.close()
-
 
 if __name__ == "__main__":
     import_csv_to_postgres()

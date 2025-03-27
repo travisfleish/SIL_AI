@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "ToolCurator.ai",
-  description: "Build Smarter, Not Harder",
+  title: "SportsTech AI Tools | Sports Innovation Lab & TwinBrain AI",
+  description: "Discover the latest AI tools for sports innovation, curated by Sports Innovation Lab and TwinBrain AI",
 };
 
 export default function RootLayout({ children }) {
