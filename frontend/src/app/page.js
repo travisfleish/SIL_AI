@@ -162,9 +162,9 @@ export default function Home() {
         {/* Top: Logo + Hamburger + Nav */}
         <div className="flex items-center justify-between w-full mb-2 md:mb-3">
           {/* Left: Combined Logos */}
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-xs tracking-wider text-white font-semibold leading-tight text-center">
-              POWERED BY:
+          <div className="flex flex-col items-center gap-5">
+            <span className="text-xs tracking-wider text-white font-semibold leading-tight text-center mt-2">
+              PRESENTED BY:
             </span>
             <div className="flex items-center space-x-3">
               <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer">
@@ -189,9 +189,9 @@ export default function Home() {
 
           {/* Desktop Nav */}
           <nav className="hidden sm:flex gap-6 text-sm sm:text-base text-white font-semibold">
-            <a href="/submit-tool" className="hover:underline">Submit Tool</a>
-            <a href="/advertise" className="hover:underline">Advertise</a>
-            <a href="https://www.sportsinnovationlab.com/blog" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Blog</a>
+            <a href="https://www.sportsilab.com" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Sports Innovation Lab</a>
+            <a href="/submit-tool" className="hover:underline">Lumascape</a>
+            <a href="/advertise" className="hover:underline">AI Playbook</a>
             <a href="#fixed-newsletter" className="hover:underline">Newsletter</a>
           </nav>
 
@@ -261,20 +261,20 @@ export default function Home() {
       </header>
 
       {/* Replace the Category Selection section with this */}
-      <section className="p-4 flex justify-center">
+      <section className="p-4 pt-8 flex justify-center bg-gray-100">
         <div className="inline-flex flex-wrap rounded-md shadow-sm">
           {CATEGORIES.map((category, index) => (
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
               className={`
-                px-4 py-2 text-sm font-medium
+                px-4 py-2 text-sm font-bold
                 border border-gray-300
                 ${index === 0 ? "rounded-l-lg" : ""}
                 ${index === CATEGORIES.length - 1 ? "rounded-r-lg" : ""}
                 ${selectedCategory === category.id 
                   ? "bg-blue-600 text-white z-10" 
-                  : "bg-white text-gray-900 hover:bg-gray-50"}
+                  : "bg-gray-150 text-gray-900 hover:bg-gray-300"}
                 ${index > 0 && "-ml-px"}
                 transition
                 whitespace-nowrap
@@ -431,16 +431,16 @@ export default function Home() {
         )}
       </section>
 
-      {/* Enhanced Newsletter Section */}
+      {/* First Newsletter Section (the fixed one) */}
       <section id="fixed-newsletter" className="w-full bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-700 py-10 flex flex-col items-center shadow-md mt-10 px-4 sm:px-0">
         <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between">
-          {/* Left side: Compelling copy */}
+          {/* Left side: AI Playbook copy */}
           <div className="md:w-1/2 mb-6 md:mb-0 md:pr-8 text-center md:text-left text-white">
-            <h2 className={`${inter.className} text-2xl md:text-3xl font-bold`}>
-              Sports Technology Insights! 🏆
+            <h2 className={`${inter.className} text-2xl md:text-2xl font-bold`}>
+              Get the Sports Innovation Lab AI Playbook!
             </h2>
             <p className="mt-2 text-lg">
-              <span className="font-semibold">Join industry leaders</span> receiving weekly updates on the latest sports innovation tools and trends.
+              <span className="font-semibold">Join industry leaders</span> discovering game-changing AI tools.
             </p>
             <p className="mt-1 text-sm text-yellow-200 font-medium">
               <span className="inline-block bg-blue-800 rounded-full px-2 py-1 mr-2">⚡ EXCLUSIVE</span>
@@ -476,7 +476,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Enhanced Floating Newsletter Section with Side-by-Side Layout */}
+      {/* Floating Newsletter Section */}
       {showNewsletter && (
         <section
           className="hidden sm:block fixed bottom-0 w-full bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-700 text-white py-6 shadow-xl z-50"
@@ -485,12 +485,11 @@ export default function Home() {
           }}
         >
           <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
-            {/* Left side: Compelling copy */}
+            {/* Left side: AI Playbook copy */}
             <div className="md:w-1/2 mb-4 md:mb-0 md:pr-8">
-              <h2 className={`${inter.className} text-2xl md:text-3xl font-bold`}>Sports Tech Updates! 🏆</h2>
+              <h2 className={`${inter.className} text-2xl md:text-2xl font-bold`}>Get the Sports Innovation Lab AI Playbook!</h2>
               <p className="mt-2 text-lg">
-                <span className="font-semibold">Join industry leaders</span> discovering game-changing sports tech tools weekly.
-                <span className="hidden md:inline"> Stay ahead with premier sports innovation insights.</span>
+                <span className="font-semibold">Join industry leaders</span> discovering game-changing AI tools.
               </p>
               <p className="mt-1 text-sm text-yellow-200 font-medium">
                 <span className="inline-block bg-blue-800 rounded-full px-2 py-1 mr-2">⚡ EXCLUSIVE</span>
@@ -604,14 +603,14 @@ export default function Home() {
         </section>
       </div>
 
-      {/* Updated Footer with Co-Branding */}
-      <footer className="w-full bg-white text-gray-700 border-t mt-10 py-8 flex flex-col items-center space-y-4">
+      {/* Updated Footer with Darker Background */}
+      <footer className="w-full bg-gray-500 text-white border-t mt-10 py-8 flex flex-col items-center space-y-4">
         {/* Combined Logos */}
         <div className="flex items-center space-x-8">
           <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center">
             <Image src="/logo.png" alt="TwinBrain Logo" width={100} height={50} />
           </a>
-          <span className="text-gray-400 font-bold text-2xl">×</span>
+          <span className="text-gray-300 font-bold text-2xl">×</span>
           <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center">
             <Image src="/sil-logo.png" alt="Sports Innovation Lab Logo" width={120} height={50} />
           </a>
@@ -631,14 +630,14 @@ export default function Home() {
               viewBox="0 0 24 24"
               width="24"
               height="24"
-              fill="#0A66C2"
+              fill="#ffffff"
             >
               <title>LinkedIn - TwinBrain AI</title>
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.937v5.669H9.351V9h3.414v1.561h.049c.476-.9 1.637-1.852 3.368-1.852 3.6 0 4.266 2.368 4.266 5.452v6.291zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.977 20.452H3.696V9h3.281v11.452zM22.225 0H1.771C.792 0 0 .771 0 1.723v20.555C0 23.229.792 24 1.771 24h20.451C23.2 24 24 23.229 24 22.278V1.723C24 .771 23.2 0 22.222 0z"/>
             </svg>
           </a>
           <a
-            href="https://www.linkedin.com/company/sports-innovation-lab/posts/?feedView=all"
+            href="https://www.linkedin.com/company/sportsinnovationlab/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn - Sports Innovation Lab"
@@ -649,7 +648,7 @@ export default function Home() {
               viewBox="0 0 24 24"
               width="24"
               height="24"
-              fill="#0077B5"
+              fill="#ffffff"
             >
               <title>LinkedIn - Sports Innovation Lab</title>
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.937v5.669H9.351V9h3.414v1.561h.049c.476-.9 1.637-1.852 3.368-1.852 3.6 0 4.266 2.368 4.266 5.452v6.291zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.977 20.452H3.696V9h3.281v11.452zM22.225 0H1.771C.792 0 0 .771 0 1.723v20.555C0 23.229.792 24 1.771 24h20.451C23.2 24 24 23.229 24 22.278V1.723C24 .771 23.2 0 22.222 0z"/>
@@ -657,7 +656,7 @@ export default function Home() {
           </a>
         </div>
 
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-gray-300">
           &copy; {new Date().getFullYear()} | A collaboration between TwinBrain AI & Sports Innovation Lab
         </p>
       </footer>
