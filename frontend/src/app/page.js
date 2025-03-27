@@ -36,6 +36,319 @@ const FILTERS = [
   { name: "Top Tools", id: "top" },
 ];
 
+// Sponsor logos for the carousel - matching SIL website style
+const SPONSORS = [
+  { id: 1, name: "ClientLogo 1", logoUrl: "/logos/ClientLogo.jpg" },
+  { id: 2, name: "ClientLogo 2", logoUrl: "/logos/ClientLogo_2.jpg" },
+  { id: 3, name: "ClientLogo 3", logoUrl: "/logos/ClientLogo_3.jpg" },
+  { id: 4, name: "ClientLogo 4", logoUrl: "/logos/ClientLogo_4.jpg" },
+  { id: 6, name: "ClientLogo 6", logoUrl: "/logos/ClientLogo_6.jpg" },
+  { id: 7, name: "ClientLogo 7", logoUrl: "/logos/ClientLogo_7.jpg" },
+  { id: 8, name: "ClientLogo 8", logoUrl: "/logos/ClientLogo_8.jpg" },
+  { id: 9, name: "ClientLogo 9", logoUrl: "/logos/ClientLogo_9.jpg" },
+  { id: 10, name: "ClientLogo 10", logoUrl: "/logos/ClientLogo_10.jpg" },
+  { id: 11, name: "ClientLogo 11", logoUrl: "/logos/ClientLogo_11.jpg" },
+  { id: 12, name: "ClientLogo 12", logoUrl: "/logos/ClientLogo_12.jpg" },
+  { id: 13, name: "ClientLogo 13", logoUrl: "/logos/ClientLogo_13.jpg" },
+  { id: 14, name: "ClientLogo 14", logoUrl: "/logos/ClientLogo_14.jpg" },
+  { id: 15, name: "ClientLogo 15", logoUrl: "/logos/ClientLogo_15.jpg" }
+  // Add more logo references as needed - adjust filenames to match your actual files
+];
+
+const SponsorCarousel = () => {
+  return (
+    <div className="w-full overflow-hidden" style={{ backgroundColor: "#111822" }}>
+      <style jsx>{`
+        .logo-slider {
+          padding: 0px 0 0px 0;
+          overflow: hidden;
+          width: 100%;
+          height: 100px;
+          white-space: nowrap;
+        }
+        
+        .logo-slide-track {
+          display: flex;
+          gap: 1.5em;
+          align-items: center;
+          flex-direction: row;
+          width: fit-content; /* Important for seamless looping */
+          animation: scroll 20s linear infinite;
+        }
+        
+        .logo-slide img {
+          max-width: 100px;
+          height: auto;
+        }
+        
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(calc(-50% - 0.75em)); } /* Account for gap in calculation */
+        }
+        
+        @media screen and (max-width: 768px) {
+          .logo-slide img {
+            max-width: 80px;
+          }
+        }
+      `}</style>
+
+      <div className="logo-slider">
+        <div className="logo-slide-track">
+          {/* First set of logos */}
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_1.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_2.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_3.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_4.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_6.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_7.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_8.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_9.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_10.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_11.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_12.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_13.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_14.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_15.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_16.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_17.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_18.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_19.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_20.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_21.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_22.jpg" alt="Logo" />
+          </div>
+
+          {/* Duplicate set for continuous loop - must be exact copy */}
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_1.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_2.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_3.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_4.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_6.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_7.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_8.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_9.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_10.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_11.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_12.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_13.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_14.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_15.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_16.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_17.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_18.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_19.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_20.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_21.jpg" alt="Logo" />
+          </div>
+          <div className="logo-slide">
+            <img src="/logos/ClientLogo_22.jpg" alt="Logo" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Full-Screen Sponsor Carousel Modal - Full width, edge-to-edge with slower speed
+const FullScreenSponsorCarousel = ({ isOpen, onClose }) => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const containerRef = useRef(null);
+  const contentRef = useRef(null);
+  const [contentWidth, setContentWidth] = useState(0);
+
+  // Triple the sponsors array to ensure we have enough for any screen size
+  const duplicatedSponsors = [...SPONSORS, ...SPONSORS, ...SPONSORS];
+
+  // Measure the content width once mounted
+  useEffect(() => {
+    if (!isOpen) return;
+
+    if (contentRef.current) {
+      setContentWidth(contentRef.current.scrollWidth / 3);
+    }
+
+    const handleResize = () => {
+      if (contentRef.current) {
+        setContentWidth(contentRef.current.scrollWidth / 3);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen || !contentWidth) return;
+
+    // Animation function for smooth continuous scrolling
+    let animationFrameId;
+    let lastTimestamp = 0;
+    const scrollSpeed = 0.25; // pixels per millisecond - slower for fullscreen
+
+    const animate = (timestamp) => {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const elapsed = timestamp - lastTimestamp;
+      lastTimestamp = timestamp;
+
+      // Update scroll position
+      setScrollPosition((prevPosition) => {
+        let newPosition = prevPosition + scrollSpeed * elapsed;
+
+        // Reset position when we've scrolled through the first set of sponsors
+        if (newPosition >= contentWidth) {
+          newPosition = 0;
+        }
+
+        return newPosition;
+      });
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [isOpen, contentWidth]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center">
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-white hover:text-blue-400 transition z-10"
+      >
+        <X size={32} />
+      </button>
+
+      <div className="text-center mb-12">
+        <h2 className={`${inter.className} text-3xl font-bold text-white mb-2`}>
+          Our Partners
+        </h2>
+        <p className="text-blue-400">
+          Powering sports innovation together
+        </p>
+      </div>
+
+      <div ref={containerRef} className="w-full overflow-hidden">
+        <div
+          ref={contentRef}
+          className="flex items-center py-12"
+          style={{
+            transform: `translateX(-${scrollPosition}px)`,
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {duplicatedSponsors.map((sponsor, index) => (
+            <div
+              key={`${sponsor.id}-${index}`}
+              className="mx-12 inline-block"
+            >
+              <Image
+                src={sponsor.logoUrl}
+                alt={sponsor.name}
+                width={180}
+                height={100}
+                className="h-20 md:h-24 w-auto object-contain filter brightness-0 invert"
+                unoptimized
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   const [tools, setTools] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -47,6 +360,7 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showSponsorCarousel, setShowSponsorCarousel] = useState(false);
 
   // Ref for the dropdown to detect clicks outside
   const dropdownRef = useRef(null);
@@ -62,6 +376,10 @@ export default function Home() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-open sponsor carousel every 5 minutes
+  useEffect(() => {
   }, []);
 
   // Close dropdown when clicking outside
@@ -154,167 +472,179 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
-    {/* Header Section with Sports Innovation Lab-inspired styling */}
-    <header
-      ref={headerRef}
-      className="relative w-full text-white shadow-lg px-4 pt-2 pb-8 md:pt-4 md:pb-16"
-      style={{
-        position: 'relative',
-        overflow: 'hidden'
-      }}
-    >
-      {/* Background Image and Overlay */}
-      <div
+      {/* Header Section with Sports Innovation Lab-inspired styling */}
+      <header
+        ref={headerRef}
+        className="relative w-full text-white shadow-lg px-4 pt-2 pb-8 md:pt-4 md:pb-16"
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: "url('/SIL_bg.jpg')", // Using the SIL background image
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'grayscale(100%)',
-          zIndex: 0
+          position: 'relative',
+          overflow: 'hidden'
         }}
-      ></div>
-
-      {/* Dark overlay to ensure text is readable */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-          zIndex: 1
-        }}
-      ></div>
-
-      {/* Removed blue radial lines since they're already in the background image */}
-
-      {/* Content container - all content must be above the background layers */}
-      <div style={{ position: 'relative', zIndex: 3 }}>
-        {/* Top: Logo + Hamburger + Nav */}
-        <div className="flex items-center justify-between w-full mb-6 md:mb-8">
-          {/* Left: Combined Logos */}
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-xs tracking-wider text-white font-semibold leading-tight text-center">
-              POWERED BY:
-            </span>
-            <div className="flex items-center space-x-3">
-              <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer">
-                <Image
-                  src="/logo.png"
-                  alt="TwinBrain Logo"
-                  width={isMobile ? 60 : 90}
-                  height={isMobile ? 30 : 45}
-                />
-              </a>
-              <span className="text-white font-bold">×</span>
-              <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer">
-                <Image
-                  src="/sil-logo.png"
-                  alt="Sports Innovation Lab Logo"
-                  width={isMobile ? 70 : 100}
-                  height={isMobile ? 30 : 40}
-                />
-              </a>
-            </div>
-          </div>
-
-          {/* Desktop Nav */}
-          <nav className="hidden sm:flex gap-6 text-sm sm:text-base text-white font-semibold">
-            <a href="https://www.sportsilab.com/" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Sports Innovation Lab</a>
-            <a href="/submit-tool" className="hover:underline">AI Playbook</a>
-            <a href="/advertise" className="hover:underline">Advertise</a>
-          </nav>
-
-          {/* Mobile Hamburger */}
-          <div className="sm:hidden">
-            <button onClick={() => setMenuOpen(!menuOpen)} className="text-white focus:outline-none">
-              {menuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Modern Styled Title Section with Reduced Padding */}
-        <div className="text-center mt-4 pb-8 md:pb-12">
-          <h1 className={`${inter.className} text-3xl sm:text-5xl md:text-6xl leading-tight mb-3 tracking-tight`}>
-            <span className="font-normal text-white">Sports</span>
-            <span className="font-bold text-white">Innovation</span>
-            <span className="font-normal text-white">Lab</span>
-            <span className="font-bold text-yellow-300">AI</span>
-          </h1>
-          <p className={`${poppins.className} hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light`}>
-            Discover the best AI tools for sports innovation
-          </p>
-          <p className={`${poppins.className} text-md sm:text-lg mt-3 mb-4 text-white/90 font-light`}>
-            Curated by Sports Innovation Lab & TwinBrain AI
-          </p>
-        </div>
-      </div>
-
-      {/* Mobile Dropdown - The menu needs to have the same styling for consistency */}
-      {menuOpen && (
+      >
+        {/* Background Image and Overlay */}
         <div
-          className="absolute top-0 left-0 right-0 text-white z-40 px-4 shadow-md border-b border-blue-500 overflow-y-auto"
           style={{
-            height: headerRef.current ? `${headerRef.current.offsetHeight}px` : '100%',
-            backgroundImage: "url('/SIL_bg.jpg')",
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: "url('/SIL_bg.jpg')", // Using the SIL background image
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            filter: 'grayscale(100%)'
+            filter: 'grayscale(100%)',
+            zIndex: 0
           }}
-        >
-          {/* Dark overlay for mobile menu */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              zIndex: 0
-            }}
-          ></div>
+        ></div>
 
-          {/* Mobile menu content */}
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            {/* Top Row: Logo and Close Button */}
-            <div className="flex items-center justify-between pt-4 pb-2">
-              <div className="flex items-center space-x-2">
+        {/* Dark overlay to ensure text is readable */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            zIndex: 1
+          }}
+        ></div>
+
+        {/* Removed blue radial lines since they're already in the background image */}
+
+        {/* Content container - all content must be above the background layers */}
+        <div style={{ position: 'relative', zIndex: 3 }}>
+          {/* Top: Logo + Hamburger + Nav */}
+          <div className="flex items-center justify-between w-full mb-6 md:mb-8">
+            {/* Left: Combined Logos */}
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-xs tracking-wider text-white font-semibold leading-tight text-center">
+                POWERED BY:
+              </span>
+              <div className="flex items-center space-x-3">
                 <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer">
-                  <Image src="/logo.png" alt="TwinBrain Logo" width={50} height={25} />
+                  <Image
+                    src="/logo_transparent.png"
+                    alt="TwinBrain Logo"
+                    width={isMobile ? 60 : 90}
+                    height={isMobile ? 30 : 45}
+                  />
                 </a>
-                <span className="text-white">×</span>
+                <span className="text-white font-bold">×</span>
                 <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer">
-                  <Image src="/sil-logo.png" alt="Sports Innovation Lab Logo" width={60} height={25} />
+                  <Image
+                    src="/sil-logo.png"
+                    alt="Sports Innovation Lab Logo"
+                    width={isMobile ? 70 : 100}
+                    height={isMobile ? 30 : 40}
+                  />
                 </a>
               </div>
-              <button
-                onClick={() => setMenuOpen(false)}
-                className="text-gray-200 hover:text-white text-2xl font-light"
-              >
-                ×
-              </button>
             </div>
 
-            {/* Nav Links Container with improved spacing */}
-            <div className="flex flex-col items-center space-y-4 py-4 mt-2 pb-12">
-              <h1 className={`${inter.className} text-xl font-semibold tracking-tight mb-6`}>SportsTechAI</h1>
-              <div className="grid grid-cols-2 gap-x-10 gap-y-6 text-center w-full max-w-xs">
-                <a href="https://www.sportsilab.com/" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Sports Innovation Lab</a>
-                <a href="/submit-tool" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">AI Playbook</a>
-                <a href="#fixed-newsletter" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Newsletter</a>
+            {/* Desktop Nav */}
+            <nav className="hidden sm:flex gap-6 text-sm sm:text-base text-white font-semibold">
+              <a href="https://www.sportsilab.com/" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Sports Innovation Lab</a>
+              <a href="/submit-tool" className="hover:underline">AI Playbook</a>
+              <a href="/advertise" className="hover:underline">Advertise</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); setShowSponsorCarousel(true); }} className="hover:underline">Our Sponsors</a>
+            </nav>
+
+            {/* Mobile Hamburger */}
+            <div className="sm:hidden">
+              <button onClick={() => setMenuOpen(!menuOpen)} className="text-white focus:outline-none">
+                {menuOpen ? <X size={28} /> : <Menu size={28} />}
+              </button>
+            </div>
+          </div>
+
+          {/* Modern Styled Title Section with Reduced Padding */}
+          <div className="text-center mt-4 pb-8 md:pb-12">
+            <h1 className={`${inter.className} text-3xl sm:text-5xl md:text-6xl leading-tight mb-3 tracking-tight`}>
+              <span className="font-normal text-white">Sports</span>
+              <span className="font-bold text-white">Innovation</span>
+              <span className="font-normal text-white">Lab</span>
+              <span className="font-bold text-yellow-300">AI</span>
+            </h1>
+            <p className={`${poppins.className} hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light`}>
+              Discover the best AI tools for sports innovation
+            </p>
+            <p className={`${poppins.className} text-md sm:text-lg mt-3 mb-4 text-white/90 font-light`}>
+              Curated by Sports Innovation Lab & TwinBrain AI
+            </p>
+          </div>
+        </div>
+
+        {/* Mobile Dropdown - The menu needs to have the same styling for consistency */}
+        {menuOpen && (
+          <div
+            className="absolute top-0 left-0 right-0 text-white z-40 px-4 shadow-md border-b border-blue-500 overflow-y-auto"
+            style={{
+              height: headerRef.current ? `${headerRef.current.offsetHeight}px` : '100%',
+              backgroundImage: "url('/SIL_bg.jpg')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'grayscale(100%)'
+            }}
+          >
+            {/* Dark overlay for mobile menu */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                zIndex: 0
+              }}
+            ></div>
+
+            {/* Mobile menu content */}
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              {/* Top Row: Logo and Close Button */}
+              <div className="flex items-center justify-between pt-4 pb-2">
+                <div className="flex items-center space-x-2">
+                  <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer">
+                    <Image src="/logo_transparent.png" alt="TwinBrain Logo" width={50} height={25} />
+                  </a>
+                  <span className="text-white">×</span>
+                  <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer">
+                    <Image src="/sil-logo.png" alt="Sports Innovation Lab Logo" width={60} height={25} />
+                  </a>
+                </div>
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="text-gray-200 hover:text-white text-2xl font-light"
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Nav Links Container with improved spacing */}
+              <div className="flex flex-col items-center space-y-4 py-4 mt-2 pb-12">
+                <h1 className={`${inter.className} text-xl font-semibold tracking-tight mb-6`}>SportsTechAI</h1>
+                <div className="grid grid-cols-2 gap-x-10 gap-y-6 text-center w-full max-w-xs">
+                  <a href="https://www.sportsilab.com/" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Sports Innovation Lab</a>
+                  <a href="/submit-tool" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">AI Playbook</a>
+                  <a href="#fixed-newsletter" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Newsletter</a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); setMenuOpen(false); setShowSponsorCarousel(true); }} className="hover:underline text-base font-medium">Our Sponsors</a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </header>
+        )}
+      </header>
+      {/* Sponsor Carousel Section - New Addition */}
+      <SponsorCarousel sponsors={SPONSORS} />
+
+      {/* Full-screen Sponsor Carousel Modal */}
+      <FullScreenSponsorCarousel
+        isOpen={showSponsorCarousel}
+        onClose={() => setShowSponsorCarousel(false)}
+        sponsors={SPONSORS}
+      />
+
       {/* Replace the Category Selection section with this */}
       <section className="p-4 pt-8 flex justify-center bg-gray-100">
         <div className="inline-flex flex-wrap rounded-md shadow-sm">
