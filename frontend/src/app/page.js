@@ -21,13 +21,14 @@ const poppins = Poppins({
 // Define API base URL - uses environment variable with fallback
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5002";
 
-// Updated SOURCES with mobileName for smaller screens
-const SOURCES = [
-  { name: "Future Tools", id: "FutureTools.io", mobileName: "Future Tools" },
-  { name: "Toolify", id: "Toolify.ai", mobileName: "Toolify" },
-  { name: "There's an AI for That", id: "There's an AI for That", mobileName: "T.A.A.F.T." },
-  { name: "AI Top Tools", id: "AI Top Tools", mobileName: "AI Top Tools" },
-  { name: "AI Tools Directory", id: "AI Tools Directory", mobileName: "AI Tools Dir" },
+// Categories instead of sources
+const CATEGORIES = [
+  { name: "All Categories", id: "" },
+  { name: "Fan Intelligence", id: "Fan Intelligence", mobileName: "Fan Intel" },
+  { name: "Advertising & Media", id: "Advertising & Media", mobileName: "Ad & Media" },
+  { name: "Creative & Personalization", id: "Creative & Personalization", mobileName: "Creative" },
+  { name: "Sponsorship & Revenue Growth", id: "Sponsorship & Revenue Growth", mobileName: "Revenue" },
+  { name: "Measurement & Analytics", id: "Measurement & Analytics", mobileName: "Analytics" }
 ];
 
 const FILTERS = [
@@ -35,21 +36,10 @@ const FILTERS = [
   { name: "Top Tools", id: "top" },
 ];
 
-// Sports Tech Categories
-const SPORTS_CATEGORIES = [
-  { id: 'fan-engagement', name: 'Fan Engagement' },
-  { id: 'performance-analytics', name: 'Performance Analytics' },
-  { id: 'athlete-health', name: 'Athlete Health' },
-  { id: 'media-production', name: 'Media Production' },
-  { id: 'betting-fantasy', name: 'Betting & Fantasy' },
-  { id: 'venue-tech', name: 'Venue Technology' }
-];
-
 export default function Home() {
   const [tools, setTools] = useState([]);
-  const [selectedSource, setSelectedSource] = useState("FutureTools.io");
-  const [selectedFilter, setSelectedFilter] = useState("new");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState("new");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [showNewsletter, setShowNewsletter] = useState(true);
@@ -89,7 +79,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/tools?source=${selectedSource}&filter=${selectedFilter}`)
+    fetch(`${API_BASE_URL}/api/tools?event_category=${selectedCategory}&filter=${selectedFilter}`)
       .then((response) => response.json())
       .then((data) => {
         // Slice to 8 tools if more than 8 and filter is 'new'
@@ -103,16 +93,11 @@ export default function Home() {
           processedTools[certifiedIndex].certified = true;
         }
 
-        // Filter by category if selected
-        const filteredTools = selectedCategory
-          ? processedTools.filter(tool => tool.category && tool.category.toLowerCase().includes(selectedCategory.toLowerCase()))
-          : processedTools;
-
-        setTools(filteredTools.length > 0 ? filteredTools : processedTools);
+        setTools(processedTools);
         setCurrentSlide(0); // Reset carousel position when tools change
       })
       .catch((error) => console.error("Error fetching tools:", error));
-  }, [selectedSource, selectedFilter, selectedCategory]);
+  }, [selectedCategory, selectedFilter]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -161,10 +146,10 @@ export default function Home() {
     setCurrentSlide((prev) => (prev === 0 ? tools.length - 1 : prev - 1));
   };
 
-  // Find the name of currently selected source
-  const getSelectedSourceName = () => {
-    const source = SOURCES.find(s => s.id === selectedSource);
-    return isMobile ? source.mobileName : source.name;
+  // Find the name of currently selected category
+  const getSelectedCategoryName = () => {
+    const category = CATEGORIES.find(c => c.id === selectedCategory);
+    return category ? (isMobile ? category.mobileName || category.name : category.name) : "All Categories";
   };
 
   return (
@@ -193,7 +178,7 @@ export default function Home() {
               <span className="text-white font-bold">×</span>
               <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer">
                 <Image
-                  src="/sil-logo.png" // You'll need to add this logo to your public folder
+                  src="/sil-logo.png"
                   alt="Sports Innovation Lab Logo"
                   width={isMobile ? 70 : 100}
                   height={isMobile ? 30 : 40}
@@ -262,7 +247,8 @@ export default function Home() {
         <div className="text-center mt-1 pb-4">
           <h1 className={`${inter.className} text-3xl sm:text-4xl md:text-5xl leading-tight mb-1 tracking-tight`}>
             <span className="font-normal text-white">Sports</span>
-            <span className="font-bold text-white">Tech</span>
+            <span className="font-bold text-white">Innovation</span>
+            <span className="font-normal text-white">Lab</span>
             <span className="font-bold text-yellow-300">AI</span>
           </h1>
           <p className={`${poppins.className} hidden sm:block text-md sm:text-lg md:text-xl mt-1 font-light`}>
@@ -274,35 +260,29 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Source Selection Dropdown */}
-      <section className="p-4 flex flex-col items-center">
-        <div className="relative w-64" ref={dropdownRef}>
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="w-full px-4 py-3 bg-white text-gray-900 rounded-lg border shadow-sm flex items-center justify-between hover:bg-gray-50 transition"
-          >
-            <span>{getSelectedSourceName()}</span>
-            <ChevronDown className={`ml-2 h-5 w-5 transform transition-transform ${dropdownOpen ? 'rotate-180' : 'rotate-0'}`} />
-          </button>
-
-          {dropdownOpen && (
-            <div className="absolute mt-1 w-full bg-white border rounded-lg shadow-lg z-20">
-              {SOURCES.map((source) => (
-                <button
-                  key={source.id}
-                  onClick={() => {
-                    setSelectedSource(source.id);
-                    setDropdownOpen(false);
-                  }}
-                  className={`w-full px-4 py-2 text-left hover:bg-blue-50 transition ${
-                    selectedSource === source.id ? "bg-blue-100 font-medium" : ""
-                  }`}
-                >
-                  {isMobile ? source.mobileName : source.name}
-                </button>
-              ))}
-            </div>
-          )}
+      {/* Replace the Category Selection section with this */}
+      <section className="p-4 flex justify-center">
+        <div className="inline-flex flex-wrap rounded-md shadow-sm">
+          {CATEGORIES.map((category, index) => (
+            <button
+              key={category.id}
+              onClick={() => setSelectedCategory(category.id)}
+              className={`
+                px-4 py-2 text-sm font-medium
+                border border-gray-300
+                ${index === 0 ? "rounded-l-lg" : ""}
+                ${index === CATEGORIES.length - 1 ? "rounded-r-lg" : ""}
+                ${selectedCategory === category.id 
+                  ? "bg-blue-600 text-white z-10" 
+                  : "bg-white text-gray-900 hover:bg-gray-50"}
+                ${index > 0 && "-ml-px"}
+                transition
+                whitespace-nowrap
+              `}
+            >
+              {isMobile && category.mobileName ? category.mobileName : category.name}
+            </button>
+          ))}
         </div>
       </section>
 
@@ -331,25 +311,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Sports Categories Filter */}
-      <div className="w-full max-w-4xl mx-auto px-4 mt-2 mb-4">
-        <h2 className="text-lg font-semibold text-gray-700 mb-3">Sports Tech Categories</h2>
-        <div className="flex flex-wrap gap-2">
-          {SPORTS_CATEGORIES.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setSelectedCategory(category.id === selectedCategory ? '' : category.id)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors 
-                ${selectedCategory === category.id 
-                  ? 'bg-blue-600 text-white' 
-                  : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
-            >
-              {category.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Tools Section - Modified to use carousel on mobile */}
       <section className="p-6 w-full">
         {isMobile ? (
@@ -366,7 +327,7 @@ export default function Home() {
               </svg>
             </button>
 
-            {/* Carousel Item - UPDATED WITH CATEGORY */}
+            {/* Carousel Item */}
             {tools.length > 0 && (
               <div className="w-full flex justify-center px-8">
                 <div
@@ -423,7 +384,7 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          // Desktop Grid View with plain white cards and hover effect - UPDATED WITH CATEGORY
+          // Desktop Grid View with plain white cards and hover effect
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {tools.slice(0,8).map((tool, index) => {
               const imageUrl = tool.screenshot_url && tool.screenshot_url.trim() !== ""
@@ -621,7 +582,7 @@ export default function Home() {
           <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
             <iframe
               className="w-full h-full"
-              src="https://www.youtube.com/embed/Ej9zCLI2ZdY"
+              src="https://www.youtube.com/embed/ccrj9qymiUs"
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -633,7 +594,7 @@ export default function Home() {
           <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
             <iframe
               className="w-full h-full"
-              src="https://www.youtube.com/embed/gqqvI1oJdZs"
+              src="https://www.youtube.com/embed/NxOyVYW_8Qs"
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -677,7 +638,7 @@ export default function Home() {
             </svg>
           </a>
           <a
-            href="https://www.linkedin.com/company/sportsinnovationlab/"
+            href="https://www.linkedin.com/company/sports-innovation-lab/posts/?feedView=all"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn - Sports Innovation Lab"
