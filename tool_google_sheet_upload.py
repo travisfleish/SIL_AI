@@ -53,11 +53,11 @@ def import_csv_to_postgres():
             continue
 
         try:
-            # Check if row exists ONLY by name and source
+            # Check if row exists ONLY by name, source, AND type
             cur.execute("""
                 SELECT id FROM ai_tools 
-                WHERE name = %s AND source = %s
-            """, (name, source))
+                WHERE name = %s AND source = %s AND type = %s
+            """, (name, source, tool_type))
             existing_row = cur.fetchone()
 
             if existing_row:
