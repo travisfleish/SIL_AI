@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/AI_Aggregator.iml" filepath="$PROJECT_DIR$/.idea/AI_Aggregator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SIL_Tools_AI.iml" filepath="$PROJECT_DIR$/.idea/SIL_Tools_AI.iml" />
     </modules>
   </component>
 </project>

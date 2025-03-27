@@ -154,17 +154,54 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
-      {/* Header Section with Reduced Padding */}
-      <header
-        ref={headerRef}
-        className="relative w-full bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white shadow-lg px-4 py-4 md:px-10 md:py-6"
-      >
+    {/* Header Section with Sports Innovation Lab-inspired styling */}
+    <header
+      ref={headerRef}
+      className="relative w-full text-white shadow-lg px-4 pt-2 pb-8 md:pt-4 md:pb-16"
+      style={{
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
+      {/* Background Image and Overlay */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: "url('/SIL_bg.jpg')", // Using the SIL background image
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'grayscale(100%)',
+          zIndex: 0
+        }}
+      ></div>
+
+      {/* Dark overlay to ensure text is readable */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          zIndex: 1
+        }}
+      ></div>
+
+      {/* Removed blue radial lines since they're already in the background image */}
+
+      {/* Content container - all content must be above the background layers */}
+      <div style={{ position: 'relative', zIndex: 3 }}>
         {/* Top: Logo + Hamburger + Nav */}
-        <div className="flex items-center justify-between w-full mb-2 md:mb-3">
+        <div className="flex items-center justify-between w-full mb-6 md:mb-8">
           {/* Left: Combined Logos */}
-          <div className="flex flex-col items-center gap-5">
-            <span className="text-xs tracking-wider text-white font-semibold leading-tight text-center mt-2">
-              PRESENTED BY:
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-xs tracking-wider text-white font-semibold leading-tight text-center">
+              POWERED BY:
             </span>
             <div className="flex items-center space-x-3">
               <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer">
@@ -189,10 +226,9 @@ export default function Home() {
 
           {/* Desktop Nav */}
           <nav className="hidden sm:flex gap-6 text-sm sm:text-base text-white font-semibold">
-            <a href="https://www.sportsilab.com" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Sports Innovation Lab</a>
-            <a href="/submit-tool" className="hover:underline">Lumascape</a>
-            <a href="/advertise" className="hover:underline">AI Playbook</a>
-            <a href="#fixed-newsletter" className="hover:underline">Newsletter</a>
+            <a href="https://www.sportsilab.com/" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Sports Innovation Lab</a>
+            <a href="/submit-tool" className="hover:underline">AI Playbook</a>
+            <a href="/advertise" className="hover:underline">Advertise</a>
           </nav>
 
           {/* Mobile Hamburger */}
@@ -203,14 +239,50 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Mobile Dropdown - Height matched exactly to header */}
-        {menuOpen && (
+        {/* Modern Styled Title Section with Reduced Padding */}
+        <div className="text-center mt-4 pb-8 md:pb-12">
+          <h1 className={`${inter.className} text-3xl sm:text-5xl md:text-6xl leading-tight mb-3 tracking-tight`}>
+            <span className="font-normal text-white">Sports</span>
+            <span className="font-bold text-white">Innovation</span>
+            <span className="font-normal text-white">Lab</span>
+            <span className="font-bold text-yellow-300">AI</span>
+          </h1>
+          <p className={`${poppins.className} hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light`}>
+            Discover the best AI tools for sports innovation
+          </p>
+          <p className={`${poppins.className} text-md sm:text-lg mt-3 mb-4 text-white/90 font-light`}>
+            Curated by Sports Innovation Lab & TwinBrain AI
+          </p>
+        </div>
+      </div>
+
+      {/* Mobile Dropdown - The menu needs to have the same styling for consistency */}
+      {menuOpen && (
+        <div
+          className="absolute top-0 left-0 right-0 text-white z-40 px-4 shadow-md border-b border-blue-500 overflow-y-auto"
+          style={{
+            height: headerRef.current ? `${headerRef.current.offsetHeight}px` : '100%',
+            backgroundImage: "url('/SIL_bg.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'grayscale(100%)'
+          }}
+        >
+          {/* Dark overlay for mobile menu */}
           <div
-            className="absolute top-0 left-0 right-0 bg-blue-700 text-white z-40 px-4 shadow-md border-b border-blue-500 overflow-y-auto"
             style={{
-              height: headerRef.current ? `${headerRef.current.offsetHeight}px` : '100%'
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              zIndex: 0
             }}
-          >
+          ></div>
+
+          {/* Mobile menu content */}
+          <div style={{ position: 'relative', zIndex: 1 }}>
             {/* Top Row: Logo and Close Button */}
             <div className="flex items-center justify-between pt-4 pb-2">
               <div className="flex items-center space-x-2">
@@ -232,34 +304,17 @@ export default function Home() {
 
             {/* Nav Links Container with improved spacing */}
             <div className="flex flex-col items-center space-y-4 py-4 mt-2 pb-12">
-              <h1 className={`${inter.className} text-xl font-semibold tracking-tight mb-6`}>SportsTech AI</h1>
+              <h1 className={`${inter.className} text-xl font-semibold tracking-tight mb-6`}>SportsTechAI</h1>
               <div className="grid grid-cols-2 gap-x-10 gap-y-6 text-center w-full max-w-xs">
-                <a href="/submit-tool" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Submit Tool</a>
-                <a href="/advertise" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Advertise</a>
-                <a href="https://www.sportsinnovationlab.com/blog" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Blog</a>
+                <a href="https://www.sportsilab.com/" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Sports Innovation Lab</a>
+                <a href="/submit-tool" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">AI Playbook</a>
                 <a href="#fixed-newsletter" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Newsletter</a>
               </div>
             </div>
           </div>
-        )}
-
-        {/* Modern Styled Title Section with Reduced Padding */}
-        <div className="text-center mt-1 pb-4">
-          <h1 className={`${inter.className} text-3xl sm:text-4xl md:text-5xl leading-tight mb-1 tracking-tight`}>
-            <span className="font-normal text-white">Sports</span>
-            <span className="font-bold text-white">Innovation</span>
-            <span className="font-normal text-white">Lab</span>
-            <span className="font-bold text-yellow-300">AI</span>
-          </h1>
-          <p className={`${poppins.className} hidden sm:block text-md sm:text-lg md:text-xl mt-1 font-light`}>
-            Discover the best AI tools for sports innovation
-          </p>
-          <p className={`${poppins.className} text-sm sm:text-md mt-1 mb-2 text-white/90 font-light`}>
-            Curated by Sports Innovation Lab & TwinBrain AI
-          </p>
         </div>
-      </header>
-
+      )}
+    </header>
       {/* Replace the Category Selection section with this */}
       <section className="p-4 pt-8 flex justify-center bg-gray-100">
         <div className="inline-flex flex-wrap rounded-md shadow-sm">
@@ -431,16 +486,29 @@ export default function Home() {
         )}
       </section>
 
-      {/* First Newsletter Section (the fixed one) */}
-      <section id="fixed-newsletter" className="w-full bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-700 py-10 flex flex-col items-center shadow-md mt-10 px-4 sm:px-0">
-        <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between">
-          {/* Left side: AI Playbook copy */}
+      {/* Fixed Newsletter Section */}
+      <section id="fixed-newsletter" className="w-full py-10 flex flex-col items-center shadow-md mt-10 px-4 sm:px-0 relative overflow-hidden">
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: "url('/Logo_BG.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            zIndex: 0
+          }}
+        ></div>
+
+        <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between relative z-10">
           <div className="md:w-1/2 mb-6 md:mb-0 md:pr-8 text-center md:text-left text-white">
-            <h2 className={`${inter.className} text-2xl md:text-2xl font-bold`}>
-              Get the Sports Innovation Lab AI Playbook!
+            <h2 className={`${inter.className} text-2xl md:text-3xl font-bold`}>
+              Sports Technology Insights! 🏆
             </h2>
             <p className="mt-2 text-lg">
-              <span className="font-semibold">Join industry leaders</span> discovering game-changing AI tools.
+              <span className="font-semibold">Join industry leaders</span> receiving weekly updates on the latest sports innovation tools and trends.
             </p>
             <p className="mt-1 text-sm text-yellow-200 font-medium">
               <span className="inline-block bg-blue-800 rounded-full px-2 py-1 mr-2">⚡ EXCLUSIVE</span>
@@ -448,7 +516,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Right side: Form */}
           <div className="md:w-1/2 w-full">
             <form className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2" onSubmit={handleSubscribe}>
               <input
@@ -476,65 +543,78 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Floating Newsletter Section */}
-      {showNewsletter && (
-        <section
-          className="hidden sm:block fixed bottom-0 w-full bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-700 text-white py-6 shadow-xl z-50"
+
+     {/* Floating Newsletter Section - Fixed positioning issue */}
+    {showNewsletter && (
+      <section
+        className="hidden sm:block fixed bottom-0 w-full text-white py-6 shadow-xl z-50 overflow-hidden"
+        style={{
+          animation: 'slideUp 0.5s ease-out',
+        }}
+      >
+        <div
           style={{
-            animation: 'slideUp 0.5s ease-out',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: "url('/Logo_BG.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            zIndex: 0
           }}
-        >
-          <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
-            {/* Left side: AI Playbook copy */}
-            <div className="md:w-1/2 mb-4 md:mb-0 md:pr-8">
-              <h2 className={`${inter.className} text-2xl md:text-2xl font-bold`}>Get the Sports Innovation Lab AI Playbook!</h2>
-              <p className="mt-2 text-lg">
-                <span className="font-semibold">Join industry leaders</span> discovering game-changing AI tools.
-              </p>
-              <p className="mt-1 text-sm text-yellow-200 font-medium">
-                <span className="inline-block bg-blue-800 rounded-full px-2 py-1 mr-2">⚡ EXCLUSIVE</span>
-                Curated by Sports Innovation Lab & TwinBrain AI
-              </p>
-            </div>
+        ></div>
 
-            {/* Right side: Form */}
-            <div className="md:w-1/2">
-              <form className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2" onSubmit={handleSubscribe}>
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="px-6 py-3 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent w-full sm:w-auto flex-grow text-base shadow-md"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap"
-                  style={{
-                    animation: 'pulse 2s infinite',
-                  }}
-                >
-                  Subscribe Now
-                </button>
-              </form>
-              {message && (
-                <p className="text-lg mt-2 font-medium text-center sm:text-left">{message}</p>
-              )}
-              <p className="text-xs mt-2 text-white/80 text-center sm:text-left">Get insights from both Sports Innovation Lab and TwinBrain AI experts.</p>
-            </div>
-
-            {/* Close button */}
-            <button
-              onClick={() => setShowNewsletter(false)}
-              className="absolute top-2 right-2 text-white hover:text-yellow-200 transition"
-              aria-label="Close newsletter"
-            >
-              <X size={24} />
-            </button>
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between relative z-10">
+          <div className="md:w-1/2 mb-4 md:mb-0 md:pr-8">
+            <h2 className={`${inter.className} text-2xl md:text-3xl font-bold`}>Sports Tech Updates! 🏆</h2>
+            <p className="mt-2 text-lg">
+              <span className="font-semibold">Join industry leaders</span> discovering game-changing sports tech tools weekly.
+              <span className="hidden md:inline"> Stay ahead with premier sports innovation insights.</span>
+            </p>
+            <p className="mt-1 text-sm text-yellow-200 font-medium">
+              <span className="inline-block bg-blue-800 rounded-full px-2 py-1 mr-2">⚡ EXCLUSIVE</span>
+              Curated by Sports Innovation Lab & TwinBrain AI
+            </p>
           </div>
-        </section>
-      )}
+
+          <div className="md:w-1/2">
+            <form className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2" onSubmit={handleSubscribe}>
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="px-6 py-3 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent w-full sm:w-auto flex-grow text-base shadow-md"
+                required
+              />
+              <button
+                type="submit"
+                className="px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap"
+                style={{
+                  animation: 'pulse 2s infinite',
+                }}
+              >
+                Subscribe Now
+              </button>
+            </form>
+            {message && (
+              <p className="text-lg mt-2 font-medium text-center sm:text-left text-white">{message}</p>
+            )}
+            <p className="text-xs mt-2 text-white/80 text-center sm:text-left">Get insights from both Sports Innovation Lab and TwinBrain AI experts.</p>
+          </div>
+
+          <button
+            onClick={() => setShowNewsletter(false)}
+            className="absolute top-2 right-2 text-white hover:text-yellow-200 transition"
+            aria-label="Close newsletter"
+          >
+            <X size={24} />
+          </button>
+        </div>
+      </section>
+    )}
 
       {/* Add this to your existing styles */}
       <style jsx>{`
