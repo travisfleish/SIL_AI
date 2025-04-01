@@ -79,7 +79,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
     <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl overflow-hidden border border-gray-200">
       {/* Category header bar */}
       <div className="w-full bg-blue-100 py-2 px-3 text-center mb-2">
-        <span className="font-medium text-blue-800 text-sm">
+        <span className="font-bold text-blue-800 text-lg">
           {category}
         </span>
       </div>
@@ -121,7 +121,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
         )}
 
         {/* Tool image */}
-        <div className="relative w-full pb-4">
+        <div className="relative w-full pb-4 mb-6">
           <Image
             src={imageUrl}
             alt={`${currentTool.name} Screenshot`}
@@ -714,7 +714,7 @@ export default function Home() {
                 />
               </a>
               <span className="text-white font-bold mr-10">×</span>
-              <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.sportsilab.com" target="_blank" rel="noopener noreferrer">
                 <Image
                   src="/sil-logo.png"
                   alt="Sports Innovation Lab Logo"
@@ -788,7 +788,7 @@ export default function Home() {
                     <Image src="/logo_transparent.png" alt="TwinBrain Logo" width={50} height={25} />
                   </a>
                   <span className="text-white">×</span>
-                  <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.sportsilab.com" target="_blank" rel="noopener noreferrer">
                     <Image src="/sil-logo.png" alt="Sports Innovation Lab Logo" width={60} height={25} />
                   </a>
                 </div>
@@ -825,12 +825,12 @@ export default function Home() {
               key={filter.id}
               onClick={() => setSelectedFilter(filter.id)}
               className={`
-                px-4 py-2 text-sm font-medium
+                px-6 py-3 text-lg font-bold
                 ${index === 0 ? "rounded-l-lg" : ""}
                 ${index === FILTERS.length - 1 ? "rounded-r-lg" : ""}
                 ${selectedFilter === filter.id 
                   ? "bg-blue-600 text-white z-10" 
-                  : "bg-white text-gray-900 hover:bg-gray-50"}
+                  : "bg-white text-gray-900 hover:bg-gray-300"}
                 border border-gray-300
                 ${index > 0 && "-ml-px"}
                 transition
@@ -853,7 +853,7 @@ export default function Home() {
                 setSelectedCategory(category.id);
               }}
               className={`
-                px-4 py-2 text-sm font-bold
+                px-6 py-3 text-md font-bold
                 border border-gray-300
                 ${index === 0 ? "rounded-l-lg" : ""}
                 ${index === CATEGORIES.length - 1 ? "rounded-r-lg" : ""}
