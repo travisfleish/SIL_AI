@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   images: {
     domains: [
       'source.unsplash.com',
@@ -8,9 +8,8 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'res.cloudinary.com'
     ],
-    unoptimized: process.env.NODE_ENV !== 'production', // Helpful for development
+    unoptimized: process.env.NODE_ENV !== 'production',
   },
-  // This ensures that Next.js is aware of and can properly handle your .env.local file
   env: {
     GOOGLE_SERVICE_ACCOUNT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
     SHEET_ID: process.env.SHEET_ID,
