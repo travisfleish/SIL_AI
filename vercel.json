@@ -6,10 +6,10 @@
       "use": "@vercel/next"
     }
   ],
-  "routes": [
-    {
-      "src": "/frontend/(.*)",
-      "dest": "frontend/$1"
-    }
-  ]
-}
+//  "routes": [
+//    {
+//      "src": "/frontend/(.*)",
+//      "dest": "frontend/$1"
+//    }
+//  ]
+//}
