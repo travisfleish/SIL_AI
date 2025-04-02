@@ -1,25 +1,32 @@
-import { Pool } from "pg";
+import { NextResponse } from 'next/server';
+import { addSubscriber } from '../../../../lib/sheets';
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
-
-export async function POST(req) {
+export async function POST(request) {
   try {
-    const { email } = await req.json();
+    // Get the request body
+    const body = await request.json();
+    const { email } = body;
+
     if (!email) {
-      return new Response(JSON.stringify({ error: "Email is required" }), { status: 400 });
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
-    await pool.query("INSERT INTO newsletter_subscribers (email) VALUES ($1) ON CONFLICT (email) DO NOTHING", [email]);
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
+    }
 
-    return new Response(JSON.stringify({ message: "Subscription successful" }), { status: 200 });
-  } catch (err) {
-    console.error("Database error:", err);
-    return new Response(JSON.stringify({ error: "Database error" }), { status: 500 });
+    // Add email to Google Sheets
+    const result = await addSubscriber(email);
+
+    if (result.success) {
+      return NextResponse.json({ message: result.message });
+    } else {
+      return NextResponse.json({ error: result.message }, { status: 400 });
+    }
+  } catch (error) {
+    console.error('Error in /api/subscribe:', error);
+    return NextResponse.json({ error: 'Failed to subscribe' }, { status: 500 });
   }
 }

@@ -18,54 +18,62 @@ const poppins = Poppins({
   display: 'swap',
 });
 
-// Category Card Component with mini-carousel functionality
+// Updated CategoryCard Component with improved tool distribution
 const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
   // Create a state to track the current tool index within this category
   const [currentToolIndex, setCurrentToolIndex] = useState(0);
 
+  // Filter tools that match this category
+  const categoryTools = tools.filter(tool => tool.category === category);
+
   // For debugging
-  console.log(`Category ${category}: Total tools: ${tools.length}`);
+  console.log(`Category ${category}: Matched tools: ${categoryTools.length}`);
 
-  // Modified filtering logic to ensure more even distribution of tools
-  // Assign at least 2 tools to each category for demo purposes
-  let categoryTools = [];
+  // Ensure we have exactly 6 tools per category
+  let displayTools = [...categoryTools];
 
-  // First approach: filter by modulo (your existing approach)
-  categoryTools = tools.filter((_, index) =>
-    index % demoCategories.length === categoryIndex
-  );
+  if (displayTools.length < 6) {
+    // If we don't have enough category-specific tools, we need to fill in with other tools
+    // First approach: try to use related tools (based on type similarity)
+    const otherTools = tools.filter(tool => tool.category !== category);
 
-  // If we don't have enough tools with the modulo approach, add some more
-  if (categoryTools.length < 2 && tools.length >= demoCategories.length * 2) {
-    // Second approach: give each category a range of tools
-    const toolsPerCategory = Math.floor(tools.length / demoCategories.length);
-    const startIndex = categoryIndex * toolsPerCategory;
-    const endIndex = startIndex + toolsPerCategory;
+    // Sort other tools by relevant factors (you could customize this logic)
+    // For example, prioritize tools from similar categories
+    const sortedOtherTools = [...otherTools].sort((a, b) => {
+      // You could implement more sophisticated sorting here
+      // For now, just a random sort to diversify selections
+      return 0.5 - Math.random();
+    });
 
-    // Add tools from the range approach
-    categoryTools = tools.slice(startIndex, endIndex);
+    // Fill up to exactly 6 tools
+    while (displayTools.length < 6 && sortedOtherTools.length > 0) {
+      // Take the next available tool and remove it from the pool
+      // This prevents the same tool from appearing in multiple categories
+      displayTools.push(sortedOtherTools.shift());
+    }
+
+    // If we still don't have enough tools (unlikely but possible)
+    // Just duplicate some existing tools to reach exactly 6
+    if (displayTools.length < 6) {
+      const availableTools = [...displayTools];
+      while (displayTools.length < 6) {
+        displayTools.push({...availableTools[displayTools.length % availableTools.length]});
+      }
+    }
+  } else if (displayTools.length > 6) {
+    // If we have too many tools, trim to exactly 6
+    displayTools = displayTools.slice(0, 6);
   }
 
-  // For testing, force at least two tools per category in demo mode
-  if (categoryTools.length < 2) {
-    categoryTools = [
-      ...(categoryTools || []),
-      ...(tools.slice(0, 2 - categoryTools.length))
-    ];
-  }
+  console.log(`Category ${category}: Display tools: ${displayTools.length}`);
 
-  console.log(`Category ${category}: Assigned tools: ${categoryTools.length}`);
-
-  // Use the first tool if we don't have any matching tools
-  const currentTool = categoryTools.length > 0
-    ? categoryTools[currentToolIndex]
+  // Use the first tool if we somehow still don't have any matching tools
+  const currentTool = displayTools.length > 0
+    ? displayTools[currentToolIndex % displayTools.length]
     : tools[categoryIndex < tools.length ? categoryIndex : 0];
 
-  // Determine if we have multiple tools to display
-  const hasMultipleTools = categoryTools.length > 1;
-
-  // Force show arrows for demo purposes
-  // const hasMultipleTools = true;  // Uncomment this for testing
+  // We'll always have multiple tools now
+  const hasMultipleTools = true;
 
   // Only proceed if we have a valid tool
   if (!currentTool) return null;
@@ -92,7 +100,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 setCurrentToolIndex(prev =>
-                  prev === 0 ? categoryTools.length - 1 : prev - 1
+                  prev === 0 ? displayTools.length - 1 : prev - 1
                 );
               }}
               className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-1 rounded-full shadow-md hover:bg-gray-100"
@@ -107,7 +115,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 setCurrentToolIndex(prev =>
-                  (prev + 1) % categoryTools.length
+                  (prev + 1) % displayTools.length
                 );
               }}
               className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-1 rounded-full shadow-md hover:bg-gray-100"
@@ -131,10 +139,10 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
             unoptimized
           />
 
-          {/* Tool counter (e.g., "1/3") */}
+          {/* Tool counter (e.g., "1/6") - always showing 6 now */}
           {hasMultipleTools && (
             <div className="absolute bottom-6 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full opacity-80">
-              {currentToolIndex + 1}/{categoryTools.length}
+              {currentToolIndex + 1}/6
             </div>
           )}
         </div>
@@ -150,10 +158,10 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
         {/* Tool description */}
         <p className="text-gray-600 text-center mt-2">{currentTool.short_description}</p>
 
-        {/* Pagination dots */}
+        {/* Pagination dots - always 6 dots now */}
         {hasMultipleTools && (
           <div className="flex justify-center mt-3 space-x-1">
-            {categoryTools.map((_, index) => (
+            {displayTools.map((_, index) => (
               <button
                 key={index}
                 onClick={(e) => {
@@ -173,9 +181,55 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
   );
 };
 
+// Enterprise Tool Card Component
+const EnterpriseToolCard = ({ tool }) => {
+  // Get image URL for the tool
+  const imageUrl = tool.screenshot_url && tool.screenshot_url.trim() !== ""
+    ? tool.screenshot_url
+    : "/default-screenshot.png";
 
-// Define API base URL - uses environment variable with fallback
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5002";
+  return (
+    <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl overflow-hidden border border-gray-200">
+      {tool.certified && (
+        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 bg-yellow-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-lg">
+          <span>⭐ SIL Certified!</span>
+        </div>
+      )}
+
+      <div className="p-4 flex flex-col items-center w-full">
+        {/* Tool image */}
+        <div className="relative w-full pb-4 mb-6">
+          <Image
+            src={imageUrl}
+            alt={`${tool.name} Screenshot`}
+            width={1280}
+            height={800}
+            className="w-full h-auto rounded-md shadow-sm"
+            unoptimized
+          />
+        </div>
+
+        {/* Tool name and link */}
+        <h3 className="text-lg font-bold flex items-center">
+          <a href={tool.source_url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+            {tool.name}
+          </a>
+          <ExternalLink className="ml-2 w-4 h-4 text-gray-500" />
+        </h3>
+
+        {/* Sector badge */}
+        {tool.sector && (
+          <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1 mb-2">
+            {tool.sector}
+          </span>
+        )}
+
+        {/* Tool description */}
+        <p className="text-gray-600 text-center mt-2">{tool.short_description}</p>
+      </div>
+    </div>
+  );
+};
 
 // Categories instead of sources
 const CATEGORIES = [
@@ -188,16 +242,16 @@ const CATEGORIES = [
 ];
 
 const FILTERS = [
-  { name: "Personal Productivity", id: "new" },
-  { name: "Enterprise Solutions", id: "top" },
+  { name: "Personal Productivity", id: "personal" },
+  { name: "Enterprise Solutions", id: "enterprise" },
 ];
 
 const DEMO_CATEGORIES = [
   "Foundational AI",
   "Writing & Editing",
-  "Creative Design",
-  "Deck Automation",
   "Meeting Assistants",
+  "Deck Automation",
+  "Content Creation",
   "Research & Analysis",
   "Task & Workflow",
   "Voice & Audio"
@@ -519,7 +573,7 @@ const FullScreenSponsorCarousel = ({ isOpen, onClose }) => {
 export default function Home() {
   const [tools, setTools] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("new");
+  const [selectedFilter, setSelectedFilter] = useState("personal");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [showNewsletter, setShowNewsletter] = useState(true);
@@ -527,6 +581,7 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showSponsorCarousel, setShowSponsorCarousel] = useState(false);
 
   // Ref for the dropdown to detect clicks outside
   const dropdownRef = useRef(null);
@@ -546,10 +601,6 @@ export default function Home() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Auto-open sponsor carousel every 5 minutes
-  useEffect(() => {
-  }, []);
-
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -565,14 +616,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Only use category filtering for Enterprise ("top") view
-    const categoryParam = selectedFilter === 'top' ? selectedCategory : '';
+    // Only use sector filtering for Enterprise view
+    const sectorParam = selectedFilter === 'enterprise' ? selectedCategory : '';
 
-    fetch(`${API_BASE_URL}/api/tools?event_category=${categoryParam}&filter=${selectedFilter}`)
+    // Changed from API_BASE_URL to relative path
+    fetch(`/api/tools?sector=${sectorParam}&type=${selectedFilter}`)
       .then((response) => response.json())
       .then((data) => {
-        // Always slice to 8 tools for consistency between tabs
-        const processedTools = data.slice(0, 8);
+        // Always use a reasonable number of tools for consistency
+        const processedTools = data.slice(0, 16);
 
         // Randomly certify one tool if desired
         if (processedTools.length > 0) {
@@ -625,7 +677,7 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/subscribe`, {
+      const response = await fetch(`/api/subscribe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -814,10 +866,19 @@ export default function Home() {
           </div>
         )}
       </header>
-      {/* Sponsor Carousel Section - New Addition */}
-      <SponsorCarousel sponsors={SPONSORS} />
 
-      {/* New & Top Tools Selection - Modified to look like a toggle */}
+      {/* Sponsor Carousel Section */}
+      <SponsorCarousel />
+
+      {/* Full-screen sponsor carousel modal */}
+      {showSponsorCarousel && (
+        <FullScreenSponsorCarousel
+          isOpen={showSponsorCarousel}
+          onClose={() => setShowSponsorCarousel(false)}
+        />
+      )}
+
+      {/* Personal/Enterprise Toggle */}
       <section className="p-4 flex justify-center mt-10">
         <div className="inline-flex rounded-md shadow-sm">
           {FILTERS.map((filter, index) => (
@@ -842,14 +903,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Replace the Category Selection section with this */}
+      {/* Enterprise Sector Selection - Only visible for enterprise mode */}
       <section className="p-4 pt-8 flex justify-center bg-gray-100 mb-5">
-        <div className={`inline-flex flex-wrap rounded-md shadow-sm ${selectedFilter === 'top' ? '' : 'opacity-50 pointer-events-none'}`}>
+        <div className={`inline-flex flex-wrap rounded-md shadow-sm ${selectedFilter === 'enterprise' ? '' : 'opacity-50 pointer-events-none'}`}>
           {CATEGORIES.map((category, index) => (
             <button
               key={category.id}
               onClick={() => {
-                setSelectedFilter('top');
                 setSelectedCategory(category.id);
               }}
               className={`
@@ -871,9 +931,7 @@ export default function Home() {
         </div>
       </section>
 
-
-
-      {/* Tools Section - Modified to use carousel on mobile */}
+      {/* Tools Section */}
       <section className="p-6 w-full">
         {isMobile ? (
           // Mobile Carousel View
@@ -911,10 +969,17 @@ export default function Home() {
                     </a>
                     <ExternalLink className="ml-2 w-4 h-4 text-gray-500" />
                   </h3>
-                  {/* Demo category badge here */}
-                  <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1 mb-2">
-                    {DEMO_CATEGORIES[currentSlide % DEMO_CATEGORIES.length]}
-                  </span>
+
+                  {selectedFilter === 'personal' ? (
+                    <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1 mb-2">
+                      {tools[currentSlide]?.category || DEMO_CATEGORIES[currentSlide % DEMO_CATEGORIES.length]}
+                    </span>
+                  ) : (
+                    <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1 mb-2">
+                      {tools[currentSlide]?.sector || ""}
+                    </span>
+                  )}
+
                   <p className="text-gray-600 text-center">{tools[currentSlide]?.short_description}</p>
                 </div>
               </div>
@@ -944,19 +1009,28 @@ export default function Home() {
             </div>
           </div>
         ) : (
-
-          // Desktop Grid View with category-based mini-carousels
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {DEMO_CATEGORIES.map((demoCategory, categoryIndex) => (
-              <CategoryCard
-                key={categoryIndex}
-                category={demoCategory}
-                tools={tools}
-                categoryIndex={categoryIndex}
-                demoCategories={DEMO_CATEGORIES}
-              />
-            ))}
-          </div>
+          // Desktop View - Different layouts based on filter
+          selectedFilter === 'personal' ? (
+            // Personal mode: Category-based grid
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {DEMO_CATEGORIES.map((demoCategory, categoryIndex) => (
+                <CategoryCard
+                  key={categoryIndex}
+                  category={demoCategory}
+                  tools={tools}
+                  categoryIndex={categoryIndex}
+                  demoCategories={DEMO_CATEGORIES}
+                />
+              ))}
+            </div>
+          ) : (
+            // Enterprise mode: Simple grid of tools filtered by sector
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {tools.map((tool, index) => (
+                <EnterpriseToolCard key={index} tool={tool} />
+              ))}
+            </div>
+          )
         )}
       </section>
 
@@ -1014,7 +1088,7 @@ export default function Home() {
       </section>
 
 
-    {/* Floating Newsletter Section - Fixed positioning issue */}
+    {/* Floating Newsletter Section */}
     {showNewsletter && (
       <section
         className="hidden sm:block fixed bottom-0 w-full text-white py-6 shadow-xl z-50 overflow-hidden"
@@ -1073,7 +1147,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Move the close button outside the max-w-6xl container */}
+        {/* Close button */}
         <button
           onClick={() => setShowNewsletter(false)}
           className="absolute top-4 right-6 text-white hover:text-yellow-200 transition z-20"
@@ -1084,7 +1158,7 @@ export default function Home() {
       </section>
     )}
 
-      {/* Add this to your existing styles */}
+      {/* CSS Animations */}
       <style jsx>{`
         @keyframes slideUp {
           from {
@@ -1115,70 +1189,67 @@ export default function Home() {
         }
       `}</style>
 
-    {/* Embedded YouTube Videos Section - Improved for mobile */}
-    <div
-      className="w-full flex flex-col items-center py-8 relative border-b-0"
-      style={{
-        backgroundImage: "url('/BGpattern05.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      {/* Follow us Header & YouTube Link */}
-      <div className="text-center mb-6 px-4 flex flex-col items-center mt-15 mb-20">
-        <a
-          href="https://www.youtube.com/@sportsinnovationlab"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center space-x-2 mb-2 hover:opacity-80 transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            fill="red"
+      {/* YouTube Videos Section */}
+      <div
+        className="w-full flex flex-col items-center py-8 relative border-b-0"
+        style={{
+          backgroundImage: "url('/BGpattern05.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* YouTube Header */}
+        <div className="text-center mb-6 px-4 flex flex-col items-center mt-15 mb-20">
+          <a
+            href="https://www.youtube.com/@sportsinnovationlab"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-2 mb-2 hover:opacity-80 transition"
           >
-            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.246 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-          </svg>
-          <h2 className={`${inter.className} text-2xl font-semibold text-gray-100`}>
-            Follow Sports Innovation Lab on YouTube
-          </h2>
-        </a>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="red"
+            >
+              <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.246 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+            </svg>
+            <h2 className={`${inter.className} text-2xl font-semibold text-gray-100`}>
+              Follow Sports Innovation Lab on YouTube
+            </h2>
+          </a>
+        </div>
+
+        {/* Videos */}
+        <section className="w-full flex flex-wrap justify-center gap-6 px-4 mb-20">
+          <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
+            <iframe
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/ccrj9qymiUs"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+
+          <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
+            <iframe
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/NxOyVYW_8Qs"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </section>
       </div>
 
-      {/* YouTube Videos - Removed excessive black space on mobile */}
-      <section className="w-full flex flex-wrap justify-center gap-6 px-4 mb-20">
-        {/* First Video - Enhanced mobile ratio */}
-        <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
-          <iframe
-            className="w-full h-full"
-            src="https://www.youtube.com/embed/ccrj9qymiUs"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
-
-        {/* Second Video - Enhanced mobile ratio */}
-        <div className="w-full sm:w-4/5 aspect-video max-w-[900px]">
-          <iframe
-            className="w-full h-full"
-            src="https://www.youtube.com/embed/NxOyVYW_8Qs"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
-      </section>
-    </div>
-
-      {/* Updated Footer with Darker Background */}
+      {/* Footer */}
       <footer className="w-full bg-gray-500 text-white py-8 flex flex-col items-center space-y-4">
-        {/* Combined Logos */}
         <div className="flex items-center space-x-8">
           <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center">
             <Image src="/logo.png" alt="TwinBrain Logo" width={100} height={50} />
