@@ -780,8 +780,8 @@ export default function Home() {
             {/* Desktop Nav */}
             <nav className="hidden sm:flex gap-6 text-sm sm:text-base text-white font-semibold mr-15">
               <a href="https://www.sportsilab.com/" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Sports Innovation Lab</a>
-              <a href="/submit-tool" className="hover:underline">AI Playbook</a>
-              <a href="/advertise" className="hover:underline">AI Lumascape</a>
+              <a href="#" onClick={(e) => e.preventDefault()} className="hover:underline">AI Playbook</a>
+              <a href="#" onClick={(e) => e.preventDefault()} className="hover:underline">AI Lumascape</a>
             </nav>
 
             {/* Mobile Hamburger */}
@@ -857,9 +857,9 @@ export default function Home() {
                 <h1 className={`${inter.className} text-xl font-semibold tracking-tight mb-6`}>SportsTechAI</h1>
                 <div className="grid grid-cols-2 gap-x-10 gap-y-6 text-center w-full max-w-xs">
                   <a href="https://www.sportsilab.com/" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Sports Innovation Lab</a>
-                  <a href="/submit-tool" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">AI Playbook</a>
+                  <a href="#" onClick={(e) => {e.preventDefault(); setMenuOpen(false);}} className="hover:underline text-base font-medium">AI Playbook</a>
                   <a href="#fixed-newsletter" onClick={() => setMenuOpen(false)} className="hover:underline text-base font-medium">Newsletter</a>
-                  <a href="#" onClick={(e) => { e.preventDefault(); setMenuOpen(false); setShowSponsorCarousel(true); }} className="hover:underline text-base font-medium">Our Sponsors</a>
+                  <a href="#" onClick={(e) => {e.preventDefault(); setMenuOpen(false);}} className="hover:underline text-base font-medium">AI Lumascape</a>
                 </div>
               </div>
             </div>
