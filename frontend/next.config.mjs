@@ -8,7 +8,7 @@ const nextConfig = { // Change module.exports to const nextConfig
       'lh3.googleusercontent.com',
       'res.cloudinary.com'
     ],
-    unoptimized: process.env.NODE_ENV !== 'production',
+    unoptimized: process.env.NODE_ENV === 'production',
   },
   env: {
     GOOGLE_SERVICE_ACCOUNT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
