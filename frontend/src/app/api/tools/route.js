@@ -484,81 +484,11 @@ const toolsData = [
     "sector": "N/A"
   },
   {
-    "id": "49",
-    "name": "StellarAlgo",
-    "source_url": "https://stellaralgo.com",
-    "short_description": "Sports customer data platform that uses AI to predict fan behavior and personalize engagement.",
-    "screenshot_url": "/screenshots/stellaralgo.png",
-    "category": "None",
-    "type": "enterprise",
-    "sector": "Fan Intelligence"
-  },
-  {
-    "id": "50",
-    "name": "Satisfi Labs",
-    "source_url": "https://satisfilabs.com",
-    "short_description": "Conversational AI for sports venues that answers fan questions and gathers audience insights.",
-    "screenshot_url": "/screenshots/satisfi_labs.png",
-    "category": "None",
-    "type": "enterprise",
-    "sector": "Fan Intelligence"
-  },
-  {
-    "id": "51",
-    "name": "Two Circles",
-    "source_url": "https://twocircles.com",
-    "short_description": "Data-driven sports marketing firm using AI for fan segmentation and targeted marketing.",
-    "screenshot_url": "/screenshots/two_circles.png",
-    "category": "None",
-    "type": "enterprise",
-    "sector": "Fan Intelligence"
-  },
-  {
     "id": "52",
     "name": "Sports Innovation Lab",
     "source_url": "https://sportsilab.com",
     "short_description": "Analyzes fan behavior data to drive sponsorship and engagement strategy.",
     "screenshot_url": "/screenshots/sports_innovation_lab.png",
-    "category": "None",
-    "type": "enterprise",
-    "sector": "Fan Intelligence"
-  },
-  {
-    "id": "53",
-    "name": "Zoomph",
-    "source_url": "https://zoomph.com",
-    "short_description": "AI-based platform measuring fan engagement and sponsorship exposure in real time.",
-    "screenshot_url": "/screenshots/zoomph.png",
-    "category": "None",
-    "type": "enterprise",
-    "sector": "Fan Intelligence"
-  },
-  {
-    "id": "54",
-    "name": "FanThreeSixty",
-    "source_url": "https://www.fanthreesixty.com",
-    "short_description": "Fan data and engagement platform using AI to predict behaviors and personalize experiences.",
-    "screenshot_url": "/screenshots/fanthreesixty.png",
-    "category": "None",
-    "type": "enterprise",
-    "sector": "Fan Intelligence"
-  },
-  {
-    "id": "55",
-    "name": "LAVA",
-    "source_url": "https://www.lava.ai",
-    "short_description": "Real-time AI engagement engine triggering personalized fan rewards and experiences.",
-    "screenshot_url": "/screenshots/lava.png",
-    "category": "None",
-    "type": "enterprise",
-    "sector": "Fan Intelligence"
-  },
-  {
-    "id": "56",
-    "name": "Edisn.ai",
-    "source_url": "https://www.hypesportsinnovation.com/startup/edisn-ai/",
-    "short_description": "Interactive fan engagement via AI-powered clickable live sports video.",
-    "screenshot_url": "/screenshots/edisn.ai.png",
     "category": "None",
     "type": "enterprise",
     "sector": "Fan Intelligence"
