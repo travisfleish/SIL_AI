@@ -770,7 +770,9 @@ export default function Home() {
           {/* Modern Styled Title Section with Reduced Padding */}
           <div className="text-center mt-4 pb-8 md:pb-12">
             <h1 className={`${inter.className} text-3xl sm:text-5xl md:text-6xl leading-tight mb-3 tracking-tight`}>
-              <span className="font-normal text-white">FluidFan.</span>
+              <span className="font-normal text-white">Sports</span>
+              <span className="font-bold text-white">Innovation</span>
+              <span className="font-normal text-white">Lab</span>
               <span className="font-bold text-yellow-300">AI</span>
             </h1>
             <p className={`${poppins.className} hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light`}>
