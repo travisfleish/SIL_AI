@@ -1,6 +1,6 @@
 // app/api/tools/route.js
 import { NextResponse } from 'next/server';
-import toolsData from '@/app/data/tools.json';
+import toolsData from '../../../data/tools.json';
 
 export async function GET(request) {
   try {
