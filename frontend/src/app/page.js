@@ -18,7 +18,7 @@ const poppins = Poppins({
   display: 'swap',
 });
 
-// Updated CategoryCard Component with improved tool distribution
+// Updated CategoryCard Component that only shows relevant category tools
 const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
   // Create a state to track the current tool index within this category
   const [currentToolIndex, setCurrentToolIndex] = useState(0);
@@ -29,61 +29,35 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
   // For debugging
   console.log(`Category ${category}: Matched tools: ${categoryTools.length}`);
 
-  // Ensure we have exactly 6 tools per category
-  let displayTools = [...categoryTools];
-
-  if (displayTools.length < 6) {
-    // If we don't have enough category-specific tools, we need to fill in with other tools
-    // First approach: try to use related tools (based on type similarity)
-    const otherTools = tools.filter(tool => tool.category !== category);
-
-    // Sort other tools by relevant factors (you could customize this logic)
-    // For example, prioritize tools from similar categories
-    const sortedOtherTools = [...otherTools].sort((a, b) => {
-      // You could implement more sophisticated sorting here
-      // For now, just a random sort to diversify selections
-      return 0.5 - Math.random();
-    });
-
-    // Fill up to exactly 6 tools
-    while (displayTools.length < 6 && sortedOtherTools.length > 0) {
-      // Take the next available tool and remove it from the pool
-      // This prevents the same tool from appearing in multiple categories
-      displayTools.push(sortedOtherTools.shift());
-    }
-
-    // If we still don't have enough tools (unlikely but possible)
-    // Just duplicate some existing tools to reach exactly 6
-    if (displayTools.length < 6) {
-      const availableTools = [...displayTools];
-      while (displayTools.length < 6) {
-        displayTools.push({...availableTools[displayTools.length % availableTools.length]});
-      }
-    }
-  } else if (displayTools.length > 6) {
-    // If we have too many tools, trim to exactly 6
-    displayTools = displayTools.slice(0, 6);
+  // If no tools match this category, show a message
+  if (categoryTools.length === 0) {
+    return (
+      <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl overflow-hidden border border-gray-200">
+        <div className="w-full bg-blue-100 py-2 px-3 text-center mb-2">
+          <span className="font-bold text-blue-800 text-lg">
+            {category}
+          </span>
+        </div>
+        <div className="p-4 flex flex-col items-center justify-center h-48 w-full">
+          <p className="text-gray-600">No tools available for this category.</p>
+        </div>
+      </div>
+    );
   }
 
-  console.log(`Category ${category}: Display tools: ${displayTools.length}`);
+  // Take up to 6 tools from this category
+  const displayTools = categoryTools.slice(0, 6);
 
-  // Use the first tool if we somehow still don't have any matching tools
-  const currentTool = displayTools.length > 0
-    ? displayTools[currentToolIndex % displayTools.length]
-    : tools[categoryIndex < tools.length ? categoryIndex : 0];
+  // Get the current tool to display
+  const currentTool = displayTools[currentToolIndex % displayTools.length];
 
-  // We'll always have multiple tools now
-  const hasMultipleTools = true;
-
-  // Only proceed if we have a valid tool
-  if (!currentTool) return null;
+  // Only show navigation if we have multiple tools
+  const hasMultipleTools = displayTools.length > 1;
 
   // Get image URL for the current tool
   const imageUrl = currentTool.screenshot_url && currentTool.screenshot_url.trim() !== ""
     ? `/screenshots/${currentTool.screenshot_url.split('/').pop()}`
     : "/default-screenshot.png";
-
-  console.log(`Tool: ${currentTool.name}, Image URL: ${imageUrl}`);
 
   return (
     <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl overflow-hidden border border-gray-200">
@@ -141,10 +115,10 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
             unoptimized
           />
 
-          {/* Tool counter (e.g., "1/6") - always showing 6 now */}
+          {/* Tool counter (e.g., "1/3") - shows actual number */}
           {hasMultipleTools && (
             <div className="absolute bottom-6 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full opacity-80">
-              {currentToolIndex + 1}/6
+              {currentToolIndex + 1}/{displayTools.length}
             </div>
           )}
         </div>
@@ -160,7 +134,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
         {/* Tool description */}
         <p className="text-gray-600 text-center mt-2">{currentTool.short_description}</p>
 
-        {/* Pagination dots - always 6 dots now */}
+        {/* Pagination dots - only for actual tools */}
         {hasMultipleTools && (
           <div className="flex justify-center mt-3 space-x-1">
             {displayTools.map((_, index) => (
@@ -626,7 +600,7 @@ export default function Home() {
       .then((response) => response.json())
       .then((data) => {
         // Always use a reasonable number of tools for consistency
-        const processedTools = data.slice(0, 16);
+        const processedTools = data;
 
         // Randomly certify one tool if desired
         if (processedTools.length > 0) {
@@ -797,9 +771,7 @@ export default function Home() {
           {/* Modern Styled Title Section with Reduced Padding */}
           <div className="text-center mt-4 pb-8 md:pb-12">
             <h1 className={`${inter.className} text-3xl sm:text-5xl md:text-6xl leading-tight mb-3 tracking-tight`}>
-              <span className="font-normal text-white">Sports</span>
-              <span className="font-bold text-white">Innovation</span>
-              <span className="font-normal text-white">Lab</span>
+              <span className="font-normal text-white">FluidFan.</span>
               <span className="font-bold text-yellow-300">AI</span>
             </h1>
             <p className={`${poppins.className} hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light`}>
@@ -1017,7 +989,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {DEMO_CATEGORIES.map((demoCategory, categoryIndex) => (
                 <CategoryCard
-                  key={categoryIndex}
+                  key={demoCategory}
                   category={demoCategory}
                   tools={tools}
                   categoryIndex={categoryIndex}
