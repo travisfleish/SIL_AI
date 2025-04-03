@@ -168,7 +168,6 @@ const EnterpriseToolCard = ({ tool }) => {
     <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl overflow-hidden border border-gray-200">
       {tool.certified && (
         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 bg-yellow-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-lg">
-          <span>⭐ SIL Certified!</span>
         </div>
       )}
 
@@ -929,7 +928,6 @@ export default function Home() {
                 >
                   {tools[currentSlide]?.certified && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 bg-yellow-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-lg">
-                      <span>⭐ SIL Certified!</span>
                     </div>
                   )}
                   <img
