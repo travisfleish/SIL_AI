@@ -1,16 +1,19 @@
 // src/app/api/tools/route.js
 import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
 // In-memory cache for the tools data
 let toolsDataCache = null;
 
-async function getToolsData() {
+function getToolsData() {
   if (toolsDataCache) return toolsDataCache;
 
   try {
-    // This works in both development and production
-    const response = await fetch(new URL('/data/tools.json', 'http://localhost:3000'));
-    toolsDataCache = await response.json();
+    // Read the JSON file from the public directory
+    const filePath = path.join(process.cwd(), 'public', 'data', 'tools.json');
+    const fileData = fs.readFileSync(filePath, 'utf8');
+    toolsDataCache = JSON.parse(fileData);
     console.log(`Loaded ${toolsDataCache.length} tools from JSON file`);
     return toolsDataCache;
   } catch (error) {
@@ -29,7 +32,7 @@ export async function GET(request) {
     console.log(`API Request - Sector: ${sector}, Type: ${type}`);
 
     // Get tools data
-    const toolsData = await getToolsData();
+    const toolsData = getToolsData();
     console.log(`Using static JSON data with ${toolsData.length} tools`);
 
     // Filter the tools
