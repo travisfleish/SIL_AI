@@ -1,20 +1,37 @@
 // lib/sheets.js
 import { google } from 'googleapis';
-import { JWT } from 'google-auth-library';
+// Remove JWT import since we'll use GoogleAuth instead
+// import { JWT } from 'google-auth-library';
 
 // Initialize the sheets client with service account credentials
 export async function getSheetData() {
   try {
-    // Create a JWT client using service account credentials
-    const auth = new JWT({
-      email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+    console.log("Starting Google Sheets fetch...");
+
+    // Format the private key correctly
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY
+      ?.replace(/\\n/g, '\n')
+      .replace(/^"(.*)"$/, '$1');
+
+    // Use GoogleAuth approach instead of JWT directly
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: privateKey
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
     });
 
-    const sheets = google.sheets({ version: 'v4', auth });
+    console.log("Auth object created, getting client...");
+    const authClient = await auth.getClient();
+
+    const sheets = google.sheets({
+      version: 'v4',
+      auth: authClient
+    });
 
     // Get data from the spreadsheet
+    console.log("Fetching spreadsheet data...");
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.SHEET_ID,
       range: 'Sheet1!A2:H', // Assuming row 1 has headers and data starts from row 2
@@ -22,6 +39,7 @@ export async function getSheetData() {
 
     const rows = response.data.values;
     if (!rows || rows.length === 0) {
+      console.log("No data found in spreadsheet");
       return [];
     }
 
@@ -74,13 +92,25 @@ export async function getSheetData() {
 // Function to add a subscriber to a 'subscribers' sheet
 export async function addSubscriber(email) {
   try {
-    const auth = new JWT({
-      email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    // Format the private key correctly
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY
+      ?.replace(/\\n/g, '\n')
+      .replace(/^"(.*)"$/, '$1');
+
+    // Use GoogleAuth approach instead of JWT directly
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: privateKey
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
     });
 
-    const sheets = google.sheets({ version: 'v4', auth });
+    const authClient = await auth.getClient();
+    const sheets = google.sheets({
+      version: 'v4',
+      auth: authClient
+    });
 
     // First check if email already exists
     const checkResponse = await sheets.spreadsheets.values.get({
