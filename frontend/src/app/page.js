@@ -83,6 +83,8 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
     ? `/screenshots/${currentTool.screenshot_url.split('/').pop()}`
     : "/default-screenshot.png";
 
+  console.log(`Tool: ${currentTool.name}, Image URL: ${imageUrl}`);
+
   return (
     <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl overflow-hidden border border-gray-200">
       {/* Category header bar */}
