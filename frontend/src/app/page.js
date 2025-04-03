@@ -80,7 +80,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
 
   // Get image URL for the current tool
   const imageUrl = currentTool.screenshot_url && currentTool.screenshot_url.trim() !== ""
-    ? currentTool.screenshot_url
+    ? `/screenshots/${currentTool.screenshot_url.split('/').pop()}`
     : "/default-screenshot.png";
 
   return (
