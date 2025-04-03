@@ -27,6 +27,6 @@
     "tailwindcss": "^4"
   },
   "engines": {
-  "node": "16.x"
+  "node": "18.x"
 }
 }
