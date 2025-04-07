@@ -30,7 +30,7 @@ if not os.path.exists(SCREENSHOTS_DIR):
 # ==========================================================================
 
 TOOLS_TO_UPDATE = [
-    ("Langchain", "https://www.langchain.com/"),
+    ("Play Anywhere", "https://playanywhere.com/"),
 ]
 
 

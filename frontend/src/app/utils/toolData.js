@@ -561,10 +561,10 @@ export const TOOL_DATA = [
   },
   {
     "id": "57",
-    "name": "StreamLayer",
-    "source_url": "https://streamlayer.io",
-    "short_description": "Adds real-time interactivity and personalized ads to live sports streams.",
-    "screenshot_url": "/screenshots/streamlayer.png",
+    "name": "Play Anywhere",
+    "source_url": "https://playanywhere.com/",
+    "short_description": "Interactive video platform turning sports content into engaging fan experiences with overlays, predictions, and live engagement.",
+    "screenshot_url": "/screenshots/play_anywhere.png",
     "category": "None",
     "type": "enterprise",
     "sector": "Advertising & Media"

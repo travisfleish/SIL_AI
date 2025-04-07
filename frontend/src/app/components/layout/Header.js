@@ -30,7 +30,7 @@ const Header = ({ onMenuToggle }) => {
       onClick: (e) => e.preventDefault()
     },
     {
-      label: "AI Lumascape",
+      label: "AI Marketmap",
       href: "#",
       onClick: (e) => e.preventDefault()
     }
