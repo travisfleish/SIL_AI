@@ -4,7 +4,7 @@ export const CATEGORIES = [
   { name: "Fan Intelligence", id: "Fan Intelligence", mobileName: "Fan Intel", group: "sports" },
   { name: "Advertising & Media", id: "Advertising & Media", mobileName: "Ad & Media", group: "sports" },
   { name: "Creative & Personalization", id: "Creative & Personalization", mobileName: "Creative", group: "sports" },
-  { name: "Sponsorship & Revenue Growth", id: "Sponsorship & Revenue Growth", mobileName: "Revenue", group: "sports" },
+  { name: "Sponsorship & Revenue", id: "Sponsorship & Revenue", mobileName: "Revenue", group: "sports" },
   { name: "Measurement & Analytics", id: "Measurement & Analytics", mobileName: "Analytics", group: "sports" },
   { name: "Agent Building", id: "Agent Building", mobileName: "Agents", group: "ai" }
 ];
@@ -16,7 +16,7 @@ export const CATEGORY_GROUPS = {
     { name: "Fan Intelligence", id: "Fan Intelligence" },
     { name: "Advertising & Media", id: "Advertising & Media" },
     { name: "Creative & Personalization", id: "Creative & Personalization" },
-    { name: "Sponsorship & Revenue Growth", id: "Sponsorship & Revenue Growth" },
+    { name: "Sponsorship & Revenue", id: "Sponsorship & Revenue" },
     { name: "Measurement & Analytics", id: "Measurement & Analytics" }
   ],
   AI: [
