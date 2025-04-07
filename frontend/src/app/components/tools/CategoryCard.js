@@ -1,0 +1,143 @@
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { ExternalLink } from 'lucide-react';
+
+const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
+  // Create a state to track the current tool index within this category
+  const [currentToolIndex, setCurrentToolIndex] = useState(0);
+
+  // Filter tools that match this category
+  const categoryTools = tools.filter(tool => tool.category === category);
+
+  // For debugging
+  console.log(`Category ${category}: Matched tools: ${categoryTools.length}`);
+
+  // If no tools match this category, show a message
+  if (categoryTools.length === 0) {
+    return (
+      <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl overflow-hidden border border-gray-200">
+        <div className="w-full bg-blue-100 py-2 px-3 text-center mb-2">
+          <span className="font-bold text-blue-800 text-lg">
+            {category}
+          </span>
+        </div>
+        <div className="p-4 flex flex-col items-center justify-center h-48 w-full">
+          <p className="text-gray-600">No tools available for this category.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Take up to 6 tools from this category
+  const displayTools = categoryTools.slice(0, 6);
+
+  // Get the current tool to display
+  const currentTool = displayTools[currentToolIndex % displayTools.length];
+
+  // Only show navigation if we have multiple tools
+  const hasMultipleTools = displayTools.length > 1;
+
+  // Get image URL for the current tool
+  const imageUrl = currentTool.screenshot_url && currentTool.screenshot_url.trim() !== ""
+    ? `/screenshots/${currentTool.screenshot_url.split('/').pop()}`
+    : "/default-screenshot.png";
+
+  return (
+    <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl overflow-hidden border border-gray-200">
+      {/* Category header bar */}
+      <div className="w-full bg-blue-100 py-2 px-3 text-center mb-2">
+        <span className="font-bold text-blue-800 text-lg">
+          {category}
+        </span>
+      </div>
+
+      <div className="p-4 flex flex-col items-center w-full relative">
+        {/* Navigation arrows - only show if multiple tools */}
+        {hasMultipleTools && (
+          <>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setCurrentToolIndex(prev =>
+                  prev === 0 ? displayTools.length - 1 : prev - 1
+                );
+              }}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-1 rounded-full shadow-md hover:bg-gray-100"
+              aria-label="Previous tool"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setCurrentToolIndex(prev =>
+                  (prev + 1) % displayTools.length
+                );
+              }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-1 rounded-full shadow-md hover:bg-gray-100"
+              aria-label="Next tool"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+          </>
+        )}
+
+        {/* Tool image */}
+        <div className="relative w-full pb-4 mb-6">
+          <Image
+            src={imageUrl}
+            alt={`${currentTool.name} Screenshot`}
+            width={1280}
+            height={800}
+            className="w-full h-auto rounded-md shadow-sm"
+            unoptimized
+          />
+
+          {/* Tool counter (e.g., "1/3") - shows actual number */}
+          {hasMultipleTools && (
+            <div className="absolute bottom-6 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full opacity-80">
+              {currentToolIndex + 1}/{displayTools.length}
+            </div>
+          )}
+        </div>
+
+        {/* Tool name and link */}
+        <h3 className="text-lg font-bold flex items-center">
+          <a href={currentTool.source_url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+            {currentTool.name}
+          </a>
+          <ExternalLink className="ml-2 w-4 h-4 text-gray-500" />
+        </h3>
+
+        {/* Tool description */}
+        <p className="text-gray-600 text-center mt-2">{currentTool.short_description}</p>
+
+        {/* Pagination dots - only for actual tools */}
+        {hasMultipleTools && (
+          <div className="flex justify-center mt-3 space-x-1">
+            {displayTools.map((_, index) => (
+              <button
+                key={index}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentToolIndex(index);
+                }}
+                className={`w-1.5 h-1.5 rounded-full ${
+                  currentToolIndex === index ? 'bg-blue-500' : 'bg-gray-300'
+                }`}
+                aria-label={`Go to tool ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CategoryCard;
