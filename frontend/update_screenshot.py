@@ -12,9 +12,7 @@ from googleapiclient.discovery import build
 load_dotenv('.env.local')
 
 # Set the path to the existing screenshots directory
-# The script is running from inside the frontend directory,
-# so we need to go directly to public/screenshots
-current_dir = os.path.dirname(os.path.abspath(__file__))  # Get directory where script is running
+current_dir = os.path.dirname(os.path.abspath(__file__))
 SCREENSHOTS_DIR = os.path.join(current_dir, "public", "screenshots")
 
 print(f"Using screenshots directory: {SCREENSHOTS_DIR}")
@@ -22,30 +20,21 @@ print(f"Using screenshots directory: {SCREENSHOTS_DIR}")
 # Verify the directory exists
 if not os.path.exists(SCREENSHOTS_DIR):
     print(f"WARNING: Screenshots directory does not exist yet at: {SCREENSHOTS_DIR}")
+    os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 
-# Updated categories matching your new system
-CATEGORIES = [
-    "Foundational AI",
-    "Writing & Editing",
-    "Meeting Assistants",
-    "Deck Automation",
-    "Content Creation",
-    "Research & Analysis",
-    "Task & Workflow",
-    "Voice & Audio"
+# ==========================================================================
+# CONFIGURATION: Specify tools to update here
+# ==========================================================================
+# Format: List of tuples with (tool_name, tool_url)
+# If you leave tool_url as None, the script will fetch the URL from Google Sheets
+# ==========================================================================
+
+TOOLS_TO_UPDATE = [
+    ("Langchain", "https://www.langchain.com/"),
 ]
 
-# Types of tools
-TOOL_TYPES = ["personal", "enterprise"]
 
-# Sectors for enterprise tools
-SECTORS = [
-    "Fan Intelligence",
-    "Advertising & Media",
-    "Creative & Personalization",
-    "Sponsorship & Revenue Growth",
-    "Measurement & Analytics"
-]
+# ==========================================================================
 
 
 def get_sheets_service():
@@ -80,30 +69,15 @@ def get_sheets_service():
     return service
 
 
-def screenshot_exists(tool_name):
+def get_tool_info_from_sheets(tool_name):
     """
-    Check if a screenshot exists for a given tool name.
+    Retrieve information for a specific tool from Google Sheets.
 
     Args:
-        tool_name (str): Name of the tool to check
+        tool_name (str): Name of the tool to find
 
     Returns:
-        bool: True if screenshot exists and is not empty, False otherwise
-    """
-    # Convert tool name to screenshot filename
-    filename = f"{tool_name.replace(' ', '_').lower()}.png"
-    file_path = os.path.join(SCREENSHOTS_DIR, filename)
-
-    # Check if file exists and is not empty
-    return os.path.exists(file_path) and os.path.getsize(file_path) > 0
-
-
-def get_tools_without_screenshots():
-    """
-    Retrieve tools from Google Sheets that do not have existing screenshots.
-
-    Returns:
-        list: Tools without screenshots [(name, url, row_index, priority)]
+        tuple: (url, row_index) or (None, None) if not found
     """
     service = get_sheets_service()
     sheet_id = os.getenv("SHEET_ID")
@@ -111,56 +85,19 @@ def get_tools_without_screenshots():
     # Get all tools from the Sheet1 tab
     result = service.spreadsheets().values().get(
         spreadsheetId=sheet_id,
-        range='Sheet1!A2:H'  # Assuming headers are in row 1
+        range='Sheet1!A2:C'  # Only need id, name, and URL columns
     ).execute()
 
     rows = result.get('values', [])
 
-    # Process rows into tools with their URLs
-    # Assuming columns are: A:id, B:name, C:source_url, D:description, E:screenshot_url, F:category, G:type, H:sector
-    all_tools = []
+    # Look for the tool by name
     for i, row in enumerate(rows):
-        # Skip rows that don't have enough columns
-        if len(row) < 3:
-            continue
+        if len(row) > 1 and row[1].strip() == tool_name:
+            url = row[2] if len(row) > 2 else None
+            return url, i + 2  # i+2 because index is 0-based and row 1 is header
 
-        # Get tool name and URL (columns B and C)
-        name = row[1] if len(row) > 1 else ""
-        url = row[2] if len(row) > 2 else ""
-
-        # Get category and type info for prioritization
-        category = row[5] if len(row) > 5 else ""
-        tool_type = row[6] if len(row) > 6 else "personal"
-        sector = row[7] if len(row) > 7 else ""
-
-        # Skip empty URLs
-        if not url or url.strip() == "":
-            continue
-
-        # Check if already has a screenshot URL in the sheet
-        has_screenshot_url = len(row) > 4 and row[4] and row[4].strip() != ""
-
-        # Check if file already exists locally
-        has_local_screenshot = screenshot_exists(name)
-
-        # If no screenshot in sheets or locally, add to the list
-        if not has_screenshot_url or not has_local_screenshot:
-            # Determine priority (1 = highest, 3 = lowest)
-            priority = 3  # Default priority
-
-            # Prioritize tools that match our primary categories/sectors
-            if tool_type == "personal" and category in CATEGORIES:
-                priority = 1
-            elif tool_type == "enterprise" and sector in SECTORS:
-                priority = 1
-
-            # Add to list with row index for later updating
-            all_tools.append((name, url, i + 2, priority))  # i+2 because index is 0-based and row 1 is header
-
-    # Sort by priority (highest first)
-    all_tools.sort(key=lambda x: x[3])
-
-    return all_tools
+    print(f"❌ Tool '{tool_name}' not found in Google Sheets")
+    return None, None
 
 
 def save_screenshot(url, name):
@@ -199,10 +136,10 @@ def save_screenshot(url, name):
             img = Image.open(BytesIO(response.content))
             print(f"Image size: {img.size}")
 
-            # Ensure screenshots directory exists
-            if not os.path.exists(SCREENSHOTS_DIR):
-                print(f"Creating screenshots directory: {SCREENSHOTS_DIR}")
-                os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
+            # Remove existing screenshot if it exists
+            if os.path.exists(save_path):
+                print(f"Removing existing screenshot: {save_path}")
+                os.remove(save_path)
 
             img.save(save_path)
             print(f"Saved image to: {save_path}")
@@ -248,28 +185,16 @@ def update_screenshot_url_in_sheets(service, sheet_id, row_index, screenshot_url
         print(f"❌ Error updating Google Sheet: {e}")
 
 
-def process_all_screenshots():
+def update_specific_screenshots():
     """
-    Process screenshots for all tools that need them.
+    Update screenshots for the specified tools only.
     """
     print("=" * 50)
-    print("STARTING FULL SCREENSHOT GENERATOR")
+    print("STARTING SPECIFIC SCREENSHOT UPDATER")
     print("=" * 50)
     print(f"Current directory: {os.getcwd()}")
     print(f"Script location: {os.path.abspath(__file__)}")
     print(f"Using screenshots directory: {SCREENSHOTS_DIR}")
-
-    # Ensure screenshot directory exists
-    if not os.path.exists(SCREENSHOTS_DIR):
-        print(f"Creating screenshots directory at: {SCREENSHOTS_DIR}")
-        os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
-    else:
-        print(f"Screenshots directory already exists at: {SCREENSHOTS_DIR}")
-
-    # Get all tools that need screenshots
-    tools_to_process = get_tools_without_screenshots()
-
-    print(f"\nFound {len(tools_to_process)} tools that need screenshots")
 
     # Setup Google Sheets service for updates
     service = get_sheets_service()
@@ -279,33 +204,49 @@ def process_all_screenshots():
         print("ERROR: SHEET_ID not found in .env.local")
         return
 
-    # Process screenshots with rate limiting
-    for i, (name, url, row_index, priority) in enumerate(tools_to_process):
+    # Process each specified tool
+    for i, (tool_name, tool_url) in enumerate(TOOLS_TO_UPDATE):
         print("\n" + "-" * 50)
-        print(f"Processing tool {i + 1}/{len(tools_to_process)}: {name} (Priority: {priority})")
+        print(f"Processing tool {i + 1}/{len(TOOLS_TO_UPDATE)}: {tool_name}")
+
+        # If URL is not provided, try to get it from Google Sheets
+        url = tool_url
+        row_index = None
+
+        if url is None:
+            print(f"No URL provided for {tool_name}, fetching from Google Sheets...")
+            url, row_index = get_tool_info_from_sheets(tool_name)
+
+            if url is None:
+                print(f"❌ Could not find URL for {tool_name}, skipping...")
+                continue
+        else:
+            # If we have a URL but need to find the row index
+            _, row_index = get_tool_info_from_sheets(tool_name)
+
         print(f"URL: {url}")
         print(f"Row index: {row_index}")
 
         # Take the screenshot
-        screenshot_path = save_screenshot(url, name)
+        screenshot_path = save_screenshot(url, tool_name)
 
-        if screenshot_path:
+        if screenshot_path and row_index:
             print(f"🖼️ Saved Screenshot: {screenshot_path}")
             # Update the screenshot URL in Google Sheets
             update_screenshot_url_in_sheets(service, sheet_id, row_index, screenshot_path)
         else:
-            print(f"❌ Failed to generate screenshot for {name}")
+            print(f"❌ Failed to update screenshot for {tool_name}")
 
         # Rate limiting to avoid overloading the screenshot API
-        if i < len(tools_to_process) - 1:  # Don't sleep after the last item
+        if i < len(TOOLS_TO_UPDATE) - 1:  # Don't sleep after the last item
             sleep_time = 2  # 2 seconds between requests
             print(f"Waiting {sleep_time} seconds before next screenshot...")
             time.sleep(sleep_time)
 
     print("\n" + "=" * 50)
-    print(f"COMPLETED PROCESSING {len(tools_to_process)} TOOLS")
+    print(f"COMPLETED UPDATING {len(TOOLS_TO_UPDATE)} TOOLS")
     print("=" * 50)
 
 
 if __name__ == "__main__":
-    process_all_screenshots()
+    update_specific_screenshots()
