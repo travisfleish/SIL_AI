@@ -1,6 +1,6 @@
 // src/app/api/tools/route.js
 import { NextResponse } from 'next/server';
-import { TOOL_DATA } from '../../utils/toolData'; // adjust path if needed
+import { TOOL_DATA } from '../../utils/toolData';
 
 export async function GET(request) {
   try {
@@ -8,34 +8,60 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const sector = searchParams.get('sector') || '';
     const type = searchParams.get('type') || 'personal';
+    const group = searchParams.get('group') || '';
 
-    console.log(`API Request - Sector: ${sector}, Type: ${type}`);
+    console.log(`API Request - Type: ${type}, Sector: ${sector}, Group: ${group}`);
 
-    // Filter the tools
-    let filteredTools = TOOL_DATA;
+    // Define which sectors belong to which groups
+    const aiSectors = ['Agent Building'];
+    const sportsSectors = [
+      'Fan Intelligence',
+      'Advertising & Media',
+      'Creative & Personalization',
+      'Sponsorship & Revenue Growth',
+      'Measurement & Analytics'
+    ];
 
-    // Map 'new' to 'personal' and 'enterprise' remains as is
-    const mappedType = type === 'new' ? 'personal' : type;
+    // Start with a copy of all tools
+    let filteredTools = [...TOOL_DATA];
 
-    // Filter by type if provided
-    if (mappedType) {
+    // Step 1: Filter by type first (personal/enterprise)
+    filteredTools = filteredTools.filter(tool =>
+      tool.type.toLowerCase() === type.toLowerCase()
+    );
+    console.log(`After type filter: ${filteredTools.length} tools`);
+
+    // Step 2: Apply sector or group filtering
+    if (group === 'sports') {
+      // All Sports Tools - include any tool with a sports sector
       filteredTools = filteredTools.filter(tool =>
-        tool.type.toLowerCase() === mappedType.toLowerCase()
+        sportsSectors.includes(tool.sector)
       );
-      console.log(`After type filter (${mappedType}): ${filteredTools.length} tools`);
+      console.log(`After 'sports' group filter: ${filteredTools.length} tools`);
+    }
+    else if (group === 'ai') {
+      // All AI Tools - include any tool with an AI sector
+      filteredTools = filteredTools.filter(tool =>
+        aiSectors.includes(tool.sector)
+      );
+      console.log(`After 'ai' group filter: ${filteredTools.length} tools`);
+    }
+    else if (sector && sector !== '') {
+      // Specific sector - only include tools with this exact sector
+      filteredTools = filteredTools.filter(tool =>
+        tool.sector === sector
+      );
+      console.log(`After sector filter '${sector}': ${filteredTools.length} tools`);
     }
 
-    // Filter by sector if provided
-    if (sector && sector !== '') {
-      filteredTools = filteredTools.filter(tool =>
-        tool.sector && tool.sector.toLowerCase().includes(sector.toLowerCase())
-      );
-      console.log(`After sector filter (${sector}): ${filteredTools.length} tools`);
+    // Log the first few tools for debugging
+    if (filteredTools.length > 0) {
+      console.log(`First tool returned: ${filteredTools[0].name} (${filteredTools[0].sector})`);
     }
 
     return NextResponse.json(filteredTools);
   } catch (error) {
     console.error('Error in /api/tools:', error);
-    return NextResponse.json([], { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

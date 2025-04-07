@@ -1,13 +1,29 @@
 // Categories for filtering enterprise tools
 export const CATEGORIES = [
   { name: "All Categories", id: "" },
-  { name: "Fan Intelligence", id: "Fan Intelligence", mobileName: "Fan Intel" },
-  { name: "Advertising & Media", id: "Advertising & Media", mobileName: "Ad & Media" },
-  { name: "Creative & Personalization", id: "Creative & Personalization", mobileName: "Creative" },
-  { name: "Sponsorship & Revenue Growth", id: "Sponsorship & Revenue Growth", mobileName: "Revenue" },
-  { name: "Measurement & Analytics", id: "Measurement & Analytics", mobileName: "Analytics" },
-  { name: "Agent Building", id: "Agent Building", mobileName: "Agents" }
+  { name: "Fan Intelligence", id: "Fan Intelligence", mobileName: "Fan Intel", group: "sports" },
+  { name: "Advertising & Media", id: "Advertising & Media", mobileName: "Ad & Media", group: "sports" },
+  { name: "Creative & Personalization", id: "Creative & Personalization", mobileName: "Creative", group: "sports" },
+  { name: "Sponsorship & Revenue Growth", id: "Sponsorship & Revenue Growth", mobileName: "Revenue", group: "sports" },
+  { name: "Measurement & Analytics", id: "Measurement & Analytics", mobileName: "Analytics", group: "sports" },
+  { name: "Agent Building", id: "Agent Building", mobileName: "Agents", group: "ai" }
 ];
+
+// Category groups for new dropdown UI
+export const CATEGORY_GROUPS = {
+  SPORTS: [
+    { name: "All Sports Tools", id: "sports_all" },
+    { name: "Fan Intelligence", id: "Fan Intelligence" },
+    { name: "Advertising & Media", id: "Advertising & Media" },
+    { name: "Creative & Personalization", id: "Creative & Personalization" },
+    { name: "Sponsorship & Revenue Growth", id: "Sponsorship & Revenue Growth" },
+    { name: "Measurement & Analytics", id: "Measurement & Analytics" }
+  ],
+  AI: [
+    { name: "All AI Tools", id: "ai_all" },
+    { name: "Agent Building", id: "Agent Building" }
+  ]
+};
 
 // Filters for toggling between view modes
 export const FILTERS = [
@@ -49,7 +65,6 @@ export const SPONSORS = [
   { id: 20, name: "ClientLogo 20", logoUrl: "/logos/ClientLogo_20.jpg" },
   { id: 21, name: "ClientLogo 21", logoUrl: "/logos/ClientLogo_21.jpg" },
   { id: 22, name: "ClientLogo 22", logoUrl: "/logos/ClientLogo_22.jpg" }
-
 ];
 
 // Content types

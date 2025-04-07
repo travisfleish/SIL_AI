@@ -1,49 +1,88 @@
-import { useState, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
-export const useToolFiltering = (initialTools = []) => {
-  const [tools, setTools] = useState(initialTools);
+export const useToolFiltering = () => {
+  const [tools, setTools] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState('personal');
   const [selectedCategory, setSelectedCategory] = useState('');
 
-  const fetchTools = async (filter, category) => {
-    try {
-      const response = await fetch(`/api/tools?type=${filter}&sector=${category || ''}`);
-      const data = await response.json();
+  const fetchTools = useCallback(async () => {
+    setLoading(true);
+    setError(null);
 
-      // Randomly certify one tool if desired
-      if (data.length > 0) {
-        const certifiedIndex = Math.floor(Math.random() * data.length);
-        data[certifiedIndex].certified = true;
+    try {
+      // Build the endpoint URL based on current selections
+      let endpoint = `/api/tools?type=${selectedFilter}`;
+
+      // Handle special category IDs for all tools in a group
+      if (selectedCategory === 'sports_all') {
+        endpoint += '&group=sports';
+      }
+      else if (selectedCategory === 'ai_all') {
+        endpoint += '&group=ai';
+      }
+      else if (selectedCategory && selectedCategory !== '') {
+        endpoint += `&sector=${encodeURIComponent(selectedCategory)}`;
+      }
+
+      console.log('Fetching tools from:', endpoint);
+
+      const response = await fetch(endpoint);
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(`Fetched ${data.length} tools`);
+
+      if (data.error) {
+        throw new Error(data.error);
       }
 
       setTools(data);
-    } catch (error) {
-      console.error("Error fetching tools:", error);
+    } catch (err) {
+      console.error('Error fetching tools:', err);
+      setError(err.message || 'Failed to fetch tools');
       setTools([]);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [selectedFilter, selectedCategory]);
 
-  // Filtered tools based on current selection
-  const filteredTools = useMemo(() => {
-    return tools.filter(tool => {
-      // For enterprise view, filter by sector
-      if (selectedFilter === 'enterprise') {
-        return selectedCategory
-          ? tool.sector === selectedCategory
-          : true;
-      }
+  // Handle filter type change (Personal/Enterprise)
+  const handleFilterChange = useCallback((filter) => {
+    setSelectedFilter(filter);
 
-      // For personal view, return all tools
-      return true;
-    });
-  }, [tools, selectedFilter, selectedCategory]);
+    // Reset or set appropriate category when switching filters
+    if (filter === 'personal') {
+      setSelectedCategory('');
+    } else if (filter === 'enterprise') {
+      // Default to all sports tools when switching to enterprise
+      setSelectedCategory('sports_all');
+    }
+  }, []);
+
+  // Handle category selection change
+  const handleCategoryChange = useCallback((category) => {
+    console.log('Category changed to:', category);
+    setSelectedCategory(category);
+  }, []);
+
+  // Fetch tools whenever the filter or category changes
+  useEffect(() => {
+    fetchTools();
+  }, [fetchTools]);
 
   return {
-    tools: filteredTools,
+    tools,
+    loading,
+    error,
     selectedFilter,
     selectedCategory,
-    setSelectedFilter,
-    setSelectedCategory,
+    setSelectedFilter: handleFilterChange,
+    setSelectedCategory: handleCategoryChange,
     fetchTools
   };
 };

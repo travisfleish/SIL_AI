@@ -1,5 +1,6 @@
-const React = require('react');
-const { CATEGORIES } = require('../../utils/constants');
+import React from 'react';
+import Dropdown from './Dropdown';
+import { CATEGORY_GROUPS } from '../../utils/constants';
 
 const CategoryFilters = ({
   selectedFilter,
@@ -12,32 +13,52 @@ const CategoryFilters = ({
     return null;
   }
 
-  return React.createElement("section", {
-    className: "p-4 pt-8 flex justify-center bg-gray-100 mb-5"
-  },
-    React.createElement("div", {
-      className: "inline-flex flex-wrap rounded-md shadow-sm"
-    },
-      CATEGORIES.map((category, index) =>
-        React.createElement("button", {
-          key: category.id,
-          onClick: () => onCategoryChange(category.id),
-          className: `
-            px-6 py-3 text-md font-bold
-            border border-gray-300
-            ${index === 0 ? "rounded-l-lg" : ""}
-            ${index === CATEGORIES.length - 1 ? "rounded-r-lg" : ""}
-            ${selectedCategory === category.id 
-              ? "bg-blue-600 text-white z-10" 
-              : "bg-gray-150 text-gray-900 hover:bg-gray-300"}
-            ${index > 0 && "-ml-px"}
-            transition
-            whitespace-nowrap
-          `
-        }, isMobile && category.mobileName ? category.mobileName : category.name)
-      )
-    )
+  // Determine which dropdown is active
+  const isSportsActive = !selectedCategory ||
+    selectedCategory === "sports_all" ||
+    CATEGORY_GROUPS.SPORTS.slice(1).some(tool => tool.id === selectedCategory);
+
+  const isAIActive = selectedCategory === "ai_all" ||
+    CATEGORY_GROUPS.AI.slice(1).some(tool => tool.id === selectedCategory);
+
+  // Find the currently selected option in the active dropdown
+  const getSelectedValue = (group) => {
+    if (group === 'sports') {
+      if (!selectedCategory || selectedCategory === 'sports_all') {
+        return 'sports_all';
+      }
+      const found = CATEGORY_GROUPS.SPORTS.find(option => option.id === selectedCategory);
+      return found ? found.id : 'sports_all';
+    } else {
+      if (selectedCategory === 'ai_all') {
+        return 'ai_all';
+      }
+      const found = CATEGORY_GROUPS.AI.find(option => option.id === selectedCategory);
+      return found ? found.id : 'ai_all';
+    }
+  };
+
+  return (
+    <section className="p-6 pt-10 pb-10 flex flex-col sm:flex-row justify-center items-center bg-gray-100 mb-6 gap-8">
+      {/* Sports Tools Dropdown */}
+      <Dropdown
+        title="Sports Tools"
+        options={CATEGORY_GROUPS.SPORTS}
+        selectedValue={getSelectedValue('sports')}
+        onChange={onCategoryChange}
+        isActive={isSportsActive}
+      />
+
+      {/* AI Tools Dropdown */}
+      <Dropdown
+        title="AI Tools"
+        options={CATEGORY_GROUPS.AI}
+        selectedValue={getSelectedValue('ai')}
+        onChange={onCategoryChange}
+        isActive={isAIActive}
+      />
+    </section>
   );
 };
 
-module.exports = CategoryFilters;
+export default CategoryFilters;

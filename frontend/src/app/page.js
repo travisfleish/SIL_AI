@@ -31,73 +31,32 @@ const useMediaQuery = () => {
   return matches;
 };
 
-const useToolFiltering = () => {
-  const [tools, setTools] = React.useState([]);
-  const [selectedFilter, setSelectedFilter] = React.useState('personal');
-  const [selectedCategory, setSelectedCategory] = React.useState('');
-  
-  const fetchTools = React.useCallback(async () => {
-    try {
-      // Reset category when switching to personal
-      if (selectedFilter === 'personal') {
-        setSelectedCategory('');
-      }
-
-      const response = await fetch(`/api/tools?type=${selectedFilter}${selectedCategory ? `&sector=${selectedCategory}` : ''}`);
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch tools');
-      }
-
-      const data = await response.json();
-      console.log('Fetched tools:', data);
-      setTools(data);
-    } catch (error) {
-      console.error('Error fetching tools:', error);
-      setTools([]); // Set to empty array on error
-    }
-  }, [selectedFilter, selectedCategory]);
-
-  // Modify setSelectedFilter to reset category
-  const modifiedSetSelectedFilter = React.useCallback((filter) => {
-    setSelectedFilter(filter);
-    if (filter === 'personal') {
-      setSelectedCategory('');
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchTools();
-  }, [fetchTools, selectedFilter, selectedCategory]);
-
-  return {
-    tools,
-    selectedFilter,
-    selectedCategory,
-    setSelectedFilter: modifiedSetSelectedFilter,
-    setSelectedCategory,
-    fetchTools
-  };
-};
+// Import useToolFiltering hook (updated version with loading/error states)
+import { useToolFiltering } from './hooks/useToolFiltering';
 
 export default function Home() {
-  // Use custom hooks for state management
+  // Use custom hooks for state management with enhanced states
   const {
     tools,
+    loading,
+    error,
     selectedFilter,
     selectedCategory,
     setSelectedFilter,
     setSelectedCategory,
-    fetchTools
   } = useToolFiltering();
 
   // Media query hook
   const isMobile = useMediaQuery();
 
-  // Fetch tools when filter or category changes
+  // Log status changes for debugging
   useEffect(() => {
-    fetchTools(selectedFilter, selectedCategory);
-  }, [selectedFilter, selectedCategory, fetchTools]);
+    console.log('Current state:', {
+      filter: selectedFilter,
+      category: selectedCategory,
+      toolCount: tools.length
+    });
+  }, [selectedFilter, selectedCategory, tools.length]);
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
@@ -123,12 +82,28 @@ export default function Home() {
         />
       )}
 
+      {/* Loading State */}
+      {loading && (
+        <div className="w-full p-12 flex justify-center">
+          <div className="animate-pulse text-xl">Loading tools...</div>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <div className="w-full p-12 flex justify-center">
+          <div className="text-red-500">Error: {error}</div>
+        </div>
+      )}
+
       {/* Tool Grid */}
-      <ToolGrid
-        tools={tools}
-        selectedFilter={selectedFilter}
-        selectedCategory={selectedCategory}
-      />
+      {!loading && !error && (
+        <ToolGrid
+          tools={tools}
+          selectedFilter={selectedFilter}
+          selectedCategory={selectedCategory}
+        />
+      )}
 
       {/* Fixed Newsletter Section */}
       <NewsletterSection variant="fixed" />
