@@ -7,12 +7,14 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import SponsorCarousel from './components/marketing/SponsorCarousel';
 import NewsletterSection from './components/marketing/NewsletterSection';
-// import YouTubeSection from './components/marketing/YouTubeSection';
 import BlogSection from './components/marketing/BlogSection';
 import ToggleButtons from './components/ui/ToggleButtons';
 import CategoryFilters from './components/ui/CategoryFilters';
 import ToolGrid from './components/tools/ToolGrid';
-import CollapsibleChatbot from './components/tools/CollapsibleChatbot';
+import ScrollAnimation from './components/ui/ScrollAnimation';
+
+// Import the animations CSS
+import './animations.css';
 
 // Simplified hook functionality
 const useMediaQuery = () => {
@@ -61,26 +63,27 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
-      {/* Header Component */}
+      {/* Header Component - No animation needed */}
       <Header />
 
-      {/*/!* Sponsor Carousel *!/*/}
-      {/*<SponsorCarousel />*/}
-
       {/* Toggle Buttons for Personal/Enterprise View */}
-      <ToggleButtons
-        selectedFilter={selectedFilter}
-        onFilterChange={setSelectedFilter}
-      />
+      <ScrollAnimation animation="fade-in" duration={800}>
+        <ToggleButtons
+          selectedFilter={selectedFilter}
+          onFilterChange={setSelectedFilter}
+        />
+      </ScrollAnimation>
 
       {/* Category Filters for Enterprise View */}
       {selectedFilter === 'enterprise' && (
-        <CategoryFilters
-          selectedFilter={selectedFilter}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-          isMobile={isMobile}
-        />
+        <ScrollAnimation animation="fade-up" delay={200}>
+          <CategoryFilters
+            selectedFilter={selectedFilter}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            isMobile={isMobile}
+          />
+        </ScrollAnimation>
       )}
 
       {/* Loading State */}
@@ -97,29 +100,31 @@ export default function Home() {
         </div>
       )}
 
-      {/* Tool Grid */}
+      {/* Tool Grid - Using ScrollAnimation */}
       {!loading && !error && (
-        <ToolGrid
-          tools={tools}
-          selectedFilter={selectedFilter}
-          selectedCategory={selectedCategory}
-        />
+        <ScrollAnimation animation="fade-up" delay={300} duration={1000} className="w-full">
+          <ToolGrid
+            tools={tools}
+            selectedFilter={selectedFilter}
+            selectedCategory={selectedCategory}
+          />
+        </ScrollAnimation>
       )}
 
-      {/* Fixed Newsletter Section */}
-      <NewsletterSection variant="fixed" />
+      {/* Fixed Newsletter Section - Using ScrollAnimation */}
+      <ScrollAnimation animation="fade-up" threshold={0.5} className="w-full">
+        <NewsletterSection variant="fixed" />
+      </ScrollAnimation>
 
-      {/* Blog Section (replacing YouTube Section) */}
-      <BlogSection />
+      {/* Blog Section - Using ScrollAnimation */}
+      <ScrollAnimation animation="fade-up" threshold={0.1} className="w-full">
+        <BlogSection />
+      </ScrollAnimation>
 
-      {/* YouTube Section (commented out) */}
-      {/* <YouTubeSection /> */}
-
-      {/* Footer */}
-      <Footer />
-
-      {/* Collapsible Chatbot */}
-      {/*<CollapsibleChatbot />*/}
+      {/* Footer - Quick fade in with no upward movement */}
+      <ScrollAnimation animation="fade-in" duration={600} className="w-full">
+        <Footer />
+      </ScrollAnimation>
     </div>
   );
 }
