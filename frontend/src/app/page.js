@@ -7,7 +7,8 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import SponsorCarousel from './components/marketing/SponsorCarousel';
 import NewsletterSection from './components/marketing/NewsletterSection';
-import YouTubeSection from './components/marketing/YouTubeSection';
+// import YouTubeSection from './components/marketing/YouTubeSection';
+import BlogSection from './components/marketing/BlogSection';
 import ToggleButtons from './components/ui/ToggleButtons';
 import CategoryFilters from './components/ui/CategoryFilters';
 import ToolGrid from './components/tools/ToolGrid';
@@ -16,18 +17,18 @@ import CollapsibleChatbot from './components/tools/CollapsibleChatbot';
 // Simplified hook functionality
 const useMediaQuery = () => {
   const [matches, setMatches] = React.useState(false);
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const media = window.matchMedia('(max-width: 768px)');
       setMatches(media.matches);
-      
+
       const listener = (e) => setMatches(e.matches);
       media.addEventListener('change', listener);
       return () => media.removeEventListener('change', listener);
     }
   }, []);
-  
+
   return matches;
 };
 
@@ -63,8 +64,8 @@ export default function Home() {
       {/* Header Component */}
       <Header />
 
-      {/* Sponsor Carousel */}
-      <SponsorCarousel />
+      {/*/!* Sponsor Carousel *!/*/}
+      {/*<SponsorCarousel />*/}
 
       {/* Toggle Buttons for Personal/Enterprise View */}
       <ToggleButtons
@@ -108,8 +109,11 @@ export default function Home() {
       {/* Fixed Newsletter Section */}
       <NewsletterSection variant="fixed" />
 
-      {/* YouTube Section */}
-      <YouTubeSection />
+      {/* Blog Section (replacing YouTube Section) */}
+      <BlogSection />
+
+      {/* YouTube Section (commented out) */}
+      {/* <YouTubeSection /> */}
 
       {/* Footer */}
       <Footer />

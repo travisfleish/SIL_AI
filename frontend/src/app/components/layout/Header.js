@@ -25,14 +25,15 @@ const Header = ({ onMenuToggle }) => {
       rel: "noopener noreferrer"
     },
     {
-      label: "AI Playbook",
+      label: "AI Marketmap",
       href: "#",
       onClick: (e) => e.preventDefault()
     },
     {
-      label: "AI Marketmap",
-      href: "#",
-      onClick: (e) => e.preventDefault()
+      label: "AI Blog",
+      href: "https://www.twinbrain.ai/blog",
+      target: "_blank",
+      rel: "noopener noreferrer"
     }
   ];
 
@@ -97,30 +98,21 @@ const Header = ({ onMenuToggle }) => {
         {/* Top: Logo + Hamburger + Nav */}
         <div className="flex items-center justify-between w-full mb-6 md:mb-8">
           {/* Left: Combined Logos */}
-          <div className="flex flex-col items-center gap-1 mt-1">
+          <div className="flex flex-col items-center gap-1 ml-14 mt-10">
             <div className="flex items-center space-x-3 ml-5">
-              <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.ai.sportsilab.com" target="_blank" rel="noopener noreferrer">
                 <Image
-                  src="/logo_transparent.png"
-                  alt="TwinBrain Logo"
+                  src="/AI_Advantage.png"
+                  alt="AI Advantage Logo"
                   width={isMobile ? 80 : 160}
                   height={isMobile ? 40 : 80}
-                />
-              </a>
-              <span className="text-white font-bold mr-10">×</span>
-              <a href="https://www.sportsilab.com" target="_blank" rel="noopener noreferrer">
-                <Image
-                  src="/sil-logo.png"
-                  alt="Sports Innovation Lab Logo"
-                  width={isMobile ? 90 : 140}
-                  height={isMobile ? 40 : 60}
                 />
               </a>
             </div>
           </div>
 
-          {/* Desktop Nav */}
-          <nav className="hidden sm:flex gap-6 text-sm sm:text-base text-white font-semibold mr-15">
+          {/* Desktop Nav - UPDATED: Changed text sizes to be much larger */}
+          <nav className="hidden sm:flex gap-6 text-xl sm:text-2xl md:text-3xl text-white font-semibold mr-15">
             {navItems.map((item) => (
               <a
                 key={item.label}
@@ -145,11 +137,10 @@ const Header = ({ onMenuToggle }) => {
 
         {/* Title Section */}
         <div className="text-center mt-4 pb-8 md:pb-12">
-          <h1 className={`${inter.className} text-3xl sm:text-5xl md:text-6xl leading-tight mb-3 tracking-tight`}>
-            <span className="font-normal text-white">Sports</span>
-            <span className="font-bold text-white">Innovation</span>
-            <span className="font-normal text-white">Lab</span>
-            <span className="font-bold text-yellow-300">AI</span>
+          <h1 className={`${inter.className} text-5xl sm:text-7xl md:text-7xl leading-tight mb-3 tracking-tight`}>
+            <span className="font-normal text-white">AI </span>
+            <span className="font-bold text-white">Advantage </span>
+            <span className="font-normal text-white">Resources</span>
           </h1>
           <p className={`hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light`}>
             Discover the best AI tools for sports professionals

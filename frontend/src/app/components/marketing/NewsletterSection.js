@@ -9,8 +9,8 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
 
   // Base wrapper classes and styles
   const wrapperClasses = isFixed
-    ? "w-full py-10 flex flex-col items-center shadow-md mt-10 px-4 sm:px-0 relative overflow-hidden"
-    : "fixed bottom-0 w-full text-white py-6 shadow-xl z-50 overflow-hidden";
+    ? "w-full py-30 flex flex-col items-center shadow-md mt-10 px-4 sm:px-0 relative overflow-hidden"
+    : "fixed bottom-0 w-full text-white py-16 shadow-xl z-50 overflow-hidden";
 
   const wrapperStyles = {
     position: isFixed ? 'relative' : 'fixed',
@@ -53,22 +53,19 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
       <div style={bgStyles}></div>
 
       {/* Content container */}
-      <div className={`max-w-6xl w-full flex flex-col md:flex-row items-center justify-between relative z-10 ${isFixed ? 'mt-20 mb-20' : ''}`}>
+      <div className={`max-w-6xl w-full flex flex-col lg:flex-row items-center justify-between relative z-10 ${isFixed ? 'mt-32 mb-32' : ''}`}>
         {/* Left section - Text */}
-        <div className="md:w-1/2 mb-6 md:mb-0 md:pr-8 text-center md:text-left text-white">
-          <h2 className="text-2xl md:text-3xl font-bold">
-            Get the SIL AI Playbook!
+        <div className="lg:w-2/5 mb-8 lg:mb-0 lg:pr-8 text-center lg:text-left text-white">
+          <h2 className="text-2xl md:text-5xl font-bold whitespace-nowrap">
+            Don't Miss and AI Beat!
           </h2>
-          <p className="mt-2 text-lg">
-            <span className="font-semibold">Join industry leaders</span> discovering game-changing AI tools.
-          </p>
-          <p className="mt-1 text-sm text-yellow-200 font-medium">
-            Curated by Sports Innovation Lab & TwinBrain AI
+          <p className="mt-2 text-xl">
+            <span className="font-semibold">Sign up for more AI news, events, and resources from Sports Innovation Lab.</span>
           </p>
         </div>
 
         {/* Right section - Form */}
-        <div className="md:w-1/2 w-full">
+        <div className="lg:w-3/5 w-full">
           <form className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2" onSubmit={handleSubscribe}>
             <input
               type="email"
