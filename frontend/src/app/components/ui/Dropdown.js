@@ -47,7 +47,7 @@ const Dropdown = ({
       {/* Dropdown Button */}
       <button
         onClick={toggleDropdown}
-        className={`flex justify-between items-center w-full px-8 py-4 text-lg font-bold
+        className={`flex justify-between items-center w-full px-16 py-4 text-lg font-bold
                   border border-gray-300 rounded-lg shadow-md
                   ${isActive ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-900 hover:bg-gray-200"}
                   transition`}

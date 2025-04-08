@@ -58,7 +58,7 @@ const Header = ({ onMenuToggle }) => {
   return (
     <header
       ref={headerRef}
-      className="relative w-full text-white shadow-lg px-4 pt-1 pb-8 md:pt-2 md:pb-16"
+      className="relative w-full text-white shadow-lg px-4 pt-1 pb-8 md:pt- md:pb-30"
       style={{
         position: 'relative',
         overflow: 'hidden'
@@ -98,13 +98,13 @@ const Header = ({ onMenuToggle }) => {
         {/* Top: Logo + Hamburger + Nav */}
         <div className="flex items-center justify-between w-full mb-6 md:mb-8">
           {/* Left: Combined Logos */}
-          <div className="flex flex-col items-center gap-1 ml-14 mt-10">
+          <div className="flex flex-col items-center gap-1 ml-15 mt-10">
             <div className="flex items-center space-x-3 ml-5">
               <a href="https://www.ai.sportsilab.com" target="_blank" rel="noopener noreferrer">
                 <Image
                   src="/AI_Advantage.png"
                   alt="AI Advantage Logo"
-                  width={isMobile ? 80 : 160}
+                  width={isMobile ? 40 : 120}
                   height={isMobile ? 40 : 80}
                 />
               </a>
@@ -112,7 +112,7 @@ const Header = ({ onMenuToggle }) => {
           </div>
 
           {/* Desktop Nav - UPDATED: Changed text sizes to be much larger */}
-          <nav className="hidden sm:flex gap-6 text-xl sm:text-2xl md:text-3xl text-white font-semibold mr-15">
+          <nav className="hidden sm:flex gap-6 text-xl sm:text-2xl md:text-xl text-white font-semibold mr-10">
             {navItems.map((item) => (
               <a
                 key={item.label}
@@ -137,7 +137,7 @@ const Header = ({ onMenuToggle }) => {
 
         {/* Title Section */}
         <div className="text-center mt-4 pb-8 md:pb-12">
-          <h1 className={`${inter.className} text-5xl sm:text-7xl md:text-7xl leading-tight mb-3 tracking-tight`}>
+          <h1 className={`${inter.className} text-5xl sm:text-7xl md:text-5xl leading-tight mt-15 mb-3 tracking-tight`}>
             <span className="font-normal text-white">AI </span>
             <span className="font-bold text-white">Advantage </span>
             <span className="font-normal text-white">Resources</span>

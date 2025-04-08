@@ -9,14 +9,14 @@ const ToggleButtons = ({
     className: "p-4 flex justify-center mt-10"
   },
     React.createElement("div", {
-      className: "inline-flex rounded-md shadow-sm"
+      className: "inline-flex rounded-md"
     },
       FILTERS.map((filter, index) =>
         React.createElement("button", {
           key: filter.id,
           onClick: () => onFilterChange(filter.id),
           className: `
-            px-6 py-3 text-lg font-bold
+            px-8 py-3 text-lg font-bold mt-5 mb-5
             ${index === 0 ? "rounded-l-lg" : ""}
             ${index === FILTERS.length - 1 ? "rounded-r-lg" : ""}
             ${selectedFilter === filter.id 

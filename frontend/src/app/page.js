@@ -119,7 +119,7 @@ export default function Home() {
       <Footer />
 
       {/* Collapsible Chatbot */}
-      <CollapsibleChatbot />
+      {/*<CollapsibleChatbot />*/}
     </div>
   );
 }

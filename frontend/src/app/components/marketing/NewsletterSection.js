@@ -9,7 +9,7 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
 
   // Base wrapper classes and styles
   const wrapperClasses = isFixed
-    ? "w-full py-24 flex flex-col items-center shadow-md mt-10 px-4 sm:px-8 relative overflow-hidden"
+    ? "w-full py-40 flex flex-col items-center shadow-md mt-10 px-4 sm:px-8 relative overflow-hidden"
     : "fixed bottom-0 w-full text-white py-16 shadow-xl z-50 overflow-hidden";
 
   const wrapperStyles = {
@@ -52,20 +52,24 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
       {/* Background */}
       <div style={bgStyles}></div>
 
+      {/* Centered Header */}
+      <div className="text-center mb-8 relative z-10">
+        <h2 className="text-4xl md:text-5xl mb-10 font-bold text-white">
+          Don't Miss an AI Beat!
+        </h2>
+      </div>
+
       {/* Content container */}
-      <div className={`max-w-6xl w-full flex flex-col lg:flex-row items-start justify-between relative z-10 ${isFixed ? 'mt-20 mb-20' : ''} px-4 sm:px-8 lg:px-12`}>
-        {/* Left section - Text */}
-        <div className="lg:w-1/2 mb-8 lg:mb-0 text-left text-white">
-          <h2 className="text-2xl md:text-5xl font-bold whitespace-nowrap">
-            Don't Miss and AI Beat!
-          </h2>
-          <p className="mt-2 text-xl">
-            <span className="font-semibold">Sign up for more AI news, events, and resources from Sports Innovation Lab.</span>
+      <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center relative z-10 px-4 sm:px-8 lg:px-12">
+        {/* Subtext - vertically aligned with form */}
+        <div className="md:w-1/2 mb-4 md:mb-0 md:pr-6 text-white flex items-center text-center">
+          <p className="text-lg md:text-xl font-semibold">
+            Sign up for more AI news, events, and resources from Sports Innovation Lab.
           </p>
         </div>
 
         {/* Right section - Form */}
-        <div className="lg:w-1/2 w-full flex justify-end">
+        <div className="md:w-1/2 w-full">
           <form className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2" onSubmit={handleSubscribe}>
             <input
               type="email"

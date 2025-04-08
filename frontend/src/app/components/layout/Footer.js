@@ -4,7 +4,7 @@ import Image from 'next/image';
 const Footer = () => {
   return (
     <footer className="w-full bg-gray-500 text-white py-8 flex flex-col items-center space-y-4">
-      <div className="flex items-center space-x-8">
+      <div className="flex items-center space-x-8 mt-10 mb-10">
         <a
           href="https://www.twinbrain.ai"
           target="_blank"
@@ -14,8 +14,8 @@ const Footer = () => {
           <Image
             src="/logo.png"
             alt="TwinBrain Logo"
-            width={100}
-            height={50}
+            width={150}
+            height={10}
           />
         </a>
         <span className="text-gray-300 font-bold text-2xl">×</span>
@@ -28,12 +28,12 @@ const Footer = () => {
           <Image
             src="/sil-logo.png"
             alt="Sports Innovation Lab Logo"
-            width={120}
-            height={50}
+            width={200}
+            height={100}
           />
         </a>
       </div>
-      <p className="text-xs text-gray-300">
+      <p className="text-xs text-gray-300 mt-10">
         &copy; {new Date().getFullYear()} | A collaboration between TwinBrain AI & Sports Innovation Lab
       </p>
     </footer>

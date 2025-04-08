@@ -57,10 +57,10 @@ const ToolGrid = ({
 
   // For desktop view - different layouts based on filter
   if (selectedFilter === 'personal') {
-    // Personal mode: Category-based grid
+    // Personal mode: Category-based grid - CHANGED FROM 4 TO 3 COLUMNS
     return (
       <section className="p-6 w-full">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {DEMO_CATEGORIES.map((demoCategory, categoryIndex) => (
             <CategoryCard
               key={demoCategory}
@@ -75,9 +75,10 @@ const ToolGrid = ({
     );
   } else {
     // Enterprise mode: Simple grid of tools filtered by sector
+    // Already showing 3 columns, but increased gap and padding
     return (
-      <section className="p-6 w-full">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="p-8 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {tools.map((tool, index) => (
             <EnterpriseToolCard
               key={tool.id || index}
