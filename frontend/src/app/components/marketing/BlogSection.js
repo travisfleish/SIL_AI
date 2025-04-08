@@ -16,7 +16,8 @@ const BlogSection = () => {
         // Clean up the excerpt to remove author attribution and ensure URLs are absolute
         const cleanedPosts = posts.map(post => ({
           ...post,
-          excerpt: removeAuthorFromExcerpt(post.excerpt, post.author),
+          title: sanitizeText(post.title),
+          excerpt: sanitizeText(removeAuthorFromExcerpt(post.excerpt, post.author)),
           // Ensure URL is absolute
           url: ensureAbsoluteUrl(post.url)
         }));
@@ -31,6 +32,13 @@ const BlogSection = () => {
 
     loadBlogPosts();
   }, []);
+
+  // Sanitize text to handle apostrophes
+  const sanitizeText = (text) => {
+    if (!text) return '';
+    // Replace apostrophes with typographically correct ones to avoid React escaping issues
+    return text.replace(/'/g, "'");
+  };
 
   // Helper function to ensure URLs are absolute
   const ensureAbsoluteUrl = (url) => {
@@ -94,7 +102,7 @@ const BlogSection = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-25">
-          <h2 className="text-4xl font-bold mb-12">The AI Blog You Can't Miss from TwinBrain.ai</h2>
+          <h2 className="text-4xl font-bold mb-12">The AI Blog You Can&apos;t Miss from TwinBrain.ai</h2>
           <p className="text-xl mb-6 max-w-4xl mx-auto">
             Sports Innovation Lab & Microsoft are proud to partner with TwinBrain to bring the sports industry
             meaningful perspectives on AI that can help to drive your business forward TODAY
@@ -127,8 +135,13 @@ const BlogSection = () => {
                 key={blog.id || Math.random().toString(36).substring(2, 9)}
                 className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex flex-col h-full"
               >
-                {/* Much larger image area */}
-                <div className="h-96 bg-gray-700 relative">
+                {/* Much larger image area - now clickable */}
+                <a
+                  href={blog.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-96 bg-gray-700 relative block overflow-hidden hover:opacity-90 transition-opacity"
+                >
                   {blog.imageUrl ? (
                     <img
                       src={blog.imageUrl}
@@ -151,7 +164,7 @@ const BlogSection = () => {
                       </div>
                     </div>
                   )}
-                </div>
+                </a>
                 {/* Increased padding for content area */}
                 <div className="p-10 flex-grow flex flex-col">
                   <div className="mb-4 flex items-center text-sm text-gray-400">
@@ -165,7 +178,15 @@ const BlogSection = () => {
                       </>
                     )}
                   </div>
-                  <h3 className="text-2xl font-bold mb-6">{blog.title}</h3>
+                  {/* Title is now a link */}
+                  <a
+                    href={blog.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-300 transition-colors"
+                  >
+                    <h3 className="text-2xl font-bold mb-6">{blog.title}</h3>
+                  </a>
                   <p className="text-gray-300 mb-8 flex-grow text-lg leading-relaxed">{blog.excerpt}</p>
                   <a
                     href={blog.url}

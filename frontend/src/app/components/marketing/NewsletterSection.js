@@ -55,7 +55,7 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
       {/* Centered Header */}
       <div className="text-center mb-8 relative z-10">
         <h2 className="text-4xl md:text-5xl mb-10 font-bold text-white">
-          Don't Miss an AI Beat!
+           Don&apos;t Miss an AI Beat! Miss an AI Beat!
         </h2>
       </div>
 
