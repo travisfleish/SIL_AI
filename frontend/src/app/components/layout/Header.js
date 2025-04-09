@@ -19,12 +19,6 @@ const Header = ({ onMenuToggle }) => {
   // Navigation items
   const navItems = [
     {
-      label: "Sports Innovation Lab",
-      href: "https://www.sportsilab.com/",
-      target: "_blank",
-      rel: "noopener noreferrer"
-    },
-    {
       label: "AI Marketmap",
       href: "#",
       onClick: (e) => e.preventDefault()
@@ -58,7 +52,7 @@ const Header = ({ onMenuToggle }) => {
   return (
     <header
       ref={headerRef}
-      className="relative w-full text-white shadow-lg px-4 pt-1 pb-8 md:pt- md:pb-30"
+      className="relative w-full text-white shadow-lg px-4 pt-1 pb-8 md:pt- md:pb-20"
       style={{
         position: 'relative',
         overflow: 'hidden'
@@ -100,17 +94,30 @@ const Header = ({ onMenuToggle }) => {
           {/* Left: Combined Logos */}
           <div className="flex flex-col items-center gap-1 ml-15 mt-10">
             <div className="flex items-center space-x-3 ml-5">
+              <Image
+                src="/AI_Advantage.png"
+                alt="AI Advantage Logo"
+                width={isMobile ? 40 : 100}
+                height={isMobile ? 40 : 80}
+              />
+              <span className="text-white font-bold text-2xl mr-6">×</span>
+              <a
+                href="https://www.sportsilab.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Image
-                  src="/AI_Advantage.png"
-                  alt="AI Advantage Logo"
-                  width={isMobile ? 40 : 120}
-                  height={isMobile ? 40 : 80}
+                  src="/sil-logo.png"
+                  alt="Sports Innovation Lab Logo"
+                  width={isMobile ? 70 : 140}
+                  height={isMobile ? 25 : 60}
                 />
+              </a>
             </div>
           </div>
 
           {/* Desktop Nav - UPDATED: Changed text sizes to be much larger */}
-          <nav className="hidden sm:flex gap-6 text-xl sm:text-2xl md:text-xl text-white font-semibold mr-10">
+          <nav className="hidden sm:flex gap-6 text-xl sm:text-2xl md:text-xl text-white font-semibold mr-16">
             {navItems.map((item) => (
               <a
                 key={item.label}
