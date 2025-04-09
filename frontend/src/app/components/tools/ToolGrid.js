@@ -129,7 +129,7 @@ const AdvancedToolGrid = ({
 
   // For desktop view - different layouts based on filter
   if (selectedFilter === 'personal') {
-    // Personal mode: Category-based grid - 3 columns with staggered animations
+    // Personal mode: Category-based grid - 3x3 grid for 9 categories
     return (
       <section
         className="p-6 w-full"

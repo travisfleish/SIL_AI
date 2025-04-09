@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
+import { DEMO_CATEGORIES } from '../../utils/constants';
 
 const MobileToolCarousel = ({
   tools,
   selectedFilter = 'personal',
-  demoCategories
+  demoCategories = DEMO_CATEGORIES
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -37,7 +38,7 @@ const MobileToolCarousel = ({
   const currentCategoryGroup = categorizedTools[currentSlide];
 
   // Determine which tool to show (first tool in the current category)
-  const currentTool = currentCategoryGroup.tools[0];
+  const currentTool = currentCategoryGroup?.tools[0];
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev === categorizedTools.length - 1 ? 0 : prev + 1));
@@ -66,7 +67,7 @@ const MobileToolCarousel = ({
           {/* Category Header */}
           <div className="w-full bg-blue-100 py-2 px-3 text-center mb-4">
             <span className="font-bold text-blue-800 text-lg">
-              {currentCategoryGroup.category}
+              {currentCategoryGroup?.category}
             </span>
           </div>
 

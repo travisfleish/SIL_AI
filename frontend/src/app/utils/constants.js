@@ -40,7 +40,8 @@ export const DEMO_CATEGORIES = [
   "Content Creation",
   "Research & Analysis",
   "Task & Workflow",
-  "Voice & Audio"
+  "Voice & Audio",
+  "Learning & Skills"
 ];
 
 // Sponsor logos for the carousel - matching SIL website style

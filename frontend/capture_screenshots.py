@@ -33,6 +33,7 @@ CATEGORIES = [
     "Research & Analysis",
     "Task & Workflow",
     "Voice & Audio"
+    "Learning & Skills"
 ]
 
 # Types of tools
