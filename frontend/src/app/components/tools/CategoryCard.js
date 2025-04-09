@@ -68,7 +68,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
         onClick={handleCardClick}
       >
         {/* Category header bar */}
-        <div className="w-full bg-blue-100 py-2 px-3 text-center mb-2 relative">
+        <div className="w-full bg-blue-100 py-2 px-3 text-center relative">
           <span className="font-bold text-blue-800 text-lg">
             {category}
           </span>
@@ -86,7 +86,8 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
           </button>
         </div>
 
-        <div className="p-4 flex flex-col items-center w-full relative">
+        {/* Full width image container with no padding/margins */}
+        <div className="w-full relative">
           {/* Navigation arrows - only show if multiple tools and modal is closed */}
           {hasMultipleTools && !isModalOpen && (
             <>
@@ -122,25 +123,26 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
             </>
           )}
 
-          {/* Tool image */}
-          <div className="relative w-full pb-4 mb-6">
-            <Image
-              src={imageUrl}
-              alt={`${currentTool.name} Screenshot`}
-              width={1280}
-              height={800}
-              className="w-full h-auto rounded-md shadow-sm"
-              unoptimized
-            />
+          {/* Tool image - full width with no padding */}
+          <Image
+            src={imageUrl}
+            alt={`${currentTool.name} Screenshot`}
+            width={1280}
+            height={800}
+            className="w-full h-auto"
+            unoptimized
+          />
 
-            {/* Tool counter (e.g., "1/3") - shows actual number */}
-            {hasMultipleTools && (
-              <div className="absolute bottom-6 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full opacity-80">
-                {currentToolIndex + 1}/{displayTools.length}
-              </div>
-            )}
-          </div>
+          {/* Tool counter (e.g., "1/3") - shows actual number */}
+          {hasMultipleTools && (
+            <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full opacity-80">
+              {currentToolIndex + 1}/{displayTools.length}
+            </div>
+          )}
+        </div>
 
+        {/* Tool info section */}
+        <div className="p-4 flex flex-col items-center w-full">
           {/* Tool name and link */}
           <h3 className="text-lg font-bold flex items-center">
             <a

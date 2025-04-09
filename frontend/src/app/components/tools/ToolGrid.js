@@ -40,23 +40,28 @@ const ToolGrid = ({ tools, selectedFilter, selectedCategory }) => {
       <div
         ref={animation.ref}
         style={animation.style}
-        className="mb-6 p-4 border rounded-lg shadow-lg bg-white flex flex-col items-center text-center"
+        className="mb-6 border rounded-lg shadow-lg bg-white flex flex-col items-center text-center overflow-hidden"
       >
+        {/* Full width image with no padding */}
         <Image
           src={tool.screenshot_url || '/default-screenshot.png'}
           alt={`${tool.name} Screenshot`}
           width={400}
           height={250}
-          className="w-full h-auto rounded-lg mb-4 object-cover"
+          className="w-full h-auto object-cover"
         />
-        <h3 className="text-lg font-bold">{tool.name}</h3>
-        <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1 mb-2">
-          {selectedFilter === 'personal'
-            ? tool.category ||
-              DEMO_CATEGORIES[index % DEMO_CATEGORIES.length]
-            : tool.sector || ''}
-        </span>
-        <p className="text-gray-600 text-center">{tool.short_description}</p>
+
+        {/* Content section */}
+        <div className="p-4 w-full">
+          <h3 className="text-lg font-bold">{tool.name}</h3>
+          <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1 mb-2">
+            {selectedFilter === 'personal'
+              ? tool.category ||
+                DEMO_CATEGORIES[index % DEMO_CATEGORIES.length]
+              : tool.sector || ''}
+          </span>
+          <p className="text-gray-600 text-center">{tool.short_description}</p>
+        </div>
       </div>
     );
   };

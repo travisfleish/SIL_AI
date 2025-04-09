@@ -123,15 +123,14 @@ const CardModal = ({
           </div>
 
           {/* Content area */}
-          <div className="p-6 overflow-y-auto flex-grow relative">
-            {/* Tool image - with counter overlay */}
-            <div className="relative w-full mb-8">
+          <div className="relative">
+            <div className="relative w-full">
               <Image
                 src={imageUrl}
                 alt={`${currentTool.name} Screenshot`}
-                width={1920}
-                height={1080}
-                className="w-full h-auto rounded-md shadow-md"
+                width={1280}
+                height={800}
+                className="w-full h-auto"
                 unoptimized
               />
 
@@ -143,29 +142,32 @@ const CardModal = ({
               )}
             </div>
 
-            {/* Tool details */}
-            <div className="text-center max-w-2xl mx-auto">
-              <h2 className="text-2xl font-bold flex items-center justify-center mb-4">
-                <a
-                  href={currentTool.source_url}
-                  className="text-blue-600 hover:underline flex items-center"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {currentTool.name}
-                  <ExternalLink className="ml-2 w-5 h-5" />
-                </a>
-              </h2>
+            {/* Existing tool details content */}
+            <div className="p-6">
+              {/* Tool details */}
+              <div className="text-center max-w-2xl mx-auto">
+                <h2 className="text-2xl font-bold flex items-center justify-center mb-4">
+                  <a
+                    href={currentTool.source_url}
+                    className="text-blue-600 hover:underline flex items-center"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {currentTool.name}
+                    <ExternalLink className="ml-2 w-5 h-5" />
+                  </a>
+                </h2>
 
-              <p className="text-gray-700 text-lg mb-6">{currentTool.short_description}</p>
+                <p className="text-gray-700 text-lg mb-6">{currentTool.short_description}</p>
 
-              {/* Additional details could be added here */}
-              {currentTool.long_description && (
-                <div className="text-left bg-gray-50 p-4 rounded-lg mb-6">
-                  <h3 className="font-semibold mb-2">About this tool:</h3>
-                  <p className="text-gray-700">{currentTool.long_description}</p>
-                </div>
-              )}
+                {/* Additional details could be added here */}
+                {currentTool.long_description && (
+                  <div className="text-left bg-gray-50 p-4 rounded-lg mb-6">
+                    <h3 className="font-semibold mb-2">About this tool:</h3>
+                    <p className="text-gray-700">{currentTool.long_description}</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

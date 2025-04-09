@@ -15,19 +15,20 @@ const EnterpriseToolCard = ({ tool }) => {
         </div>
       )}
 
-      <div className="p-4 flex flex-col items-center w-full">
-        {/* Tool image */}
-        <div className="relative w-full pb-4 mb-6">
-          <Image
-            src={imageUrl}
-            alt={`${tool.name} Screenshot`}
-            width={1280}
-            height={800}
-            className="w-full h-auto rounded-md shadow-sm"
-            unoptimized
-          />
-        </div>
+      {/* Tool image - Full width with no padding/margins on top or sides */}
+      <div className="w-full">
+        <Image
+          src={imageUrl}
+          alt={`${tool.name} Screenshot`}
+          width={1280}
+          height={800}
+          className="w-full h-auto"
+          unoptimized
+        />
+      </div>
 
+      {/* Tool info section */}
+      <div className="p-4 flex flex-col items-center w-full">
         {/* Tool name and link */}
         <h3 className="text-lg font-bold flex items-center">
           <a href={tool.source_url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
