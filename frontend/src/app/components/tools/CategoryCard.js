@@ -54,9 +54,18 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
     setIsModalOpen(true);
   };
 
+  // Card click handler
+  const handleCardClick = (e) => {
+    // Open modal when clicking the card, except for specific elements
+    handleOpenModal();
+  };
+
   return (
     <>
-      <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-102 hover:shadow-xl overflow-hidden border border-gray-200">
+      <div
+        className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-110 hover:shadow-xl overflow-hidden border border-gray-200 cursor-pointer"
+        onClick={handleCardClick}
+      >
         {/* Category header bar */}
         <div className="w-full bg-blue-100 py-2 px-3 text-center mb-2 relative">
           <span className="font-bold text-blue-800 text-lg">
@@ -133,10 +142,16 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
 
           {/* Tool name and link */}
           <h3 className="text-lg font-bold flex items-center">
-            <a href={currentTool.source_url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+            <a
+              href={currentTool.source_url}
+              className="text-blue-600 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()} // Prevent opening modal when clicking link
+            >
               {currentTool.name}
+              <ExternalLink className="ml-2 w-4 h-4 text-gray-500" />
             </a>
-            <ExternalLink className="ml-2 w-4 h-4 text-gray-500" />
           </h3>
 
           {/* Tool description */}
