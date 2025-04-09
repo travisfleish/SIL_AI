@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { ExternalLink, X } from 'lucide-react';
 
@@ -12,8 +12,11 @@ const CardModal = ({
 }) => {
   const currentTool = tools[currentToolIndex];
   const hasMultipleTools = tools.length > 1;
+  const modalContentRef = useRef(null);
+  const leftButtonRef = useRef(null);
+  const rightButtonRef = useRef(null);
 
-  // Handle escape key to close modal
+  // Handle escape key to close modal and click outside
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -32,14 +35,27 @@ const CardModal = ({
       }
     };
 
+    const handleClickOutside = (e) => {
+      // Check if click is outside the modal content AND not on navigation buttons
+      const isOutsideModal = modalContentRef.current && !modalContentRef.current.contains(e.target);
+      const isOnLeftButton = leftButtonRef.current && leftButtonRef.current.contains(e.target);
+      const isOnRightButton = rightButtonRef.current && rightButtonRef.current.contains(e.target);
+
+      if (isOutsideModal && !isOnLeftButton && !isOnRightButton) {
+        onClose();
+      }
+    };
+
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener('mousedown', handleClickOutside);
       // Prevent body scrolling while modal is open
       document.body.style.overflow = 'hidden';
     }
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutside);
       document.body.style.overflow = 'unset';
     };
   }, [isOpen, hasMultipleTools, tools.length, onClose, setCurrentToolIndex]);
@@ -59,6 +75,7 @@ const CardModal = ({
         {hasMultipleTools && (
           <>
             <button
+              ref={leftButtonRef}
               onClick={() => setCurrentToolIndex(prev =>
                 prev === 0 ? tools.length - 1 : prev - 1
               )}
@@ -71,6 +88,7 @@ const CardModal = ({
             </button>
 
             <button
+              ref={rightButtonRef}
               onClick={() => setCurrentToolIndex(prev =>
                 (prev + 1) % tools.length
               )}
@@ -84,8 +102,11 @@ const CardModal = ({
           </>
         )}
 
-        {/* Modal content */}
-        <div className="bg-white rounded-lg shadow-xl w-full max-h-[90vh] overflow-hidden flex flex-col animate-fadeIn">
+        {/* Modal content - using ref to detect clicks outside */}
+        <div
+          ref={modalContentRef}
+          className="bg-white rounded-lg shadow-xl w-full max-h-[90vh] overflow-hidden flex flex-col animate-fadeIn"
+        >
           {/* Header with category */}
           <div className="w-full bg-blue-100 py-3 px-4 flex justify-between items-center sticky top-0">
             <span className="font-bold text-blue-800 text-xl">
