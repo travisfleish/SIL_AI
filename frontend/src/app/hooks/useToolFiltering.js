@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { CATEGORY_GROUPS } from '../utils/constants';
 
 export const useToolFiltering = () => {
   const [tools, setTools] = useState([]);
@@ -67,7 +68,28 @@ export const useToolFiltering = () => {
   // Handle category selection change
   const handleCategoryChange = useCallback((category) => {
     console.log('Category changed to:', category);
-    setSelectedCategory(category);
+
+    // Determine the current group (sports or AI)
+    const currentGroup = category === 'sports_all' ||
+      CATEGORY_GROUPS.SPORTS.some(c => c.id === category) ? 'sports' : 'ai';
+
+    // If switching to 'all' within the same group, set to the all category
+    if (category === 'sports_all' || category === 'ai_all') {
+      setSelectedCategory(category);
+      return;
+    }
+
+    // Check if the category exists in the current group
+    const isValidCategory = currentGroup === 'sports'
+      ? CATEGORY_GROUPS.SPORTS.some(c => c.id === category)
+      : CATEGORY_GROUPS.AI.some(c => c.id === category);
+
+    // If valid category, set it. Otherwise, set to the corresponding 'all' category
+    setSelectedCategory(
+      isValidCategory
+        ? category
+        : (currentGroup === 'sports' ? 'sports_all' : 'ai_all')
+    );
   }, []);
 
   // Fetch tools whenever the filter or category changes

@@ -6,7 +6,8 @@ const Dropdown = ({
   options,
   selectedValue,
   onChange,
-  isActive = false
+  isActive = false,
+  width
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -43,14 +44,18 @@ const Dropdown = ({
   const displayText = selected ? selected.name : title;
 
   return (
-    <div ref={dropdownRef} className="relative inline-block w-full sm:w-64 md:w-80">
+    <div
+      ref={dropdownRef}
+      className="relative inline-block"
+      style={{ width: width ? `${width}px` : 'auto' }}
+    >
       {/* Dropdown Button */}
       <button
         onClick={toggleDropdown}
-        className={`flex justify-between items-center w-full px-16 py-4 text-lg font-bold
+        className={`flex justify-center items-center w-full px-4 py-3 text-lg font-bold
                   border border-gray-300 rounded-lg shadow-md
                   ${isActive ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-900 hover:bg-gray-200"}
-                  transition`}
+                  transition whitespace-nowrap`}
       >
         <span className="mr-4">{displayText}</span>
         <ChevronDown size={20} className={`transform ${isOpen ? 'rotate-180' : 'rotate-0'} transition-transform`} />
@@ -58,12 +63,15 @@ const Dropdown = ({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-lg border border-gray-200">
+        <div
+          className="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-lg border border-gray-200"
+          style={{ width: width ? `${width}px` : 'auto' }}
+        >
           {options.map(option => (
             <button
               key={option.id}
               onClick={() => handleSelect(option)}
-              className={`block w-full text-left px-6 py-3 hover:bg-gray-100 text-base
+              className={`block w-full text-left px-4 py-3 hover:bg-gray-100 text-base whitespace-nowrap
                         ${selectedValue === option.id ? "bg-blue-50 font-bold" : ""}`}
             >
               {option.name}

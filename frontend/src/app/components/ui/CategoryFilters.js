@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Dropdown from './Dropdown';
 import { CATEGORY_GROUPS } from '../../utils/constants';
 
@@ -13,12 +13,33 @@ const CategoryFilters = ({
     return null;
   }
 
+  // Calculate optimal dropdown width based on longest category name
+  const dropdownWidth = useMemo(() => {
+    const calculateWidth = (categories) => {
+      // Estimate pixel width based on character count and approximate character width
+      const longestCategory = categories.reduce(
+        (longest, current) => current.name.length > longest.length ? current.name : longest,
+        ""
+      );
+
+      // Increased padding: 10 pixels per character + more extra padding
+      return longestCategory.length * 10 + 120;
+    };
+
+    const sportsWidth = calculateWidth(CATEGORY_GROUPS.SPORTS);
+    const aiWidth = calculateWidth(CATEGORY_GROUPS.AI);
+
+    // Return the larger of the two widths
+    return Math.max(sportsWidth, aiWidth);
+  }, []);
+
   // Determine which dropdown is active
   const isSportsActive = !selectedCategory ||
     selectedCategory === "sports_all" ||
     CATEGORY_GROUPS.SPORTS.slice(1).some(tool => tool.id === selectedCategory);
 
-  const isAIActive = selectedCategory === "ai_all" ||
+  const isAIActive = !selectedCategory ||
+    selectedCategory === "ai_all" ||
     CATEGORY_GROUPS.AI.slice(1).some(tool => tool.id === selectedCategory);
 
   // Find the currently selected option in the active dropdown
@@ -30,7 +51,7 @@ const CategoryFilters = ({
       const found = CATEGORY_GROUPS.SPORTS.find(option => option.id === selectedCategory);
       return found ? found.id : 'sports_all';
     } else {
-      if (selectedCategory === 'ai_all') {
+      if (!selectedCategory || selectedCategory === 'ai_all') {
         return 'ai_all';
       }
       const found = CATEGORY_GROUPS.AI.find(option => option.id === selectedCategory);
@@ -47,6 +68,7 @@ const CategoryFilters = ({
         selectedValue={getSelectedValue('sports')}
         onChange={onCategoryChange}
         isActive={isSportsActive}
+        width={dropdownWidth}
       />
 
       {/* AI Tools Dropdown */}
@@ -56,6 +78,7 @@ const CategoryFilters = ({
         selectedValue={getSelectedValue('ai')}
         onChange={onCategoryChange}
         isActive={isAIActive}
+        width={dropdownWidth}
       />
     </section>
   );

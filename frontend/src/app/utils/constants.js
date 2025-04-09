@@ -6,7 +6,11 @@ export const CATEGORIES = [
   { name: "Creative & Personalization", id: "Creative & Personalization", mobileName: "Creative", group: "sports" },
   { name: "Sponsorship & Revenue", id: "Sponsorship & Revenue", mobileName: "Revenue", group: "sports" },
   { name: "Measurement & Analytics", id: "Measurement & Analytics", mobileName: "Analytics", group: "sports" },
-  { name: "Agent Building", id: "Agent Building", mobileName: "Agents", group: "ai" }
+  { name: "Agent Builders", id: "Agent Builders", mobileName: "Agents", group: "ai" },
+  { name: "LLM Frameworks & Orchestration", id: "LLM Frameworks & Orchestration", mobileName: "LLM", group: "ai" },
+  { name: "Model Hubs & Customization", id: "Model Hubs & Customization", mobileName: "Models", group: "ai" },
+  { name: "AI Coding & App Platforms", id: "AI Coding & App Platforms", mobileName: "Coding", group: "ai" },
+  { name: "Embeddings & Vector Search", id: "Embeddings & Vector Search", mobileName: "Vector", group: "ai" }
 ];
 
 // Category groups for new dropdown UI
@@ -21,7 +25,11 @@ export const CATEGORY_GROUPS = {
   ],
   AI: [
     { name: "All AI Tools", id: "ai_all" },
-    { name: "Agent Building", id: "Agent Building" }
+    { name: "Agent Builders", id: "Agent Builders" },
+    { name: "LLM Frameworks & Orchestration", id: "LLM Frameworks & Orchestration" },
+    { name: "Model Hubs & Customization", id: "Model Hubs & Customization" },
+    { name: "AI Coding & App Platforms", id: "AI Coding & App Platforms" },
+    { name: "Embeddings & Vector Search", id: "Embeddings & Vector Search" }
   ]
 };
 

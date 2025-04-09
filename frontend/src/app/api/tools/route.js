@@ -1,4 +1,3 @@
-// src/app/api/tools/route.js
 import { NextResponse } from 'next/server';
 import { TOOL_DATA } from '../../utils/toolData';
 
@@ -13,12 +12,12 @@ export async function GET(request) {
     console.log(`API Request - Type: ${type}, Sector: ${sector}, Group: ${group}`);
 
     // Define which sectors belong to which groups
-    const aiSectors = ['Agent Building'];
+    const aiSectors = ['Agent Builders', 'LLM Frameworks & Orchestration', 'Model Hubs & Customization', 'AI Coding & App Platforms', 'Embeddings & Vector Search'];
     const sportsSectors = [
       'Fan Intelligence',
       'Advertising & Media',
       'Creative & Personalization',
-      'Sponsorship & Revenue Growth',
+      'Sponsorship & Revenue',
       'Measurement & Analytics'
     ];
 

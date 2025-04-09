@@ -100,14 +100,12 @@ const Header = ({ onMenuToggle }) => {
           {/* Left: Combined Logos */}
           <div className="flex flex-col items-center gap-1 ml-15 mt-10">
             <div className="flex items-center space-x-3 ml-5">
-              <a href="https://www.ai.sportsilab.com" target="_blank" rel="noopener noreferrer">
                 <Image
                   src="/AI_Advantage.png"
                   alt="AI Advantage Logo"
                   width={isMobile ? 40 : 120}
                   height={isMobile ? 40 : 80}
                 />
-              </a>
             </div>
           </div>
 
