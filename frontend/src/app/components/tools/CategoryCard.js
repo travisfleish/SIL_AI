@@ -20,7 +20,8 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
   // If no tools match this category, show a message
   if (categoryTools.length === 0) {
     return (
-      <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-110 hover:shadow-xl overflow-hidden border border-gray-200">
+      <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-110
+       hover:shadow-xl overflow-hidden border border-gray-200">
         <div className="w-full bg-blue-100 py-2 px-3 text-center mb-2 relative">
           <span className="font-bold text-blue-800 text-lg">
             {category}
@@ -63,7 +64,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
   return (
     <>
       <div
-        className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-110 hover:shadow-xl overflow-hidden border border-gray-200 cursor-pointer"
+        className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-102 hover:shadow-xl overflow-hidden border border-gray-200 cursor-pointer"
         onClick={handleCardClick}
       >
         {/* Category header bar */}
