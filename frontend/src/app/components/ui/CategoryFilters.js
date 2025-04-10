@@ -10,6 +10,11 @@ const CategoryFilters = ({
 }) => {
   // Always call hooks at the top level
   const dropdownWidth = useMemo(() => {
+    // Skip calculation for mobile since we're using fixed width there
+    if (isMobile) {
+      return undefined;
+    }
+
     const calculateWidth = (categories) => {
       const longestCategory = categories.reduce(
         (longest, current) =>
@@ -23,7 +28,7 @@ const CategoryFilters = ({
     const aiWidth = calculateWidth(CATEGORY_GROUPS.AI);
 
     return Math.max(sportsWidth, aiWidth);
-  }, []);
+  }, [isMobile]);
 
   // Only render if in enterprise view
   if (selectedFilter !== 'enterprise') {
@@ -56,8 +61,17 @@ const CategoryFilters = ({
     }
   };
 
+  // Always use flex-row (side by side) layout for both mobile and desktop
+  // Just adjust the padding and spacing based on screen size
+  const sectionClass = isMobile
+    ? "p-3 pt-6 pb-6 flex flex-row justify-center items-center bg-gray-100 mb-4 gap-3"
+    : "p-6 pt-10 pb-10 flex flex-row justify-center items-center bg-gray-100 mb-6 gap-8";
+
+  // On mobile, use smaller width for each dropdown
+  const mobileDropdownWidth = isMobile ? 130 : undefined;
+
   return (
-    <section className="p-6 pt-10 pb-10 flex flex-col sm:flex-row justify-center items-center bg-gray-100 mb-6 gap-8">
+    <section className={sectionClass}>
       {/* Sports Tools Dropdown */}
       <Dropdown
         title="Sports Tools"
@@ -65,7 +79,8 @@ const CategoryFilters = ({
         selectedValue={getSelectedValue('sports')}
         onChange={onCategoryChange}
         isActive={isSportsActive}
-        width={dropdownWidth}
+        width={isMobile ? mobileDropdownWidth : dropdownWidth}
+        isMobile={isMobile}
       />
 
       {/* AI Tools Dropdown */}
@@ -75,7 +90,8 @@ const CategoryFilters = ({
         selectedValue={getSelectedValue('ai')}
         onChange={onCategoryChange}
         isActive={isAIActive}
-        width={dropdownWidth}
+        width={isMobile ? mobileDropdownWidth : dropdownWidth}
+        isMobile={isMobile}
       />
     </section>
   );

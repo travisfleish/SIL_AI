@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 // Import components
 import Header from './components/layout/Header';
 import MobileHeader from './components/layout/MobileHeader';
+import MobileDescriptionSection from './components/ui/MobileDescriptionSection';
 import Footer from './components/layout/Footer';
 import SponsorCarousel from './components/marketing/SponsorCarousel';
 import NewsletterSection from './components/marketing/NewsletterSection';
@@ -88,6 +89,9 @@ export default function Home() {
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
       {/* Conditionally render MobileHeader for mobile, regular Header for desktop */}
       {isMobile ? <MobileHeader /> : <Header />}
+
+      {/* Mobile Description Section - only appears on mobile */}
+      <MobileDescriptionSection isMobile={isMobile} />
 
       {/* Toggle Buttons for Personal/Enterprise View - Pass isMobile prop */}
       <ScrollAnimation animation="fade-in" duration={800}>

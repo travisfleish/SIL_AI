@@ -16,20 +16,20 @@ export const CATEGORIES = [
 // Category groups for new dropdown UI
 export const CATEGORY_GROUPS = {
   SPORTS: [
-    { name: "All Sports Tools", id: "sports_all" },
-    { name: "Fan Intelligence", id: "Fan Intelligence" },
-    { name: "Advertising & Media", id: "Advertising & Media" },
-    { name: "Creative & Personalization", id: "Creative & Personalization" },
-    { name: "Sponsorship & Revenue", id: "Sponsorship & Revenue" },
-    { name: "Measurement & Analytics", id: "Measurement & Analytics" }
+    { name: "All Sports Tools", id: "sports_all", mobileName: "All Sports" },
+    { name: "Fan Intelligence", id: "Fan Intelligence", mobileName: "Fan Intel" },
+    { name: "Advertising & Media", id: "Advertising & Media", mobileName: "Ad & Media" },
+    { name: "Creative & Personalization", id: "Creative & Personalization", mobileName: "Creative" },
+    { name: "Sponsorship & Revenue", id: "Sponsorship & Revenue", mobileName: "Revenue" },
+    { name: "Measurement & Analytics", id: "Measurement & Analytics", mobileName: "Analytics" }
   ],
   AI: [
-    { name: "All AI Tools", id: "ai_all" },
-    { name: "Agent Builders", id: "Agent Builders" },
-    { name: "LLM Frameworks & Orchestration", id: "LLM Frameworks & Orchestration" },
-    { name: "Model Hubs & Customization", id: "Model Hubs & Customization" },
-    { name: "AI Coding & App Platforms", id: "AI Coding & App Platforms" },
-    { name: "Embeddings & Vector Search", id: "Embeddings & Vector Search" }
+    { name: "All AI Tools", id: "ai_all", mobileName: "All AI" },
+    { name: "Agent Builders", id: "Agent Builders", mobileName: "Agents" },
+    { name: "LLM Frameworks & Orchestration", id: "LLM Frameworks & Orchestration", mobileName: "LLM" },
+    { name: "Model Hubs & Customization", id: "Model Hubs & Customization", mobileName: "Models" },
+    { name: "AI Coding & App Platforms", id: "AI Coding & App Platforms", mobileName: "Coding" },
+    { name: "Embeddings & Vector Search", id: "Embeddings & Vector Search", mobileName: "Vector" }
   ]
 };
 
