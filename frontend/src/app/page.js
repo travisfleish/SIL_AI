@@ -62,71 +62,6 @@ const SimpleHeader = () => {
   );
 };
 
-// Simple Mobile Fallback Component
-const MobileFallback = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    setMessage("Thank you for subscribing!");
-    setEmail('');
-  };
-
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Use SimpleHeader instead of Header */}
-      <SimpleHeader />
-
-      <main className="p-4 max-w-lg mx-auto">
-        <div className="mb-8">
-          <div className="grid grid-cols-2 gap-2">
-            <button className="py-3 bg-blue-600 text-white font-bold rounded-lg">
-              Personal
-            </button>
-            <button className="py-3 bg-gray-200 text-gray-800 font-bold rounded-lg">
-              Enterprise
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-gray-100 p-4 rounded-lg mb-8">
-          <h2 className="text-xl font-bold mb-4">Popular AI Tools</h2>
-          <p className="text-gray-700 mb-4">
-            We&apos;re showing a simplified version of this page for better mobile performance.
-          </p>
-          <p className="text-gray-600 text-sm">
-            Visit on desktop for the full experience with all tools and features.
-          </p>
-        </div>
-
-        <div className="bg-blue-100 p-4 rounded-lg">
-          <h2 className="text-xl font-bold mb-2">Stay Updated</h2>
-          <p className="mb-4">Sign up for our newsletter for the latest in sports and AI.</p>
-          <form onSubmit={handleSubscribe}>
-            <input
-              type="email"
-              placeholder="Your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 mb-2 border rounded"
-            />
-            <button
-              type="submit"
-              className="w-full py-2 bg-yellow-500 text-white font-bold rounded"
-            >
-              Subscribe
-            </button>
-          </form>
-          {message && (
-            <p className="mt-2 text-center font-medium">{message}</p>
-          )}
-        </div>
-      </main>
-    </div>
-  );
-};
-
 export default function Home() {
   // Use custom hooks for state management with enhanced states
   const {
@@ -142,15 +77,12 @@ export default function Home() {
   // Media query hook
   const isMobile = useMediaQuery();
 
-  // State to track if we're on a mobile device to trigger fallback
-  const [usesMobileFallback, setUsesMobileFallback] = useState(false);
+  // State to track if initial detection has happened
   const [hasMounted, setHasMounted] = useState(false);
 
-  // Check if we need to use the mobile fallback
+  // Check if we're on mobile
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Enable mobile fallback if screen width is below threshold
-      setUsesMobileFallback(window.innerWidth < 768);
       setHasMounted(true);
 
       // Add global error handler
@@ -166,25 +98,20 @@ export default function Home() {
     console.log('Current state:', {
       filter: selectedFilter,
       category: selectedCategory,
-      toolCount: tools.length
+      toolCount: tools.length,
+      isMobile
     });
-  }, [selectedFilter, selectedCategory, tools.length]);
+  }, [selectedFilter, selectedCategory, tools.length, isMobile]);
 
   // Show loading state until client-side code has determined device type
   if (!hasMounted) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
-  // Render simplified mobile fallback if on mobile
-  if (usesMobileFallback) {
-    return <MobileFallback />;
-  }
-
-  // Regular desktop experience
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
-      {/* Header Component - No animation needed */}
-      <Header />
+      {/* Conditionally render SimpleHeader for mobile, regular Header for desktop */}
+      {isMobile ? <SimpleHeader /> : <Header />}
 
       {/* Toggle Buttons for Personal/Enterprise View */}
       <ScrollAnimation animation="fade-in" duration={800}>
@@ -222,7 +149,7 @@ export default function Home() {
 
       {/* Tool Grid - Using ScrollAnimation */}
       {!loading && !error && (
-        <ScrollAnimation animation="fade-up" delay={300} duration={1000} className="w-full">
+        <ScrollAnimation animation={isMobile ? "fade-in" : "fade-up"} delay={isMobile ? 0 : 300} duration={isMobile ? 0 : 1000} className="w-full">
           <ToolGrid
             tools={tools}
             selectedFilter={selectedFilter}
@@ -232,12 +159,12 @@ export default function Home() {
       )}
 
       {/* Fixed Newsletter Section - Using ScrollAnimation */}
-      <ScrollAnimation animation="fade-up" threshold={0.5} className="w-full">
+      <ScrollAnimation animation={isMobile ? "fade-in" : "fade-up"} threshold={0.5} duration={isMobile ? 0 : 800} className="w-full">
         <NewsletterSection variant="fixed" />
       </ScrollAnimation>
 
       {/* Blog Section - Using ScrollAnimation */}
-      <ScrollAnimation animation="fade-up" threshold={0.1} className="w-full">
+      <ScrollAnimation animation={isMobile ? "fade-in" : "fade-up"} threshold={0.1} duration={isMobile ? 0 : 800} className="w-full">
         <BlogSection />
       </ScrollAnimation>
 
