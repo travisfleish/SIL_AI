@@ -64,7 +64,7 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="p-8 bg-red-50 text-red-800 rounded-lg m-4">
           <h2 className="text-xl font-bold mb-2">Something went wrong</h2>
-          <p className="mb-4">We're sorry, but there was an error loading this page.</p>
+          <p className="mb-4">We&apos;re sorry, but there was an error loading this page.</p>
           <button
             onClick={() => window.location.reload()}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg"
