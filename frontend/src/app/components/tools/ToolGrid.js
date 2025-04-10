@@ -62,53 +62,6 @@ const MobileCategoryCard = ({ category, tools }) => {
   );
 };
 
-// Mobile Debug Component
-const MobileDebugView = ({ tools, selectedFilter }) => {
-  // Only show this on mobile
-  if (typeof window === 'undefined' || window.innerWidth >= 768) {
-    return null;
-  }
-
-  return (
-    <div style={{
-      position: 'fixed',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      background: 'white',
-      padding: '10px',
-      zIndex: 9999,
-      maxHeight: '50vh',
-      overflow: 'auto',
-      border: '2px solid red'
-    }}>
-      <h3>Mobile Debug: {selectedFilter}</h3>
-      <p>Tools count: {tools?.length || 0}</p>
-      <div>
-        {selectedFilter === 'personal' && (
-          <div>
-            <p><strong>Categories in DEMO_CATEGORIES:</strong></p>
-            <ul>
-              {DEMO_CATEGORIES.map((cat, i) => (
-                <li key={i}>{cat}: {tools.filter(t => t.category === cat).length} tools</li>
-              ))}
-            </ul>
-          </div>
-        )}
-        <p><strong>First 3 tools:</strong></p>
-        {tools?.slice(0, 3).map((tool, i) => (
-          <div key={i} style={{marginBottom: '5px', padding: '5px', border: '1px solid #ccc'}}>
-            <p><strong>{tool.name}</strong></p>
-            <p>Category: {tool.category || 'None'}</p>
-            <p>Sector: {tool.sector || 'None'}</p>
-            <p>Type: {tool.type || 'None'}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
 const ToolGrid = ({ tools, selectedFilter, selectedCategory }) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
@@ -230,42 +183,32 @@ const ToolGrid = ({ tools, selectedFilter, selectedCategory }) => {
     // Special handling for personal tools on mobile
     if (selectedFilter === 'personal') {
       return (
-        <>
-          <section className="p-6 w-full">
-            <div className="w-full">
-              {/* Use the simpler MobileCategoryCard for personal view */}
-              {DEMO_CATEGORIES.map((category, index) => (
-                <MobileCategoryCard
-                  key={category}
-                  category={category}
-                  tools={tools}
-                />
-              ))}
-            </div>
-          </section>
-
-          {/* Mobile Debug View */}
-          <MobileDebugView tools={tools} selectedFilter={selectedFilter} />
-        </>
+        <section className="p-6 w-full">
+          <div className="w-full">
+            {/* Use the simpler MobileCategoryCard for personal view */}
+            {DEMO_CATEGORIES.map((category, index) => (
+              <MobileCategoryCard
+                key={category}
+                category={category}
+                tools={tools}
+              />
+            ))}
+          </div>
+        </section>
       );
     }
 
     // Regular mobile view for enterprise tools
     return (
-      <>
-        <section className="p-6 w-full">
-          <div className="w-full flex justify-center">
-            <div className="w-full max-w-md">
-              {tools.map((tool, index) => (
-                <ToolCard key={tool.id || index} tool={tool} index={index} />
-              ))}
-            </div>
+      <section className="p-6 w-full">
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-md">
+            {tools.map((tool, index) => (
+              <ToolCard key={tool.id || index} tool={tool} index={index} />
+            ))}
           </div>
-        </section>
-
-        {/* Mobile Debug View */}
-        <MobileDebugView tools={tools} selectedFilter={selectedFilter} />
-      </>
+        </div>
+      </section>
     );
   }
 
