@@ -37,6 +37,31 @@ const useMediaQuery = () => {
 // Import useToolFiltering hook (updated version with loading/error states)
 import { useToolFiltering } from './hooks/useToolFiltering';
 
+// Simple Header Component that works on mobile
+const SimpleHeader = () => {
+  return (
+    <header className="w-full bg-gray-900 text-white p-4">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center">
+          <span className="text-xl font-bold">AI Advantage</span>
+        </div>
+
+        <nav className="hidden sm:block">
+          <ul className="flex space-x-4">
+            <li><a href="#" className="hover:underline">AI Marketmap</a></li>
+            <li><a href="https://www.twinbrain.ai/blog" target="_blank" rel="noopener noreferrer" className="hover:underline">AI Blog</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div className="mt-6 text-center">
+        <h1 className="text-4xl font-bold">AI Advantage Resources</h1>
+        <p className="mt-2">Discover the best AI tools for sports professionals</p>
+      </div>
+    </header>
+  );
+};
+
 // Simple Mobile Fallback Component
 const MobileFallback = () => {
   const [email, setEmail] = useState('');
@@ -50,11 +75,10 @@ const MobileFallback = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      {/* Use SimpleHeader instead of Header */}
+      <SimpleHeader />
 
       <main className="p-4 max-w-lg mx-auto">
-        <h1 className="text-3xl font-bold my-6 text-center">AI Advantage Resources</h1>
-
         <div className="mb-8">
           <div className="grid grid-cols-2 gap-2">
             <button className="py-3 bg-blue-600 text-white font-bold rounded-lg">
