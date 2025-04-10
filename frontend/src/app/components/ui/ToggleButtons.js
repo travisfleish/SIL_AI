@@ -4,7 +4,7 @@ const { FILTERS } = require('../../utils/constants');
 const ToggleButtons = ({
   selectedFilter,
   onFilterChange,
-  isMobile // Add isMobile prop
+  isMobile // Use isMobile prop to determine display text
 }) => {
   return React.createElement("section", {
     className: "p-4 flex justify-center mt-4 mb-2" // Reduced top margin
@@ -27,7 +27,7 @@ const ToggleButtons = ({
             ${index > 0 && "-ml-px"}
             transition
           `
-        }, isMobile ? filter.shortName || filter.name : filter.name)
+        }, isMobile && filter.shortName ? filter.shortName : filter.name)
       )
     )
   );

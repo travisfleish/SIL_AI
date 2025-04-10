@@ -1,13 +1,32 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { fetchBlogPosts } from '../../../lib/blog-util';
 
 const BlogSection = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const carouselRef = useRef(null);
+
+  // Detect if we're on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Check on initial load
+    checkMobile();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkMobile);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const loadBlogPosts = async () => {
@@ -70,6 +89,42 @@ const BlogSection = () => {
     return cleaned.trim();
   };
 
+  // Carousel controls
+  const nextSlide = () => {
+    if (blogs.length <= 1) return;
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % blogs.length);
+  };
+
+  const prevSlide = () => {
+    if (blogs.length <= 1) return;
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + blogs.length) % blogs.length);
+  };
+
+  // Touch controls for swipe gesture on mobile
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const diff = touchStartX.current - touchEndX.current;
+    const threshold = 50; // Minimum swipe distance
+
+    if (diff > threshold) {
+      // Swipe left, go to next
+      nextSlide();
+    } else if (diff < -threshold) {
+      // Swipe right, go to previous
+      prevSlide();
+    }
+  };
+
   return (
     <section className="w-full py-30 text-white relative">
       <div
@@ -129,77 +184,210 @@ const BlogSection = () => {
             <p className="text-gray-300">No blog posts available at the moment.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-12 mx-auto max-w-3xl">
-            {blogs.map((blog) => (
-              <div
-                key={blog.id || Math.random().toString(36).substring(2, 9)}
-                className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex flex-col h-full"
-              >
-                {/* Much larger image area - now clickable */}
-                <a
-                  href={blog.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="h-96 bg-gray-700 relative block overflow-hidden hover:opacity-90 transition-opacity"
+          <>
+            {/* Mobile Carousel View */}
+            {isMobile ? (
+              <div className="relative mx-auto max-w-md">
+                {/* Carousel container */}
+                <div
+                  ref={carouselRef}
+                  className="overflow-hidden"
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
                 >
-                  {blog.imageUrl ? (
-                    <img
-                      src={blog.imageUrl}
-                      alt={blog.title}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.style.display = 'none';
-                        e.target.parentNode.classList.add('flex', 'items-center', 'justify-center');
-                        const placeholder = document.createElement('div');
-                        placeholder.className = 'text-gray-500 text-center';
-                        placeholder.innerText = 'Image unavailable';
-                        e.target.parentNode.appendChild(placeholder);
-                      }}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-full h-full bg-gray-700 flex items-center justify-center">
-                        <span className="text-gray-500">No image</span>
+                  {/* Blog post carousel */}
+                  <div
+                    className="flex transition-transform duration-300 ease-in-out"
+                    style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                  >
+                    {blogs.map((blog, index) => (
+                      <div
+                        key={blog.id || Math.random().toString(36).substring(2, 9)}
+                        className="w-full flex-shrink-0 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex flex-col"
+                      >
+                        {/* Image container */}
+                        <a
+                          href={blog.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="h-60 bg-gray-700 relative block overflow-hidden"
+                        >
+                          {blog.imageUrl ? (
+                            <img
+                              src={blog.imageUrl}
+                              alt={blog.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.style.display = 'none';
+                                e.target.parentNode.classList.add('flex', 'items-center', 'justify-center');
+                                const placeholder = document.createElement('div');
+                                placeholder.className = 'text-gray-500 text-center';
+                                placeholder.innerText = 'Image unavailable';
+                                e.target.parentNode.appendChild(placeholder);
+                              }}
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-full h-full bg-gray-700 flex items-center justify-center">
+                                <span className="text-gray-500">No image</span>
+                              </div>
+                            </div>
+                          )}
+                        </a>
+
+                        {/* Content area */}
+                        <div className="p-6 flex-grow flex flex-col">
+                          <div className="mb-2 flex items-center text-sm text-gray-400">
+                            {blog.author && (
+                              <span className="mr-2 text-sm">{blog.author}</span>
+                            )}
+                            {blog.date && (
+                              <>
+                                {blog.author && <span className="mr-2">•</span>}
+                                <span className="text-sm">{blog.date}</span>
+                              </>
+                            )}
+                          </div>
+
+                          <a
+                            href={blog.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-blue-300 transition-colors"
+                          >
+                            <h3 className="text-xl font-bold mb-4">{blog.title}</h3>
+                          </a>
+
+                          <p className="text-gray-300 mb-6 flex-grow text-sm line-clamp-3">{blog.excerpt}</p>
+
+                          <a
+                            href={blog.url}
+                            className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors mt-auto text-sm font-medium"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Read more <ArrowRight className="ml-2 h-4 w-4" />
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </a>
-                {/* Increased padding for content area */}
-                <div className="p-10 flex-grow flex flex-col">
-                  <div className="mb-4 flex items-center text-sm text-gray-400">
-                    {blog.author && (
-                      <span className="mr-2 text-base">{blog.author}</span>
-                    )}
-                    {blog.date && (
-                      <>
-                        {blog.author && <span className="mr-2">•</span>}
-                        <span className="text-base">{blog.date}</span>
-                      </>
-                    )}
+                    ))}
                   </div>
-                  {/* Title is now a link */}
-                  <a
-                    href={blog.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-blue-300 transition-colors"
-                  >
-                    <h3 className="text-2xl font-bold mb-6">{blog.title}</h3>
-                  </a>
-                  <p className="text-gray-300 mb-8 flex-grow text-lg leading-relaxed">{blog.excerpt}</p>
-                  <a
-                    href={blog.url}
-                    className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors mt-auto text-lg font-medium"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Read more <ArrowRight className="ml-2 h-6 w-6" />
-                  </a>
                 </div>
+
+                {/* Navigation arrows - only show if multiple blogs */}
+                {blogs.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevSlide}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/30 p-2 rounded-full text-white hover:bg-white/50 transition"
+                      aria-label="Previous blog"
+                    >
+                      <ChevronLeft size={24} />
+                    </button>
+
+                    <button
+                      onClick={nextSlide}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/30 p-2 rounded-full text-white hover:bg-white/50 transition"
+                      aria-label="Next blog"
+                    >
+                      <ChevronRight size={24} />
+                    </button>
+                  </>
+                )}
+
+                {/* Pagination dots */}
+                {blogs.length > 1 && (
+                  <div className="flex justify-center mt-4 space-x-2">
+                    {blogs.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentIndex(index)}
+                        className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                          currentIndex === index ? 'bg-blue-500' : 'bg-gray-500'
+                        }`}
+                        aria-label={`Go to blog ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
+            ) : (
+              // Desktop View (original grid layout)
+              <div className="grid grid-cols-1 gap-12 mx-auto max-w-3xl">
+                {blogs.map((blog) => (
+                  <div
+                    key={blog.id || Math.random().toString(36).substring(2, 9)}
+                    className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex flex-col h-full"
+                  >
+                    {/* Much larger image area - now clickable */}
+                    <a
+                      href={blog.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="h-96 bg-gray-700 relative block overflow-hidden hover:opacity-90 transition-opacity"
+                    >
+                      {blog.imageUrl ? (
+                        <img
+                          src={blog.imageUrl}
+                          alt={blog.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.style.display = 'none';
+                            e.target.parentNode.classList.add('flex', 'items-center', 'justify-center');
+                            const placeholder = document.createElement('div');
+                            placeholder.className = 'text-gray-500 text-center';
+                            placeholder.innerText = 'Image unavailable';
+                            e.target.parentNode.appendChild(placeholder);
+                          }}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-full h-full bg-gray-700 flex items-center justify-center">
+                            <span className="text-gray-500">No image</span>
+                          </div>
+                        </div>
+                      )}
+                    </a>
+                    {/* Increased padding for content area */}
+                    <div className="p-10 flex-grow flex flex-col">
+                      <div className="mb-4 flex items-center text-sm text-gray-400">
+                        {blog.author && (
+                          <span className="mr-2 text-base">{blog.author}</span>
+                        )}
+                        {blog.date && (
+                          <>
+                            {blog.author && <span className="mr-2">•</span>}
+                            <span className="text-base">{blog.date}</span>
+                          </>
+                        )}
+                      </div>
+                      {/* Title is now a link */}
+                      <a
+                        href={blog.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-blue-300 transition-colors"
+                      >
+                        <h3 className="text-2xl font-bold mb-6">{blog.title}</h3>
+                      </a>
+                      <p className="text-gray-300 mb-8 flex-grow text-lg leading-relaxed">{blog.excerpt}</p>
+                      <a
+                        href={blog.url}
+                        className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors mt-auto text-lg font-medium"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Read more <ArrowRight className="ml-2 h-6 w-6" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

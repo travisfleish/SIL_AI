@@ -89,11 +89,12 @@ export default function Home() {
       {/* Conditionally render MobileHeader for mobile, regular Header for desktop */}
       {isMobile ? <MobileHeader /> : <Header />}
 
-      {/* Toggle Buttons for Personal/Enterprise View */}
+      {/* Toggle Buttons for Personal/Enterprise View - Pass isMobile prop */}
       <ScrollAnimation animation="fade-in" duration={800}>
         <ToggleButtons
           selectedFilter={selectedFilter}
           onFilterChange={setSelectedFilter}
+          isMobile={isMobile}
         />
       </ScrollAnimation>
 
