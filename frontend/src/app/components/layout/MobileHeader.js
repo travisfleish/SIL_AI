@@ -29,14 +29,7 @@ const MobileHeader = () => {
         {/* Logo */}
         <div className="flex items-center">
           <div className="relative h-14 w-14">
-            <Image
-              src="/AI_Advantage.png"
-              alt="AI Advantage Logo"
-              width={56}
-              height={56}
-              className="object-contain"
-              unoptimized
-            />
+            <span className="text-xl font-bold">AI</span>
           </div>
         </div>
 
