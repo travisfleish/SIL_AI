@@ -7,24 +7,33 @@ export const useToolFiltering = () => {
   const [error, setError] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState('personal');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [initialized, setInitialized] = useState(false);
 
-  const fetchTools = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  // This effect only runs once on component mount
+  useEffect(() => {
+    // Initial fetch on mount - only once
+    if (!initialized) {
+      setLoading(true);
+      setInitialized(true);
+      fetchData(selectedFilter, selectedCategory);
+    }
+  }, [initialized, selectedFilter, selectedCategory]);
 
+  // Separate function for data fetching (not a useCallback to avoid dependency issues)
+  const fetchData = async (filter, category) => {
     try {
       // Build the endpoint URL based on current selections
-      let endpoint = `/api/tools?type=${selectedFilter}`;
+      let endpoint = `/api/tools?type=${filter}`;
 
       // Handle special category IDs for all tools in a group
-      if (selectedCategory === 'sports_all') {
+      if (category === 'sports_all') {
         endpoint += '&group=sports';
       }
-      else if (selectedCategory === 'ai_all') {
+      else if (category === 'ai_all') {
         endpoint += '&group=ai';
       }
-      else if (selectedCategory && selectedCategory !== '') {
-        endpoint += `&sector=${encodeURIComponent(selectedCategory)}`;
+      else if (category && category !== '') {
+        endpoint += `&sector=${encodeURIComponent(category)}`;
       }
 
       console.log('Fetching tools from:', endpoint);
@@ -36,13 +45,13 @@ export const useToolFiltering = () => {
       }
 
       const data = await response.json();
-      console.log(`Fetched ${data.length} tools`);
+      console.log(`Fetched ${data?.length || 0} tools`);
 
       if (data.error) {
         throw new Error(data.error);
       }
 
-      setTools(data);
+      setTools(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching tools:', err);
       setError(err.message || 'Failed to fetch tools');
@@ -50,52 +59,55 @@ export const useToolFiltering = () => {
     } finally {
       setLoading(false);
     }
-  }, [selectedFilter, selectedCategory]);
+  };
 
   // Handle filter type change (Personal/Enterprise)
-  const handleFilterChange = useCallback((filter) => {
+  const handleFilterChange = (filter) => {
+    setLoading(true);
     setSelectedFilter(filter);
 
-    // Reset or set appropriate category when switching filters
-    if (filter === 'personal') {
-      setSelectedCategory('');
-    } else if (filter === 'enterprise') {
-      // Default to all sports tools when switching to enterprise
-      setSelectedCategory('sports_all');
-    }
-  }, []);
+    // Reset or set appropriate category
+    const newCategory = filter === 'personal' ? '' : 'sports_all';
+    setSelectedCategory(newCategory);
+
+    // Fetch with new filter and category
+    fetchData(filter, newCategory);
+  };
 
   // Handle category selection change
-  const handleCategoryChange = useCallback((category) => {
-    console.log('Category changed to:', category);
+  const handleCategoryChange = (category) => {
+    setLoading(true);
 
-    // Determine the current group (sports or AI)
-    const currentGroup = category === 'sports_all' ||
-      CATEGORY_GROUPS.SPORTS.some(c => c.id === category) ? 'sports' : 'ai';
+    try {
+      console.log('Category changed to:', category);
 
-    // If switching to 'all' within the same group, set to the all category
-    if (category === 'sports_all' || category === 'ai_all') {
-      setSelectedCategory(category);
-      return;
+      // Determine the current group (sports or AI)
+      const currentGroup = category === 'sports_all' ||
+        CATEGORY_GROUPS.SPORTS.some(c => c.id === category) ? 'sports' : 'ai';
+
+      // If switching to 'all' within the same group, set to the all category
+      let newCategory;
+      if (category === 'sports_all' || category === 'ai_all') {
+        newCategory = category;
+      } else {
+        // Check if the category exists in the current group
+        const isValidCategory = currentGroup === 'sports'
+          ? CATEGORY_GROUPS.SPORTS.some(c => c.id === category)
+          : CATEGORY_GROUPS.AI.some(c => c.id === category);
+
+        // If valid category, set it. Otherwise, set to the corresponding 'all' category
+        newCategory = isValidCategory ? category : (currentGroup === 'sports' ? 'sports_all' : 'ai_all');
+      }
+
+      setSelectedCategory(newCategory);
+
+      // Fetch with new category
+      fetchData(selectedFilter, newCategory);
+    } catch (err) {
+      console.error('Error changing category:', err);
+      setLoading(false);
     }
-
-    // Check if the category exists in the current group
-    const isValidCategory = currentGroup === 'sports'
-      ? CATEGORY_GROUPS.SPORTS.some(c => c.id === category)
-      : CATEGORY_GROUPS.AI.some(c => c.id === category);
-
-    // If valid category, set it. Otherwise, set to the corresponding 'all' category
-    setSelectedCategory(
-      isValidCategory
-        ? category
-        : (currentGroup === 'sports' ? 'sports_all' : 'ai_all')
-    );
-  }, []);
-
-  // Fetch tools whenever the filter or category changes
-  useEffect(() => {
-    fetchTools();
-  }, [fetchTools]);
+  };
 
   return {
     tools,
@@ -105,6 +117,9 @@ export const useToolFiltering = () => {
     selectedCategory,
     setSelectedFilter: handleFilterChange,
     setSelectedCategory: handleCategoryChange,
-    fetchTools
+    fetchTools: () => {
+      setLoading(true);
+      fetchData(selectedFilter, selectedCategory);
+    }
   };
 };
