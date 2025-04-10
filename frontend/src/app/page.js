@@ -5,35 +5,29 @@ import React, { useEffect, useState } from 'react';
 // Import components
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
+import SponsorCarousel from './components/marketing/SponsorCarousel';
+import NewsletterSection from './components/marketing/NewsletterSection';
+import BlogSection from './components/marketing/BlogSection';
 import ToggleButtons from './components/ui/ToggleButtons';
 import CategoryFilters from './components/ui/CategoryFilters';
 import ToolGrid from './components/tools/ToolGrid';
-import NewsletterSection from './components/marketing/NewsletterSection';
-import BlogSection from './components/marketing/BlogSection';
+import ScrollAnimation from './components/ui/ScrollAnimation';
 
 // Import the animations CSS
 import './animations.css';
 
-// Simplified media query hook with safer mobile detection
+// Simplified hook functionality
 const useMediaQuery = () => {
-  const [matches, setMatches] = useState(false);
+  const [matches, setMatches] = React.useState(false);
 
   useEffect(() => {
-    // Set initial value based on window width
     if (typeof window !== 'undefined') {
-      setMatches(window.innerWidth < 768);
+      const media = window.matchMedia('(max-width: 768px)');
+      setMatches(media.matches);
 
-      // Add resize listener with debounce for performance
-      let resizeTimer;
-      const handleResize = () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-          setMatches(window.innerWidth < 768);
-        }, 100);
-      };
-
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
+      const listener = (e) => setMatches(e.matches);
+      media.addEventListener('change', listener);
+      return () => media.removeEventListener('change', listener);
     }
   }, []);
 
@@ -43,48 +37,73 @@ const useMediaQuery = () => {
 // Import useToolFiltering hook (updated version with loading/error states)
 import { useToolFiltering } from './hooks/useToolFiltering';
 
-// Error boundary component for catching and reporting errors
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
+// Simple Mobile Fallback Component
+const MobileFallback = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
 
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error };
-  }
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    setMessage("Thank you for subscribing!");
+    setEmail('');
+  };
 
-  componentDidCatch(error, errorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo);
-    // You could log this error to a service here
-  }
+  return (
+    <div className="min-h-screen bg-white">
+      <Header />
 
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="p-8 bg-red-50 text-red-800 rounded-lg m-4">
-          <h2 className="text-xl font-bold mb-2">Something went wrong</h2>
-          <p className="mb-4">We&apos;re sorry, but there was an error loading this page.</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg"
-          >
-            Refresh Page
-          </button>
+      <main className="p-4 max-w-lg mx-auto">
+        <h1 className="text-3xl font-bold my-6 text-center">AI Advantage Resources</h1>
+
+        <div className="mb-8">
+          <div className="grid grid-cols-2 gap-2">
+            <button className="py-3 bg-blue-600 text-white font-bold rounded-lg">
+              Personal
+            </button>
+            <button className="py-3 bg-gray-200 text-gray-800 font-bold rounded-lg">
+              Enterprise
+            </button>
+          </div>
         </div>
-      );
-    }
 
-    return this.props.children;
-  }
-}
+        <div className="bg-gray-100 p-4 rounded-lg mb-8">
+          <h2 className="text-xl font-bold mb-4">Popular AI Tools</h2>
+          <p className="text-gray-700 mb-4">
+            We&apos;re showing a simplified version of this page for better mobile performance.
+          </p>
+          <p className="text-gray-600 text-sm">
+            Visit on desktop for the full experience with all tools and features.
+          </p>
+        </div>
+
+        <div className="bg-blue-100 p-4 rounded-lg">
+          <h2 className="text-xl font-bold mb-2">Stay Updated</h2>
+          <p className="mb-4">Sign up for our newsletter for the latest in sports and AI.</p>
+          <form onSubmit={handleSubscribe}>
+            <input
+              type="email"
+              placeholder="Your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-2 mb-2 border rounded"
+            />
+            <button
+              type="submit"
+              className="w-full py-2 bg-yellow-500 text-white font-bold rounded"
+            >
+              Subscribe
+            </button>
+          </form>
+          {message && (
+            <p className="mt-2 text-center font-medium">{message}</p>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+};
 
 export default function Home() {
-  // State to track if we're on mobile
-  const [isMobile, setIsMobile] = useState(false);
-  // State to track if initial render is complete (avoid animations on first load)
-  const [isInitialRender, setIsInitialRender] = useState(true);
-
   // Use custom hooks for state management with enhanced states
   const {
     tools,
@@ -96,93 +115,112 @@ export default function Home() {
     setSelectedCategory,
   } = useToolFiltering();
 
-  // Check for mobile once on mount
+  // Media query hook
+  const isMobile = useMediaQuery();
+
+  // State to track if we're on a mobile device to trigger fallback
+  const [usesMobileFallback, setUsesMobileFallback] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // Check if we need to use the mobile fallback
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setIsMobile(window.innerWidth < 768);
+      // Enable mobile fallback if screen width is below threshold
+      setUsesMobileFallback(window.innerWidth < 768);
+      setHasMounted(true);
 
-      // After initial render is complete, set isInitialRender to false
-      setTimeout(() => {
-        setIsInitialRender(false);
-      }, 500);
-
-      // Setup error logging
+      // Add global error handler
       window.onerror = function(message, source, lineno, colno, error) {
-        console.error('Global error:', {message, source, lineno, colno, error});
+        console.error('Global error:', message, source, lineno, colno);
         return false;
       };
     }
   }, []);
 
-  // Get responsive state
-  const isMobileView = useMediaQuery();
+  // Log status changes for debugging
+  useEffect(() => {
+    console.log('Current state:', {
+      filter: selectedFilter,
+      category: selectedCategory,
+      toolCount: tools.length
+    });
+  }, [selectedFilter, selectedCategory, tools.length]);
 
+  // Show loading state until client-side code has determined device type
+  if (!hasMounted) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  // Render simplified mobile fallback if on mobile
+  if (usesMobileFallback) {
+    return <MobileFallback />;
+  }
+
+  // Regular desktop experience
   return (
-    <ErrorBoundary>
-      <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
-        {/* Header Component - No animation needed */}
-        <Header />
+    <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
+      {/* Header Component - No animation needed */}
+      <Header />
 
-        {/* Toggle Buttons for Personal/Enterprise View - No animations on mobile */}
-        <div className="w-full">
-          <ToggleButtons
+      {/* Toggle Buttons for Personal/Enterprise View */}
+      <ScrollAnimation animation="fade-in" duration={800}>
+        <ToggleButtons
+          selectedFilter={selectedFilter}
+          onFilterChange={setSelectedFilter}
+        />
+      </ScrollAnimation>
+
+      {/* Category Filters for Enterprise View */}
+      {selectedFilter === 'enterprise' && (
+        <ScrollAnimation animation="fade-up" delay={200}>
+          <CategoryFilters
             selectedFilter={selectedFilter}
-            onFilterChange={setSelectedFilter}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            isMobile={isMobile}
           />
+        </ScrollAnimation>
+      )}
+
+      {/* Loading State */}
+      {loading && (
+        <div className="w-full p-12 flex justify-center">
+          <div className="animate-pulse text-xl">Loading tools...</div>
         </div>
+      )}
 
-        {/* Category Filters for Enterprise View - No animations on mobile */}
-        {selectedFilter === 'enterprise' && (
-          <div className="w-full">
-            <CategoryFilters
-              selectedFilter={selectedFilter}
-              selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
-              isMobile={isMobileView}
-            />
-          </div>
-        )}
-
-        {/* Loading State */}
-        {loading && (
-          <div className="w-full p-12 flex justify-center">
-            <div className="animate-pulse text-xl">Loading tools...</div>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div className="w-full p-12 flex justify-center">
-            <div className="text-red-500">Error: {error}</div>
-          </div>
-        )}
-
-        {/* Tool Grid - No animations on mobile */}
-        {!loading && !error && (
-          <div className="w-full">
-            <ToolGrid
-              tools={tools}
-              selectedFilter={selectedFilter}
-              selectedCategory={selectedCategory}
-            />
-          </div>
-        )}
-
-        {/* Fixed Newsletter Section - No animations on mobile */}
-        <div className="w-full">
-          <NewsletterSection variant="fixed" />
+      {/* Error State */}
+      {error && (
+        <div className="w-full p-12 flex justify-center">
+          <div className="text-red-500">Error: {error}</div>
         </div>
+      )}
 
-        {/* Blog Section - No animations on mobile */}
-        <div className="w-full">
-          <BlogSection />
-        </div>
+      {/* Tool Grid - Using ScrollAnimation */}
+      {!loading && !error && (
+        <ScrollAnimation animation="fade-up" delay={300} duration={1000} className="w-full">
+          <ToolGrid
+            tools={tools}
+            selectedFilter={selectedFilter}
+            selectedCategory={selectedCategory}
+          />
+        </ScrollAnimation>
+      )}
 
-        {/* Footer - No animations */}
-        <div className="w-full">
-          <Footer />
-        </div>
-      </div>
-    </ErrorBoundary>
+      {/* Fixed Newsletter Section - Using ScrollAnimation */}
+      <ScrollAnimation animation="fade-up" threshold={0.5} className="w-full">
+        <NewsletterSection variant="fixed" />
+      </ScrollAnimation>
+
+      {/* Blog Section - Using ScrollAnimation */}
+      <ScrollAnimation animation="fade-up" threshold={0.1} className="w-full">
+        <BlogSection />
+      </ScrollAnimation>
+
+      {/* Footer - Quick fade in with no upward movement */}
+      <ScrollAnimation animation="fade-in" duration={600} className="w-full">
+        <Footer />
+      </ScrollAnimation>
+    </div>
   );
 }
