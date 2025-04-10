@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 
 const MobileHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(true);
 
   // Navigation items
   const navItems = [
@@ -22,14 +23,23 @@ const MobileHeader = () => {
     }
   ];
 
-  return (
+   return (
     <header className="relative w-full bg-[#121620] text-white shadow-lg">
       {/* Main header bar */}
       <div className="flex items-center justify-between px-4 py-4">
         {/* Logo */}
         <div className="flex items-center">
-          <div className="relative h-14 w-14">
-            <span className="text-xl font-bold">AI</span>
+          <div className="relative h-14 w-14 flex items-center justify-center">
+            {imageLoaded ? (
+              <img
+                src="/AI_Advantage.png"
+                alt="AI Advantage Logo"
+                className="max-h-full max-w-full object-contain"
+                onError={() => setImageLoaded(false)}
+              />
+            ) : (
+              <span className="text-xl font-bold">AI</span>
+            )}
           </div>
         </div>
 
