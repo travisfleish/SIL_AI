@@ -1,33 +1,39 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Import components
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-import SponsorCarousel from './components/marketing/SponsorCarousel';
-import NewsletterSection from './components/marketing/NewsletterSection';
-import BlogSection from './components/marketing/BlogSection';
 import ToggleButtons from './components/ui/ToggleButtons';
 import CategoryFilters from './components/ui/CategoryFilters';
 import ToolGrid from './components/tools/ToolGrid';
-import ScrollAnimation from './components/ui/ScrollAnimation';
+import NewsletterSection from './components/marketing/NewsletterSection';
+import BlogSection from './components/marketing/BlogSection';
 
 // Import the animations CSS
 import './animations.css';
 
-// Simplified hook functionality
+// Simplified media query hook with safer mobile detection
 const useMediaQuery = () => {
-  const [matches, setMatches] = React.useState(false);
+  const [matches, setMatches] = useState(false);
 
   useEffect(() => {
+    // Set initial value based on window width
     if (typeof window !== 'undefined') {
-      const media = window.matchMedia('(max-width: 768px)');
-      setMatches(media.matches);
+      setMatches(window.innerWidth < 768);
 
-      const listener = (e) => setMatches(e.matches);
-      media.addEventListener('change', listener);
-      return () => media.removeEventListener('change', listener);
+      // Add resize listener with debounce for performance
+      let resizeTimer;
+      const handleResize = () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          setMatches(window.innerWidth < 768);
+        }, 100);
+      };
+
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     }
   }, []);
 
@@ -37,7 +43,48 @@ const useMediaQuery = () => {
 // Import useToolFiltering hook (updated version with loading/error states)
 import { useToolFiltering } from './hooks/useToolFiltering';
 
+// Error boundary component for catching and reporting errors
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("Error caught by boundary:", error, errorInfo);
+    // You could log this error to a service here
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-8 bg-red-50 text-red-800 rounded-lg m-4">
+          <h2 className="text-xl font-bold mb-2">Something went wrong</h2>
+          <p className="mb-4">We're sorry, but there was an error loading this page.</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+          >
+            Refresh Page
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 export default function Home() {
+  // State to track if we're on mobile
+  const [isMobile, setIsMobile] = useState(false);
+  // State to track if initial render is complete (avoid animations on first load)
+  const [isInitialRender, setIsInitialRender] = useState(true);
+
   // Use custom hooks for state management with enhanced states
   const {
     tools,
@@ -49,82 +96,93 @@ export default function Home() {
     setSelectedCategory,
   } = useToolFiltering();
 
-  // Media query hook
-  const isMobile = useMediaQuery();
-
-  // Log status changes for debugging
+  // Check for mobile once on mount
   useEffect(() => {
-    console.log('Current state:', {
-      filter: selectedFilter,
-      category: selectedCategory,
-      toolCount: tools.length
-    });
-  }, [selectedFilter, selectedCategory, tools.length]);
+    if (typeof window !== 'undefined') {
+      setIsMobile(window.innerWidth < 768);
+
+      // After initial render is complete, set isInitialRender to false
+      setTimeout(() => {
+        setIsInitialRender(false);
+      }, 500);
+
+      // Setup error logging
+      window.onerror = function(message, source, lineno, colno, error) {
+        console.error('Global error:', {message, source, lineno, colno, error});
+        return false;
+      };
+    }
+  }, []);
+
+  // Get responsive state
+  const isMobileView = useMediaQuery();
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
-      {/* Header Component - No animation needed */}
-      <Header />
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
+        {/* Header Component - No animation needed */}
+        <Header />
 
-      {/* Toggle Buttons for Personal/Enterprise View */}
-      <ScrollAnimation animation="fade-in" duration={800}>
-        <ToggleButtons
-          selectedFilter={selectedFilter}
-          onFilterChange={setSelectedFilter}
-        />
-      </ScrollAnimation>
-
-      {/* Category Filters for Enterprise View */}
-      {selectedFilter === 'enterprise' && (
-        <ScrollAnimation animation="fade-up" delay={200}>
-          <CategoryFilters
+        {/* Toggle Buttons for Personal/Enterprise View - No animations on mobile */}
+        <div className="w-full">
+          <ToggleButtons
             selectedFilter={selectedFilter}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-            isMobile={isMobile}
+            onFilterChange={setSelectedFilter}
           />
-        </ScrollAnimation>
-      )}
-
-      {/* Loading State */}
-      {loading && (
-        <div className="w-full p-12 flex justify-center">
-          <div className="animate-pulse text-xl">Loading tools...</div>
         </div>
-      )}
 
-      {/* Error State */}
-      {error && (
-        <div className="w-full p-12 flex justify-center">
-          <div className="text-red-500">Error: {error}</div>
+        {/* Category Filters for Enterprise View - No animations on mobile */}
+        {selectedFilter === 'enterprise' && (
+          <div className="w-full">
+            <CategoryFilters
+              selectedFilter={selectedFilter}
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+              isMobile={isMobileView}
+            />
+          </div>
+        )}
+
+        {/* Loading State */}
+        {loading && (
+          <div className="w-full p-12 flex justify-center">
+            <div className="animate-pulse text-xl">Loading tools...</div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="w-full p-12 flex justify-center">
+            <div className="text-red-500">Error: {error}</div>
+          </div>
+        )}
+
+        {/* Tool Grid - No animations on mobile */}
+        {!loading && !error && (
+          <div className="w-full">
+            <ToolGrid
+              tools={tools}
+              selectedFilter={selectedFilter}
+              selectedCategory={selectedCategory}
+            />
+          </div>
+        )}
+
+        {/* Fixed Newsletter Section - No animations on mobile */}
+        <div className="w-full">
+          <NewsletterSection variant="fixed" />
         </div>
-      )}
 
-      {/* Tool Grid - Using ScrollAnimation */}
-      {!loading && !error && (
-        <ScrollAnimation animation="fade-up" delay={300} duration={1000} className="w-full">
-          <ToolGrid
-            tools={tools}
-            selectedFilter={selectedFilter}
-            selectedCategory={selectedCategory}
-          />
-        </ScrollAnimation>
-      )}
+        {/* Blog Section - No animations on mobile */}
+        <div className="w-full">
+          <BlogSection />
+        </div>
 
-      {/* Fixed Newsletter Section - Using ScrollAnimation */}
-      <ScrollAnimation animation="fade-up" threshold={0.5} className="w-full">
-        <NewsletterSection variant="fixed" />
-      </ScrollAnimation>
-
-      {/* Blog Section - Using ScrollAnimation */}
-      <ScrollAnimation animation="fade-up" threshold={0.1} className="w-full">
-        <BlogSection />
-      </ScrollAnimation>
-
-      {/* Footer - Quick fade in with no upward movement */}
-      <ScrollAnimation animation="fade-in" duration={600} className="w-full">
-        <Footer />
-      </ScrollAnimation>
-    </div>
+        {/* Footer - No animations */}
+        <div className="w-full">
+          <Footer />
+        </div>
+      </div>
+    </ErrorBoundary>
   );
 }

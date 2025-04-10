@@ -3,16 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 
 /**
- * A custom hook that detects when an element is visible in the viewport
- * and triggers animations accordingly.
- *
- * @param {Object} options - Configuration options
- * @param {string} options.animation - Animation type: 'fade-up', 'fade-in', etc.
- * @param {number} options.threshold - Percentage of element visible to trigger animation (0-1)
- * @param {number} options.delay - Delay before animation starts (ms)
- * @param {number} options.duration - Animation duration (ms)
- * @param {boolean} options.once - Whether to run the animation only once or every time it enters viewport
- * @returns {Object} - The ref to attach to your element and whether it's visible
+ * A mobile-optimized hook that detects viewport visibility
+ * with significantly reduced animation complexity on mobile devices
  */
 const useScrollAnimation = ({
   animation = 'fade-up',
@@ -22,11 +14,30 @@ const useScrollAnimation = ({
   once = true
 } = {}) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const elementRef = useRef(null);
+
+  // Detect mobile device once
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsMobile(window.innerWidth < 768);
+
+      // Immediately make visible on mobile
+      if (window.innerWidth < 768) {
+        setIsVisible(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     // Skip during SSR
     if (typeof window === 'undefined') return;
+
+    // Skip complex observer setup on mobile
+    if (isMobile) {
+      setIsVisible(true);
+      return;
+    }
 
     const currentRef = elementRef.current;
     if (!currentRef) return;
@@ -34,19 +45,14 @@ const useScrollAnimation = ({
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-
-        // If the element is intersecting and either:
-        // 1. We want animations to repeat (once === false), or
-        // 2. It hasn't been animated yet (isVisible === false)
         if (entry.isIntersecting && (!once || !isVisible)) {
           setIsVisible(true);
         } else if (!entry.isIntersecting && !once) {
-          // Reset visibility if we want animations to repeat
           setIsVisible(false);
         }
       },
       {
-        root: null, // viewport
+        root: null,
         rootMargin: '0px',
         threshold,
       }
@@ -59,11 +65,19 @@ const useScrollAnimation = ({
         observer.unobserve(currentRef);
       }
     };
-  }, [threshold, once, isVisible]);
+  }, [threshold, once, isVisible, isMobile]);
 
-  // Generate the animation styles based on animation type and visibility
+  // Generate simplified animation styles for mobile
   const getAnimationStyles = () => {
-    // Base styles
+    // For mobile, return visible styles immediately
+    if (isMobile) {
+      return {
+        opacity: 1,
+        transform: 'none'
+      };
+    }
+
+    // Desktop animation styles
     const styles = {
       opacity: isVisible ? 1 : 0,
       transform: isVisible ? 'none' : '',
@@ -99,8 +113,12 @@ const useScrollAnimation = ({
     return styles;
   };
 
-  // Create className string for CSS-based animations
+  // Create simplified className string for mobile
   const getAnimationClass = () => {
+    if (isMobile) {
+      return '';
+    }
+
     const baseClass = 'animate-on-scroll';
     const typeClass = animation;
     const visibleClass = isVisible ? 'animate-visible' : '';
@@ -114,9 +132,10 @@ const useScrollAnimation = ({
 
   return {
     ref: elementRef,
-    isVisible,
+    isVisible: isMobile ? true : isVisible,
     style: getAnimationStyles(),
     className: getAnimationClass(),
+    isMobile
   };
 };
 

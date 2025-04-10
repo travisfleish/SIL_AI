@@ -3,16 +3,8 @@
 import React, { useEffect, useRef, useState, Children, cloneElement, isValidElement } from 'react';
 
 /**
- * ScrollAnimation component that animates both the container and its children when they enter the viewport
- *
- * @param {Object} props
- * @param {React.ReactNode} props.children - The content to be animated
- * @param {string} props.animation - Animation type: 'fade-up', 'fade-in', 'slide-in-left', 'slide-in-right', 'scale-up'
- * @param {number} props.delay - Delay in milliseconds before animation starts (default: 0)
- * @param {number} props.duration - Animation duration in milliseconds (default: 800)
- * @param {number} props.threshold - Value between 0-1 indicating how much of the element must be visible (default: 0.1)
- * @param {string} props.className - Additional CSS classes to apply
- * @param {boolean} props.staggerChildren - Whether to stagger child animations (default: false)
+ * Mobile-optimized ScrollAnimation component
+ * Significantly reduces animation complexity on mobile devices
  */
 const ScrollAnimation = ({
   children,
@@ -25,12 +17,54 @@ const ScrollAnimation = ({
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const elementRef = useRef(null);
 
+  // Detect mobile once on mount
   useEffect(() => {
-    // Skip animation if there's no window (during SSR)
+    if (typeof window !== 'undefined') {
+      setIsMobile(window.innerWidth < 768);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Skip animation if there's no window (during SSR) or on mobile
     if (typeof window === 'undefined') return;
 
+    // On mobile, either show content immediately or use simplified animations
+    if (isMobile) {
+      // Option 1: Show content immediately with no animations
+      setIsVisible(true);
+      return;
+
+      // Option 2: Use simpler intersection observer with fewer options
+      // Uncomment this and comment the setIsVisible(true) above if you want
+      // minimal animations on mobile instead of none
+      /*
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.disconnect();
+          }
+        },
+        { threshold: 0.1 } // Use a simple threshold only
+      );
+
+      const currentRef = elementRef.current;
+      if (currentRef) {
+        observer.observe(currentRef);
+      }
+
+      return () => {
+        if (currentRef) {
+          observer.unobserve(currentRef);
+        }
+      };
+      */
+    }
+
+    // Full animations for desktop
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -39,7 +73,7 @@ const ScrollAnimation = ({
         }
       },
       {
-        root: null, // viewport
+        root: null,
         rootMargin: '0px',
         threshold: threshold,
       }
@@ -55,10 +89,16 @@ const ScrollAnimation = ({
         observer.unobserve(currentRef);
       }
     };
-  }, [threshold]);
+  }, [threshold, isMobile]);
 
-  // Animation styles based on the animation type
+  // Animation styles based on device and visibility
   const getAnimationStyle = () => {
+    // On mobile, use minimal or no animation styles
+    if (isMobile) {
+      return { opacity: 1, transform: 'none' };
+    }
+
+    // Desktop animation styles
     const baseStyle = {
       opacity: 0,
       transform: 'none',
@@ -73,7 +113,7 @@ const ScrollAnimation = ({
       transitionDelay: `${delay}ms`,
     };
 
-    // Initial styles based on animation type
+    // Initial styles based on animation type for desktop
     switch (animation) {
       case 'fade-up':
         baseStyle.transform = 'translateY(30px)';
@@ -103,8 +143,13 @@ const ScrollAnimation = ({
     return isVisible ? visibleStyle : baseStyle;
   };
 
-  // Animate children with optional staggering
+  // Simplified child animation approach
   const animateChildren = () => {
+    // For mobile, don't apply staggered animations to children
+    if (isMobile) {
+      return children;
+    }
+
     return Children.map(children, (child, index) => {
       if (!isValidElement(child)) return child;
 
@@ -140,10 +185,10 @@ const ScrollAnimation = ({
     <div
       ref={elementRef}
       className={`w-full ${className}`}
-      style={{...getAnimationStyle(), width: '100%'}}
+      style={isMobile ? { opacity: 1, width: '100%' } : {...getAnimationStyle(), width: '100%'}}
       {...props}
     >
-      {animateChildren()}
+      {isMobile ? children : animateChildren()}
     </div>
   );
 };
