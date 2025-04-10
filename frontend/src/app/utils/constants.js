@@ -35,8 +35,8 @@ export const CATEGORY_GROUPS = {
 
 // Filters for toggling between view modes
 export const FILTERS = [
-  { name: "Personal Productivity", id: "personal" },
-  { name: "Enterprise Solutions", id: "enterprise" },
+  { name: "Personal Productivity", id: "personal", shortName: "Personal" },
+  { name: "Enterprise Solutions", id: "enterprise", shortName: "Enterprise" },
 ];
 
 // Categories for personal productivity tools

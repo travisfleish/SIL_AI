@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { Menu, X } from 'lucide-react';
 
 // Import components
 import Header from './components/layout/Header';
@@ -37,69 +39,87 @@ const useMediaQuery = () => {
 // Import useToolFiltering hook (updated version with loading/error states)
 import { useToolFiltering } from './hooks/useToolFiltering';
 
-// Simple Mobile Fallback Component
-const MobileFallback = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+// Simple Header Component that works on mobile
+const SimpleHeader = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    setMessage("Thank you for subscribing!");
-    setEmail('');
-  };
+  // Navigation items
+  const navItems = [
+    {
+      label: "AI Marketmap",
+      href: "#",
+      onClick: (e) => e.preventDefault()
+    },
+    {
+      label: "AI Blog",
+      href: "https://www.twinbrain.ai/blog",
+      target: "_blank",
+      rel: "noopener noreferrer"
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-
-      <main className="p-4 max-w-lg mx-auto">
-        <h1 className="text-3xl font-bold my-6 text-center">AI Advantage Resources</h1>
-
-        <div className="mb-8">
-          <div className="grid grid-cols-2 gap-2">
-            <button className="py-3 bg-blue-600 text-white font-bold rounded-lg">
-              Personal
-            </button>
-            <button className="py-3 bg-gray-200 text-gray-800 font-bold rounded-lg">
-              Enterprise
-            </button>
+    <header className="relative w-full bg-[#121620] text-white shadow-lg">
+      {/* Main header bar */}
+      <div className="flex items-center justify-between px-4 py-4">
+        {/* Logo */}
+        <div className="flex items-center">
+          <div className="relative h-14 w-14">
+            <Image
+              src="/AI_Advantage.png"
+              alt="AI Advantage Logo"
+              width={56}
+              height={56}
+              className="object-contain"
+            />
           </div>
         </div>
 
-        <div className="bg-gray-100 p-4 rounded-lg mb-8">
-          <h2 className="text-xl font-bold mb-4">Popular AI Tools</h2>
-          <p className="text-gray-700 mb-4">
-            We&apos;re showing a simplified version of this page for better mobile performance.
-          </p>
-          <p className="text-gray-600 text-sm">
-            Visit on desktop for the full experience with all tools and features.
-          </p>
-        </div>
+        {/* Empty middle space */}
+        <div className="flex-1"></div>
 
-        <div className="bg-blue-100 p-4 rounded-lg">
-          <h2 className="text-xl font-bold mb-2">Stay Updated</h2>
-          <p className="mb-4">Sign up for our newsletter for the latest in sports and AI.</p>
-          <form onSubmit={handleSubscribe}>
-            <input
-              type="email"
-              placeholder="Your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 mb-2 border rounded"
-            />
-            <button
-              type="submit"
-              className="w-full py-2 bg-yellow-500 text-white font-bold rounded"
-            >
-              Subscribe
-            </button>
-          </form>
-          {message && (
-            <p className="mt-2 text-center font-medium">{message}</p>
-          )}
+        {/* Menu button with two parallel lines */}
+        <div className="flex justify-end">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-white focus:outline-none p-1"
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? (
+              <X size={28} />
+            ) : (
+              <div className="flex flex-col space-y-2">
+                <div className="w-7 h-0.5 bg-white"></div>
+                <div className="w-7 h-0.5 bg-white"></div>
+              </div>
+            )}
+          </button>
         </div>
-      </main>
-    </div>
+      </div>
+
+      {/* Dropdown menu - now same color as header with no border */}
+      {menuOpen && (
+        <div className="absolute w-full bg-[#121620] shadow-md z-50">
+          <nav className="flex flex-col py-3">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                target={item.target}
+                rel={item.rel}
+                onClick={(e) => {
+                  if (item.onClick) item.onClick(e);
+                  setMenuOpen(false);
+                }}
+                className="px-6 py-4 hover:bg-[#1e2433] text-base font-medium text-center"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
+    </header>
   );
 };
 
@@ -118,15 +138,12 @@ export default function Home() {
   // Media query hook
   const isMobile = useMediaQuery();
 
-  // State to track if we're on a mobile device to trigger fallback
-  const [usesMobileFallback, setUsesMobileFallback] = useState(false);
+  // State to track if initial detection has happened
   const [hasMounted, setHasMounted] = useState(false);
 
-  // Check if we need to use the mobile fallback
+  // Check if we're on mobile
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Enable mobile fallback if screen width is below threshold
-      setUsesMobileFallback(window.innerWidth < 768);
       setHasMounted(true);
 
       // Add global error handler
@@ -142,25 +159,20 @@ export default function Home() {
     console.log('Current state:', {
       filter: selectedFilter,
       category: selectedCategory,
-      toolCount: tools.length
+      toolCount: tools.length,
+      isMobile
     });
-  }, [selectedFilter, selectedCategory, tools.length]);
+  }, [selectedFilter, selectedCategory, tools.length, isMobile]);
 
   // Show loading state until client-side code has determined device type
   if (!hasMounted) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
-  // Render simplified mobile fallback if on mobile
-  if (usesMobileFallback) {
-    return <MobileFallback />;
-  }
-
-  // Regular desktop experience
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col items-center relative">
-      {/* Header Component - No animation needed */}
-      <Header />
+      {/* Conditionally render SimpleHeader for mobile, regular Header for desktop */}
+      {isMobile ? <SimpleHeader /> : <Header />}
 
       {/* Toggle Buttons for Personal/Enterprise View */}
       <ScrollAnimation animation="fade-in" duration={800}>
@@ -198,7 +210,7 @@ export default function Home() {
 
       {/* Tool Grid - Using ScrollAnimation */}
       {!loading && !error && (
-        <ScrollAnimation animation="fade-up" delay={300} duration={1000} className="w-full">
+        <ScrollAnimation animation={isMobile ? "fade-in" : "fade-up"} delay={isMobile ? 0 : 300} duration={isMobile ? 0 : 1000} className="w-full">
           <ToolGrid
             tools={tools}
             selectedFilter={selectedFilter}
@@ -208,12 +220,12 @@ export default function Home() {
       )}
 
       {/* Fixed Newsletter Section - Using ScrollAnimation */}
-      <ScrollAnimation animation="fade-up" threshold={0.5} className="w-full">
+      <ScrollAnimation animation={isMobile ? "fade-in" : "fade-up"} threshold={0.5} duration={isMobile ? 0 : 800} className="w-full">
         <NewsletterSection variant="fixed" />
       </ScrollAnimation>
 
       {/* Blog Section - Using ScrollAnimation */}
-      <ScrollAnimation animation="fade-up" threshold={0.1} className="w-full">
+      <ScrollAnimation animation={isMobile ? "fade-in" : "fade-up"} threshold={0.1} duration={isMobile ? 0 : 800} className="w-full">
         <BlogSection />
       </ScrollAnimation>
 

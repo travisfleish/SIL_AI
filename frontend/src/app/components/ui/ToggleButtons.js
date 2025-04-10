@@ -3,10 +3,11 @@ const { FILTERS } = require('../../utils/constants');
 
 const ToggleButtons = ({
   selectedFilter,
-  onFilterChange
+  onFilterChange,
+  isMobile // Add isMobile prop
 }) => {
   return React.createElement("section", {
-    className: "p-4 flex justify-center mt-10"
+    className: "p-4 flex justify-center mt-4 mb-2" // Reduced top margin
   },
     React.createElement("div", {
       className: "inline-flex rounded-md"
@@ -16,7 +17,7 @@ const ToggleButtons = ({
           key: filter.id,
           onClick: () => onFilterChange(filter.id),
           className: `
-            px-8 py-3 text-lg font-bold mt-5 mb-5
+            ${isMobile ? 'px-5' : 'px-8'} py-3 text-lg font-bold mt-3 mb-3
             ${index === 0 ? "rounded-l-lg" : ""}
             ${index === FILTERS.length - 1 ? "rounded-r-lg" : ""}
             ${selectedFilter === filter.id 
@@ -26,7 +27,7 @@ const ToggleButtons = ({
             ${index > 0 && "-ml-px"}
             transition
           `
-        }, filter.name)
+        }, isMobile ? filter.shortName || filter.name : filter.name)
       )
     )
   );

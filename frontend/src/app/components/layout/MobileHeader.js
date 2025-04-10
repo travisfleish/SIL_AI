@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
-const SimpleHeader = () => {
+const MobileHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Navigation items
@@ -25,36 +25,46 @@ const SimpleHeader = () => {
   return (
     <header className="relative w-full bg-[#121620] text-white shadow-lg">
       {/* Main header bar */}
-      <div className="flex items-center justify-between px-4 py-3">
-        {/* Logo in center */}
-        <div className="flex-1"></div>
-        <div className="flex-1 flex justify-center">
-          <div className="relative h-8">
+      <div className="flex items-center justify-between px-4 py-4">
+        {/* Logo */}
+        <div className="flex items-center">
+          <div className="relative h-14 w-14">
             <Image
               src="/AI_Advantage.png"
               alt="AI Advantage Logo"
-              width={100}
-              height={32}
+              width={56}
+              height={56}
               className="object-contain"
             />
           </div>
         </div>
 
-        {/* Menu button on right */}
-        <div className="flex-1 flex justify-end">
+        {/* Empty middle space */}
+        <div className="flex-1"></div>
+
+        {/* Menu button with two parallel lines */}
+        <div className="flex justify-end">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-white focus:outline-none"
+            className="text-white focus:outline-none p-1"
+            aria-label="Toggle menu"
           >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            {menuOpen ? (
+              <X size={28} />
+            ) : (
+              <div className="flex flex-col space-y-2">
+                <div className="w-7 h-0.5 bg-white"></div>
+                <div className="w-7 h-0.5 bg-white"></div>
+              </div>
+            )}
           </button>
         </div>
       </div>
 
-      {/* Dropdown menu */}
+      {/* Dropdown menu - now same color as header with no border */}
       {menuOpen && (
-        <div className="absolute w-full bg-[#1a1f2e] shadow-md z-50 border-t border-gray-700">
-          <nav className="flex flex-col py-2">
+        <div className="absolute w-full bg-[#121620] shadow-md z-50">
+          <nav className="flex flex-col py-3">
             {navItems.map((item) => (
               <a
                 key={item.label}
@@ -65,7 +75,7 @@ const SimpleHeader = () => {
                   if (item.onClick) item.onClick(e);
                   setMenuOpen(false);
                 }}
-                className="px-6 py-3 hover:bg-[#252a39] text-base font-medium"
+                className="px-6 py-4 hover:bg-[#1e2433] text-base font-medium text-center"
               >
                 {item.label}
               </a>
@@ -77,4 +87,4 @@ const SimpleHeader = () => {
   );
 };
 
-export default SimpleHeader;
+export default MobileHeader;
