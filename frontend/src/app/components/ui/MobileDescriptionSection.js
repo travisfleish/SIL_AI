@@ -14,9 +14,6 @@ const MobileDescriptionSection = ({ isMobile }) => {
         AI <span className="text-blue-600">Advantage</span> Resources
       </h2>
       <p className="text-sm text-gray-600 mt-1">
-        Discover the best AI tools for sports professionals
-      </p>
-      <p className="text-sm text-gray-600 mt-1">
         Brought to you by Sports Innovation Lab
       </p>
     </div>
