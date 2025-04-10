@@ -89,6 +89,16 @@ export default function Home() {
       {/* Conditionally render MobileHeader for mobile, regular Header for desktop */}
       {isMobile ? <MobileHeader /> : <Header />}
 
+      {/* Test image to verify path */}
+      <div className="py-4 flex justify-center w-full">
+        <img
+          src="/AI_Advantage.png"
+          alt="AI Advantage Logo Test"
+          width="100"
+          height="100"
+        />
+      </div>
+
       {/* Toggle Buttons for Personal/Enterprise View */}
       <ScrollAnimation animation="fade-in" duration={800}>
         <ToggleButtons
