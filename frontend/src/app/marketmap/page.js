@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Footer from '../components/layout/Footer';
 import BlogSection from '../components/marketing/BlogSection';
 import { Inter } from 'next/font/google';
@@ -77,14 +78,14 @@ export default function MarketMapPage() {
           <div className="flex items-center justify-between w-full mb-6">
             {/* Left: Combined Logos */}
             <div className="flex items-center space-x-3 ml-8 mt-5">
-              <a href="/" className="transition-opacity hover:opacity-90">
+              <Link href="/" className="transition-opacity hover:opacity-90">
                 <Image
                   src="/AI_Advantage.png"
                   alt="AI Advantage Logo"
                   width={isMobile ? 40 : 100}
                   height={isMobile ? 40 : 80}
                 />
-              </a>
+              </Link>
               <span className="text-white font-bold text-xl">×</span>
               <a
                 href="https://www.sportsilab.com"
@@ -102,8 +103,8 @@ export default function MarketMapPage() {
 
             {/* Navigation links */}
             <nav className="hidden sm:flex gap-6 mr-10 text-lg text-white font-semibold">
-              <a href="/" className="hover:text-blue-300 transition-colors">Home</a>
-              <a href="/marketmap" className="text-blue-300">AI Marketmap</a>
+              <Link href="/" className="hover:text-blue-300 transition-colors">Home</Link>
+              <Link href="/marketmap" className="text-blue-300">AI Marketmap</Link>
               <a href="https://www.twinbrain.ai/blog" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300 transition-colors">AI Blog</a>
             </nav>
           </div>
