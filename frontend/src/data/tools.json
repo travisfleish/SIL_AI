@@ -521,10 +521,10 @@
   },
   {
     "id": "53",
-    "name": "Krisp",
-    "source_url": "https://krisp.ai",
-    "short_description": "Remove background noise and echo in real-time.",
-    "screenshot_url": "/screenshots/krisp.png",
+    "name": "Bland.ai",
+    "source_url": "https://www.bland.ai",
+    "short_description": "AI voice agents that make and receive phone calls with natural conversations.",
+    "screenshot_url": "/screenshots/bland.ai.png",
     "category": "Voice & Audio",
     "type": "personal",
     "sector": "N/A"

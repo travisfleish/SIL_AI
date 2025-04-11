@@ -5,6 +5,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { fetchBlogPosts } from '../../../lib/blog-util';
 
 const BlogSection = () => {
+  // State management remains the same
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,6 +29,7 @@ const BlogSection = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Other code and helper functions remain the same...
   useEffect(() => {
     const loadBlogPosts = async () => {
       try {
@@ -52,44 +54,29 @@ const BlogSection = () => {
     loadBlogPosts();
   }, []);
 
-  // Sanitize text to handle apostrophes
+  // Helper functions remain the same...
   const sanitizeText = (text) => {
     if (!text) return '';
-    // Replace apostrophes with typographically correct ones to avoid React escaping issues
     return text.replace(/'/g, "'");
   };
 
-  // Helper function to ensure URLs are absolute
   const ensureAbsoluteUrl = (url) => {
     if (!url) return 'https://www.twinbrain.ai/blog';
-
-    // If the URL already starts with http:// or https://, it's already absolute
     if (url.startsWith('http://') || url.startsWith('https://')) {
       return url;
     }
-
-    // If it's a relative URL, make it absolute by prepending the TwinBrain domain
     return `https://www.twinbrain.ai${url.startsWith('/') ? '' : '/'}${url}`;
   };
 
-  // Helper function to remove "By: Author Name" from excerpts
   const removeAuthorFromExcerpt = (excerpt, author) => {
     if (!excerpt || !author) return excerpt;
-
-    // Remove "By: Author Name" pattern
     let cleaned = excerpt.replace(new RegExp(`By:\\s*${author}`, 'i'), '');
-
-    // Also remove "By: Author" pattern
     cleaned = cleaned.replace(/By:\s*[^.,;]+/i, '');
-
-    // Also remove attribution at the end with dot
     cleaned = cleaned.replace(/\.\s*By:?\s*[^.,;]+\.?$/i, '.');
-
-    // Trim and clean up
     return cleaned.trim();
   };
 
-  // Carousel controls
+  // Carousel navigation functions
   const nextSlide = () => {
     if (blogs.length <= 1) return;
     setCurrentIndex((prevIndex) => (prevIndex + 1) % blogs.length);
@@ -100,7 +87,7 @@ const BlogSection = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + blogs.length) % blogs.length);
   };
 
-  // Touch controls for swipe gesture on mobile
+  // Touch controls for swipe gesture
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
@@ -114,19 +101,17 @@ const BlogSection = () => {
 
   const handleTouchEnd = () => {
     const diff = touchStartX.current - touchEndX.current;
-    const threshold = 50; // Minimum swipe distance
+    const threshold = 50;
 
     if (diff > threshold) {
-      // Swipe left, go to next
       nextSlide();
     } else if (diff < -threshold) {
-      // Swipe right, go to previous
       prevSlide();
     }
   };
 
   return (
-    <section className="w-full py-30 text-white relative">
+    <section className="w-full py-20 text-white relative">
       <div
         style={{
           position: 'absolute',
@@ -156,12 +141,16 @@ const BlogSection = () => {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-25">
-          <h2 className="text-4xl font-bold mb-12">The AI Blog You Can&apos;t Miss from TwinBrain.ai</h2>
-          <p className="text-xl mb-6 max-w-4xl mx-auto">
-            Sports Innovation Lab & Microsoft are proud to partner with TwinBrain to bring the sports industry
-            meaningful perspectives on AI that can help to drive your business forward TODAY
-          </p>
+        {/* Adjusted padding: less above, more below */}
+        <div className={`text-center ${isMobile ? 'pt-1 pb-15' : 'my-12'}`}>
+          <h2 className={`${isMobile ? "text-3xl font-bold" : "text-4xl font-bold"}`}>
+            AI Blog from TwinBrain.ai
+          </h2>
+          {!isMobile && (
+            <p className="text-xl mt-4 max-w-4xl mx-auto">
+              Get perspectives from Sports Innovation Lab & Microsoft's partnership with TwinBrain to help your business grow
+            </p>
+          )}
         </div>
 
         {loading ? (
@@ -188,6 +177,27 @@ const BlogSection = () => {
             {/* Mobile Carousel View */}
             {isMobile ? (
               <div className="relative mx-auto max-w-md">
+                {/* Navigation arrows - positioned higher */}
+                {blogs.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevSlide}
+                      className="absolute left-2 top-1/4 -translate-y-1/2 z-10 bg-black/80 p-2.5 rounded-full text-white hover:bg-black transition shadow-md"
+                      aria-label="Previous blog"
+                    >
+                      <ChevronLeft size={26} />
+                    </button>
+
+                    <button
+                      onClick={nextSlide}
+                      className="absolute right-2 top-1/4 -translate-y-1/2 z-10 bg-black/80 p-2.5 rounded-full text-white hover:bg-black transition shadow-md"
+                      aria-label="Next blog"
+                    >
+                      <ChevronRight size={26} />
+                    </button>
+                  </>
+                )}
+
                 {/* Carousel container */}
                 <div
                   ref={carouselRef}
@@ -275,27 +285,6 @@ const BlogSection = () => {
                     ))}
                   </div>
                 </div>
-
-                {/* Navigation arrows - only show if multiple blogs */}
-                {blogs.length > 1 && (
-                  <>
-                    <button
-                      onClick={prevSlide}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/30 p-2 rounded-full text-white hover:bg-white/50 transition"
-                      aria-label="Previous blog"
-                    >
-                      <ChevronLeft size={24} />
-                    </button>
-
-                    <button
-                      onClick={nextSlide}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/30 p-2 rounded-full text-white hover:bg-white/50 transition"
-                      aria-label="Next blog"
-                    >
-                      <ChevronRight size={24} />
-                    </button>
-                  </>
-                )}
 
                 {/* Pagination dots */}
                 {blogs.length > 1 && (
