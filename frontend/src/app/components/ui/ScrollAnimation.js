@@ -102,15 +102,15 @@ const ScrollAnimation = ({
     const baseStyle = {
       opacity: 0,
       transform: 'none',
-      transition: `transform ${duration}ms ease-out, opacity ${duration}ms ease-out`,
-      transitionDelay: `${delay}ms`,
+      // Fixed: Combined transition with delay into a single property
+      transition: `transform ${duration}ms ease-out ${delay}ms, opacity ${duration}ms ease-out ${delay}ms`,
     };
 
     const visibleStyle = {
       opacity: 1,
       transform: 'none',
-      transition: `transform ${duration}ms ease-out, opacity ${duration}ms ease-out`,
-      transitionDelay: `${delay}ms`,
+      // Fixed: Combined transition with delay into a single property
+      transition: `transform ${duration}ms ease-out ${delay}ms, opacity ${duration}ms ease-out ${delay}ms`,
     };
 
     // Initial styles based on animation type for desktop
@@ -155,6 +155,7 @@ const ScrollAnimation = ({
 
       // Determine child animation delay if staggering is enabled
       const childDelay = staggerChildren ? index * 100 : 0;
+      const totalDelay = delay + childDelay;
 
       // Merge existing styles with animation styles
       const childStyle = {
@@ -169,8 +170,8 @@ const ScrollAnimation = ({
           animation === 'scale-down' ? 'scale(1.1)' :
           'translateY(20px)'
         ),
-        transition: `transform ${duration}ms ease-out, opacity ${duration}ms ease-out`,
-        transitionDelay: `${delay + childDelay}ms`
+        // Fixed: Combined transition with delay into a single property
+        transition: `transform ${duration}ms ease-out ${totalDelay}ms, opacity ${duration}ms ease-out ${totalDelay}ms`
       };
 
       // Clone the child with additional animation styles

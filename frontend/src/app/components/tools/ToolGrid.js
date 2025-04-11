@@ -140,7 +140,7 @@ const MobileCategoryCard = ({ category, tools }) => {
   const hasMultipleTools = categoryTools.length > 1;
 
   return (
-    <div className="mb-8 border border-gray-200 rounded-xl shadow-lg bg-white flex flex-col items-center text-center overflow-hidden">
+    <div className="mb-8 border border-gray-200 rounded-xl shadow-lg bg-white flex flex-col items-center text-center">
       {/* Category header with improved styling */}
       <div className="w-full bg-blue-100 py-3 px-4 text-center border-b border-blue-200">
         <span className="font-bold text-blue-800 text-lg tracking-wide">
@@ -148,9 +148,18 @@ const MobileCategoryCard = ({ category, tools }) => {
         </span>
       </div>
 
-      {/* Image container with relative positioning for buttons */}
-      <div className="relative w-full">
-        {/* Navigation arrows - enhanced with background */}
+      {/* Container with overflow visible to allow nav buttons to extend outside */}
+      <div className="relative w-full" style={{ overflow: 'visible' }}>
+        {/* Image container */}
+        <div className="w-full h-32 overflow-hidden">
+          <img
+            src={currentTool.screenshot_url || '/default-screenshot.png'}
+            alt={`${currentTool.name} Screenshot`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Navigation arrows - positioned 50% on/off the edge but smaller */}
         {hasMultipleTools && (
           <>
             <button
@@ -159,7 +168,8 @@ const MobileCategoryCard = ({ category, tools }) => {
                   prev === 0 ? categoryTools.length - 1 : prev - 1
                 );
               }}
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2.5 rounded-full shadow-md hover:bg-white hover:shadow-lg transition-all duration-200"
+              className="absolute left-0 translate-x-[-40%] top-[100%] -translate-y-1/2 z-20 bg-white rounded-full shadow-md p-2 hover:bg-gray-100 transition-transform hover:scale-110"
+              style={{ overflow: 'visible' }}
               aria-label="Previous tool"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -173,7 +183,8 @@ const MobileCategoryCard = ({ category, tools }) => {
                   (prev + 1) % categoryTools.length
                 );
               }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2.5 rounded-full shadow-md hover:bg-white hover:shadow-lg transition-all duration-200"
+              className="absolute right-0 translate-x-[40%] top-[100%] -translate-y-1/2 z-20 bg-white rounded-full shadow-md p-2 hover:bg-gray-100 transition-transform hover:scale-110"
+              style={{ overflow: 'visible' }}
               aria-label="Next tool"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -181,22 +192,6 @@ const MobileCategoryCard = ({ category, tools }) => {
               </svg>
             </button>
           </>
-        )}
-
-        {/* Simple image with reduced height using a fixed height container */}
-        <div className="w-full h-32 overflow-hidden">
-          <img
-            src={currentTool.screenshot_url || '/default-screenshot.png'}
-            alt={`${currentTool.name} Screenshot`}
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        {/* Tool counter (e.g., "1/3") - improved styling */}
-        {hasMultipleTools && (
-          <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2.5 py-1 rounded-full shadow-sm">
-            {currentToolIndex + 1}/{categoryTools.length}
-          </div>
         )}
       </div>
 
@@ -217,19 +212,26 @@ const MobileCategoryCard = ({ category, tools }) => {
           {currentTool.short_description}
         </p>
 
-        {/* Pagination dots for multiple tools - improved styling */}
+        {/* Pagination dots and counter below - rearranged */}
         {hasMultipleTools && (
-          <div className="flex justify-center mt-2 space-x-1.5">
-            {categoryTools.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentToolIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                  currentToolIndex === index ? 'bg-blue-500 scale-110' : 'bg-gray-300'
-                }`}
-                aria-label={`Go to tool ${index + 1}`}
-              />
-            ))}
+          <div className="flex flex-col items-center mt-2">
+            <div className="flex justify-center space-x-1.5 mb-2">
+              {categoryTools.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentToolIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                    currentToolIndex === index ? 'bg-blue-500 scale-110' : 'bg-gray-300'
+                  }`}
+                  aria-label={`Go to tool ${index + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Counter moved below the pagination dots */}
+            <div className="text-blue-600 text-xs font-medium">
+              {currentToolIndex + 1}/{categoryTools.length}
+            </div>
           </div>
         )}
       </div>

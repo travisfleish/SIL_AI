@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { fetchBlogPosts } from '../../../lib/blog-util';
 
@@ -111,7 +112,7 @@ const BlogSection = () => {
   };
 
   return (
-    <section className="w-full py-30 text-white relative">
+    <section className="w-full py-20 text-white relative">
       <div
         style={{
           position: 'absolute',
@@ -142,13 +143,47 @@ const BlogSection = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Adjusted padding: less above, more below */}
-        <div className={`text-center ${isMobile ? 'pt-1 pb-6' : 'my-12'}`}>
-          <h2 className={`${isMobile ? "text-3xl font-bold" : "text-4xl font-bold"}`}>
-            AI Blog from TwinBrain.ai
-          </h2>
+        <div className={`text-center ${isMobile ? 'pt-1 pb-4' : 'pb-6 my-8'}`}>
+          <h2 className={`${isMobile ? "text-4xl font-bold" : "text-5xl"} flex items-center ${isMobile ? "justify-center" : "justify-center gap-3"}`}>
+              {isMobile ? (
+                <div className="flex items-center gap-2">
+                  AI Blog {' '}
+                  <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer" className="ml-1 flex items-center">
+                    <span className="mx-1">by</span>
+                    <Image
+                      src="/TwinBrain_White_Transparent.png"
+                      alt="TwinBrain Logo"
+                      width={90}
+                      height={30}
+                      className="inline"
+                    />
+                  </a>
+                </div>
+              ) : (
+                <>
+                  AI Blog - <a href="https://www.twinbrain.ai/blog" target="_blank" rel="noopener noreferrer" className="font-extrabold hover:text-blue-300 transition-colors">Neural Notes</a> by: {' '}
+                  <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer">
+                    <Image
+                      src="/TwinBrain_White_Transparent.png"
+                      alt="TwinBrain Logo"
+                      width={200}
+                      height={60}
+                      className="inline"
+                    />
+                  </a>
+                </>
+              )}
+            </h2>
           {!isMobile && (
-            <p className="text-xl mt-4 max-w-4xl mx-auto">
-              Get perspectives from Sports Innovation Lab &amp; Microsoft&apos;s partnership with TwinBrain to help your business grow
+            <p className="text-lg mt-6 max-w-4xl mx-auto">
+              Practical AI insights and advice in partnership with {' '}
+              <a href="https://www.sportsinnovationlab.com" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:text-blue-400 transition-colors">
+                Sports Innovation Lab
+              </a>
+              {' '} & {' '}
+              <a href="https://www.microsoft.com" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:text-blue-400 transition-colors">
+                Microsoft
+              </a>
             </p>
           )}
         </div>
@@ -247,7 +282,6 @@ const BlogSection = () => {
                           )}
                         </a>
 
-                        {/* Content area */}
                         <div className="p-6 flex-grow flex flex-col">
                           <div className="mb-2 flex items-center text-sm text-gray-400">
                             {blog.author && (
@@ -272,14 +306,32 @@ const BlogSection = () => {
 
                           <p className="text-gray-300 mb-6 flex-grow text-sm line-clamp-3">{blog.excerpt}</p>
 
-                          <a
-                            href={blog.url}
-                            className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors mt-auto text-sm font-medium"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Read more <ArrowRight className="ml-2 h-4 w-4" />
-                          </a>
+                          <div className="flex items-center justify-between mt-auto">
+                            <a
+                              href={blog.url}
+                              className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Read more <ArrowRight className="ml-2 h-4 w-4" />
+                            </a>
+
+                            {/* TwinBrain logo aligned with Read more - ENLARGED */}
+                            <a
+                              href="https://www.twinbrain.ai"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center"
+                            >
+                              <Image
+                                src="/TwinBrain_White_Transparent.png"
+                                alt="TwinBrain Logo"
+                                width={70}
+                                height={35}
+                                className="self-center"
+                              />
+                            </a>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -340,7 +392,6 @@ const BlogSection = () => {
                         </div>
                       )}
                     </a>
-                    {/* Increased padding for content area */}
                     <div className="p-10 flex-grow flex flex-col">
                       <div className="mb-4 flex items-center text-sm text-gray-400">
                         {blog.author && (
@@ -363,14 +414,33 @@ const BlogSection = () => {
                         <h3 className="text-2xl font-bold mb-6">{blog.title}</h3>
                       </a>
                       <p className="text-gray-300 mb-8 flex-grow text-lg leading-relaxed">{blog.excerpt}</p>
-                      <a
-                        href={blog.url}
-                        className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors mt-auto text-lg font-medium"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Read more <ArrowRight className="ml-2 h-6 w-6" />
-                      </a>
+
+                      <div className="flex items-center justify-between mt-auto">
+                        <a
+                          href={blog.url}
+                          className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors text-lg font-medium"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Read more <ArrowRight className="ml-2 h-6 w-6" />
+                        </a>
+
+                        {/* TwinBrain logo aligned with Read more - ENLARGED */}
+                        <a
+                          href="https://www.twinbrain.ai"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center"
+                        >
+                          <Image
+                            src="/TwinBrain_White_Transparent.png"
+                            alt="TwinBrain Logo"
+                            width={120}
+                            height={60}
+                            className="self-center"
+                          />
+                        </a>
+                      </div>
                     </div>
                   </div>
                 ))}
