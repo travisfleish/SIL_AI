@@ -23,10 +23,40 @@ const MobileHeader = () => {
     }
   ];
 
-   return (
-    <header className="relative w-full bg-[#121620] text-white shadow-lg">
+  return (
+    <header className="relative w-full text-white shadow-lg">
+      {/* Background with SIL_bg.jpg (same as blog section) */}
+      <div className="absolute inset-0 z-0">
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: "url('/SIL_bg.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'grayscale(100%)',
+            zIndex: 0
+          }}
+        />
+        {/* Dark overlay to ensure text is readable */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            zIndex: 1
+          }}
+        />
+      </div>
+
       {/* Main header bar */}
-      <div className="flex items-center justify-between px-4 py-4">
+      <div className="flex items-center justify-between px-4 py-4 relative z-10">
         {/* Logo */}
         <div className="flex items-center">
           <div className="relative h-14 w-14 flex items-center justify-center">
@@ -65,10 +95,39 @@ const MobileHeader = () => {
         </div>
       </div>
 
-      {/* Dropdown menu - now same color as header with no border */}
+      {/* Dropdown menu - using same dark overlay */}
       {menuOpen && (
-        <div className="absolute w-full bg-[#121620] shadow-md z-50">
-          <nav className="flex flex-col py-3">
+        <div className="absolute w-full z-50 relative">
+          {/* Use same background and overlay for consistency */}
+          <div className="absolute inset-0 z-0">
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundImage: "url('/SIL_bg.jpg')",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'grayscale(100%)',
+                zIndex: 0
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                zIndex: 1
+              }}
+            />
+          </div>
+
+          <nav className="flex flex-col py-3 relative z-10">
             {navItems.map((item) => (
               <a
                 key={item.label}
@@ -79,7 +138,7 @@ const MobileHeader = () => {
                   if (item.onClick) item.onClick(e);
                   setMenuOpen(false);
                 }}
-                className="px-6 py-4 hover:bg-[#1e2433] text-base font-medium text-center"
+                className="px-6 py-4 hover:bg-black/30 text-base font-medium text-center"
               >
                 {item.label}
               </a>

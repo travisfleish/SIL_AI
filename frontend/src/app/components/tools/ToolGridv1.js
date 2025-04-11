@@ -1,12 +1,15 @@
-// import React, { useEffect } from 'react';
+// import React, { useState, useEffect } from 'react';
 // import Image from 'next/image';
 // import { DEMO_CATEGORIES } from '../../utils/constants';
 // import CategoryCard from './CategoryCard';
 // import EnterpriseToolCard from './EnterpriseToolCard';
 // import useScrollAnimation from '../../hooks/useScrollAnimation';
 //
-// // Create a simpler version of CategoryCard for mobile
+// // Create a better version of CategoryCard for mobile with carousel functionality and reduced image height
 // const MobileCategoryCard = ({ category, tools }) => {
+//   // State for the current tool index within this category
+//   const [currentToolIndex, setCurrentToolIndex] = useState(0);
+//
 //   // Filter tools that match this category
 //   const categoryTools = tools.filter(tool => tool.category === category);
 //
@@ -15,8 +18,11 @@
 //     return null;
 //   }
 //
-//   // Take the first tool from this category
-//   const tool = categoryTools[0];
+//   // Get the current tool to display
+//   const currentTool = categoryTools[currentToolIndex % categoryTools.length];
+//
+//   // Only show navigation if we have multiple tools
+//   const hasMultipleTools = categoryTools.length > 1;
 //
 //   return (
 //     <div className="mb-6 border rounded-lg shadow-lg bg-white flex flex-col items-center text-center overflow-hidden">
@@ -27,34 +33,88 @@
 //         </span>
 //       </div>
 //
-//       {/* Simple image with no Next.js optimization */}
-//       <img
-//         src={tool.screenshot_url || '/default-screenshot.png'}
-//         alt={`${tool.name} Screenshot`}
-//         className="w-full h-auto"
-//         style={{ maxHeight: '200px', objectFit: 'cover' }}
-//       />
+//       {/* Image container with relative positioning for buttons */}
+//       <div className="relative w-full">
+//         {/* Navigation arrows - only show if multiple tools */}
+//         {hasMultipleTools && (
+//           <>
+//             <button
+//               onClick={() => {
+//                 setCurrentToolIndex(prev =>
+//                   prev === 0 ? categoryTools.length - 1 : prev - 1
+//                 );
+//               }}
+//               className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-md"
+//               aria-label="Previous tool"
+//             >
+//               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//                 <path d="M15 18l-6-6 6-6" />
+//               </svg>
+//             </button>
+//
+//             <button
+//               onClick={() => {
+//                 setCurrentToolIndex(prev =>
+//                   (prev + 1) % categoryTools.length
+//                 );
+//               }}
+//               className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-2 rounded-full shadow-md"
+//               aria-label="Next tool"
+//             >
+//               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//                 <path d="M9 18l6-6-6-6" />
+//               </svg>
+//             </button>
+//           </>
+//         )}
+//
+//         {/* Simple image with reduced height using a fixed height container */}
+//         <div className="w-full h-32 overflow-hidden">
+//           <img
+//             src={currentTool.screenshot_url || '/default-screenshot.png'}
+//             alt={`${currentTool.name} Screenshot`}
+//             className="w-full h-full object-cover"
+//           />
+//         </div>
+//
+//         {/* Tool counter (e.g., "1/3") */}
+//         {hasMultipleTools && (
+//           <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full opacity-80">
+//             {currentToolIndex + 1}/{categoryTools.length}
+//           </div>
+//         )}
+//       </div>
 //
 //       {/* Tool info */}
 //       <div className="p-4 flex flex-col items-center w-full">
 //         <h3 className="text-lg font-bold">
 //           <a
-//             href={tool.source_url}
+//             href={currentTool.source_url}
 //             className="text-blue-600 hover:underline"
 //             target="_blank"
 //             rel="noopener noreferrer"
 //           >
-//             {tool.name}
+//             {currentTool.name}
 //           </a>
 //         </h3>
 //
-//         <p className="text-gray-600 text-center mt-2">
-//           {tool.short_description}
+//         <p className="text-gray-600 text-center mt-2 line-clamp-3 text-sm">
+//           {currentTool.short_description}
 //         </p>
 //
-//         {categoryTools.length > 1 && (
-//           <div className="mt-2 text-sm text-gray-500">
-//             + {categoryTools.length - 1} more in this category
+//         {/* Pagination dots for multiple tools */}
+//         {hasMultipleTools && (
+//           <div className="flex justify-center mt-3 space-x-1">
+//             {categoryTools.map((_, index) => (
+//               <button
+//                 key={index}
+//                 onClick={() => setCurrentToolIndex(index)}
+//                 className={`w-1.5 h-1.5 rounded-full ${
+//                   currentToolIndex === index ? 'bg-blue-500' : 'bg-gray-300'
+//                 }`}
+//                 aria-label={`Go to tool ${index + 1}`}
+//               />
+//             ))}
 //           </div>
 //         )}
 //       </div>
@@ -185,7 +245,7 @@
 //       return (
 //         <section className="p-6 w-full">
 //           <div className="w-full">
-//             {/* Use the simpler MobileCategoryCard for personal view */}
+//             {/* Use the enhanced MobileCategoryCard for personal view */}
 //             {DEMO_CATEGORIES.map((category, index) => (
 //               <MobileCategoryCard
 //                 key={category}

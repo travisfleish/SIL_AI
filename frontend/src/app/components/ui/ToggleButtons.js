@@ -4,28 +4,28 @@ const { FILTERS } = require('../../utils/constants');
 const ToggleButtons = ({
   selectedFilter,
   onFilterChange,
-  isMobile // Use isMobile prop to determine display text
+  isMobile
 }) => {
   return React.createElement("section", {
-    className: "p-4 flex justify-center mt-4 mb-2" // Reduced top margin
+    className: "p-3 flex justify-center mb-5" // Reduced outer padding
   },
     React.createElement("div", {
-      className: "inline-flex rounded-md"
+      className: "inline-flex rounded-lg shadow-sm" // Maintained shadow
     },
       FILTERS.map((filter, index) =>
         React.createElement("button", {
           key: filter.id,
           onClick: () => onFilterChange(filter.id),
           className: `
-            ${isMobile ? 'px-5' : 'px-8'} py-3 text-lg font-bold mt-3 mb-3
+            ${isMobile ? 'px-5' : 'px-6'} py-2.5 text-base font-medium
             ${index === 0 ? "rounded-l-lg" : ""}
             ${index === FILTERS.length - 1 ? "rounded-r-lg" : ""}
             ${selectedFilter === filter.id 
-              ? "bg-blue-600 text-white z-10" 
-              : "bg-white text-gray-900 hover:bg-gray-300"}
-            border border-gray-300
+              ? "bg-blue-600 text-white" // Clean active state
+              : "bg-white text-gray-800 hover:text-blue-700"} 
+            border border-gray-200
             ${index > 0 && "-ml-px"}
-            transition
+            transition-colors duration-150
           `
         }, isMobile && filter.shortName ? filter.shortName : filter.name)
       )
