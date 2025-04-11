@@ -10,6 +10,12 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
   // Detect if we're on mobile
   const [isMobile, setIsMobile] = useState(false);
 
+  // Form state
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -25,107 +31,137 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Base wrapper classes and styles - significantly reduced padding for mobile
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // This is critical to prevent page refresh
+
+    // Don't proceed if already submitting or no email
+    if (isSubmitting || !email) return;
+
+    setIsSubmitting(true);
+    setMessage('');
+
+    try {
+      // Basic client-side validation
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setMessage('Please enter a valid email address');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Make API call with fetch
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      // Get the response data
+      const data = await response.json();
+
+      // Handle success or error
+      if (response.ok) {
+        setIsSuccess(true);
+        setMessage(data.message || 'Thank you for subscribing!');
+        setEmail('');
+
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          setIsSuccess(false);
+          setMessage('');
+        }, 5000);
+      } else {
+        setIsSuccess(false);
+        setMessage(data.error || 'Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error('Newsletter submission error:', error);
+      setIsSuccess(false);
+      setMessage('Could not connect to our server. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Base wrapper classes and styles
   const wrapperClasses = isFixed
     ? `w-full ${isMobile ? 'py-8' : 'py-40'} flex flex-col items-center shadow-md mt-10 px-4 sm:px-8 relative overflow-hidden`
     : "fixed bottom-0 w-full text-white py-16 shadow-xl z-50 overflow-hidden";
 
-  const wrapperStyles = {
-    position: isFixed ? 'relative' : 'fixed',
-    animation: isFloating ? 'slideUp 0.5s ease-out' : undefined
-  };
-
-  // Background div styles
-  const bgStyles = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundImage: "url('/Logo_BG.jpg')",
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    zIndex: 0
-  };
-
-  // Create a unique ID for the newsletter section
-  const sectionId = isFixed ? "fixed-newsletter" : "floating-newsletter";
-
-  // State for form
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    setMessage("Thank you for subscribing!");
-    setEmail('');
-  };
-
-  // Heading and subheading text sizes adjustments for mobile
-  const headingClass = isMobile
-    ? "text-2xl mb-3 font-bold text-white" // Smaller title on mobile
-    : "text-4xl md:text-5xl mb-10 font-bold text-white";
-
-  const subtextClass = isMobile
-    ? "text-sm font-medium text-center mb-2" // Smaller subtext on mobile
-    : "text-lg md:text-xl font-semibold text-center";
-
-  // Form input padding adjustments for mobile
-  const inputClass = `px-${isMobile ? '3' : '6'} py-${isMobile ? '2' : '3'} rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent w-full sm:w-auto flex-grow text-base shadow-md`;
-
-  const buttonClass = `px-${isMobile ? '3' : '6'} py-${isMobile ? '2' : '3'} bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap`;
-
   return (
     <section
-      id={sectionId}
+      id={isFixed ? "fixed-newsletter" : "floating-newsletter"}
       className={wrapperClasses}
-      style={wrapperStyles}
+      style={{
+        position: isFixed ? 'relative' : 'fixed',
+        animation: isFloating ? 'slideUp 0.5s ease-out' : undefined
+      }}
     >
       {/* Background */}
-      <div style={bgStyles}></div>
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: "url('/Logo_BG.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          zIndex: 0
+        }}
+      ></div>
 
       {/* Centered Header */}
       <div className="text-center mb-2 sm:mb-8 relative z-10">
-        <h2 className={headingClass}>
+        <h2 className={isMobile ? "text-2xl mb-3 font-bold text-white" : "text-4xl md:text-5xl mb-10 font-bold text-white"}>
            Don&apos;t Miss an AI Beat!
         </h2>
       </div>
 
-      {/* Content container - reduced spacing for mobile */}
+      {/* Content container */}
       <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center relative z-10 px-4 sm:px-8 lg:px-12">
-        {/* Subtext - vertically aligned with form */}
+        {/* Subtext */}
         <div className="md:w-1/2 mb-3 md:mb-0 md:pr-6 text-white flex items-center text-center">
-          <p className={subtextClass}>
+          <p className={isMobile ? "text-sm font-medium text-center mb-2" : "text-lg md:text-xl font-semibold text-center"}>
             Sign up for more AI news, events, and resources from Sports Innovation Lab.
           </p>
         </div>
 
-        {/* Right section - Form */}
+        {/* Form */}
         <div className="md:w-1/2 w-full">
-          <form className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2" onSubmit={handleSubscribe}>
-            <input
-              type="email"
-              placeholder="Your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={inputClass}
-              required
-            />
-            <button
-              type="submit"
-              className={buttonClass}
-              style={isFloating ? { animation: 'pulse 2s infinite' } : {}}
-            >
-              Request Now
-            </button>
+          <form onSubmit={handleSubmit} className="w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full sm:flex-grow px-4 py-2 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 shadow-md"
+                disabled={isSubmitting}
+                required
+              />
+              <button
+                type="submit"
+                className="w-full sm:w-auto px-4 py-2 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Sending...' : 'Request Now'}
+              </button>
+            </div>
           </form>
+
           {message && (
-            <p className="text-sm sm:text-base mt-2 font-medium text-center sm:text-left text-white">{message}</p>
+            <p className={`mt-2 text-sm sm:text-base font-medium text-center sm:text-left ${isSuccess ? 'text-green-300' : 'text-white'}`}>
+              {message}
+            </p>
           )}
         </div>
       </div>
 
-      {/* Close button (only for floating variant) */}
+      {/* Close button */}
       {isFloating && onClose && (
         <button
           onClick={onClose}

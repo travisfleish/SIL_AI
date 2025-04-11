@@ -1,6 +1,6 @@
 'use client';
 
-const { useState } = require('react');
+import { useState } from 'react';
 
 const useNewsletterForm = () => {
   const [email, setEmail] = useState('');
@@ -30,12 +30,20 @@ const useNewsletterForm = () => {
 
       const data = await response.json();
 
-      if (data.error) {
+      if (!response.ok) {
+        // Handle HTTP error responses (4xx, 5xx)
+        setError(data.error || `Error: ${response.status}`);
+        setMessage(data.error || 'Failed to subscribe. Please try again later.');
+        setIsSuccess(false);
+      } else if (data.error) {
+        // Handle application-level errors
         setError(data.error);
         setMessage(data.error);
+        setIsSuccess(false);
       } else {
+        // Handle success
         setIsSuccess(true);
-        setMessage("Thank you for subscribing!");
+        setMessage(data.message || "Thank you for subscribing!");
         setEmail("");
 
         // Hide success message after 5 seconds
@@ -45,8 +53,11 @@ const useNewsletterForm = () => {
         }, 5000);
       }
     } catch (err) {
+      // Handle exceptions (network errors, etc.)
+      console.error('Newsletter form error:', err);
       setError(err.message || 'Failed to subscribe. Please try again later.');
       setMessage(err.message || 'Failed to subscribe. Please try again later.');
+      setIsSuccess(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -64,4 +75,4 @@ const useNewsletterForm = () => {
   };
 };
 
-module.exports = useNewsletterForm;
+export default useNewsletterForm;
