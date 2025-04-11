@@ -35,14 +35,14 @@ const Footer = () => {
           className="flex flex-col items-center"
         >
           <Image
-            src="/logo.png"
-            alt="TwinBrain Logo"
-            width={isMobile ? 80 : 150}
-            height={isMobile ? 30 : 50}
+            src="/AI_Advantage.png"
+            alt="AI Advantage Logo"
+            width={isMobile ? 40 : 100}
+            height={isMobile ? 40 : 80}
             className="h-auto"
           />
         </a>
-        <span className={`text-gray-300 font-bold ${isMobile ? 'text-lg' : 'text-xl'} mx-1`}>×</span>
+        <span className={`text-gray-300 font-bold ${isMobile ? 'text-lg' : 'text-xl'} mr-7 mx-1`}>×</span>
         <a
           href="https://www.sportsinnovationlab.com"
           target="_blank"
@@ -52,8 +52,8 @@ const Footer = () => {
           <Image
             src="/sil-logo.png"
             alt="Sports Innovation Lab Logo"
-            width={isMobile ? 110 : 200}
-            height={isMobile ? 40 : 100}
+            width={isMobile ? 70 : 140}
+            height={isMobile ? 25 : 60}
             className="h-auto"
           />
         </a>

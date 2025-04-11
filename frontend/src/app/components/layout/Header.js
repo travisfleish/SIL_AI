@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 // Header component
-const Header = ({ onMenuToggle }) => {
+const Header = ({ onMenuToggle, isMarketMap = false }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const headerRef = useRef(null);
@@ -20,8 +20,12 @@ const Header = ({ onMenuToggle }) => {
   const navItems = [
     {
       label: "AI Marketmap",
-      href: "#",
-      onClick: (e) => e.preventDefault()
+      href: "/marketmap",
+      onClick: (e) => {
+        if (window.location.pathname === "/marketmap") {
+          e.preventDefault();
+        }
+      }
     },
     {
       label: "AI Blog",
@@ -143,12 +147,24 @@ const Header = ({ onMenuToggle }) => {
         {/* Title Section */}
         <div className="text-center mt-4 pb-8 md:pb-12">
           <h1 className={`${inter.className} text-5xl sm:text-7xl md:text-5xl leading-tight mt-15 mb-3 tracking-tight`}>
-            <span className="font-normal text-white">AI </span>
-            <span className="font-bold text-white">Advantage </span>
-            <span className="font-normal text-white">Resources</span>
+            {isMarketMap ? (
+              <>
+                <span className="font-normal text-white">AI </span>
+                <span className="font-bold text-white">Marketmap</span>
+              </>
+            ) : (
+              <>
+                <span className="font-normal text-white">AI </span>
+                <span className="font-bold text-white">Advantage </span>
+                <span className="font-normal text-white">Resources</span>
+              </>
+            )}
           </h1>
           <p className={`hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light`}>
-            Discover the best AI tools for sports professionals
+            {isMarketMap
+              ? "Explore the AI tools ecosystem for sports professionals"
+              : "Discover the best AI tools for sports professionals"
+            }
           </p>
         </div>
       </div>

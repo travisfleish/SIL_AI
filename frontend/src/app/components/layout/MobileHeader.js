@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
 
-const MobileHeader = () => {
+const MobileHeader = ({ isMarketMap = false }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(true);
 
@@ -12,8 +12,12 @@ const MobileHeader = () => {
   const navItems = [
     {
       label: "AI Marketmap",
-      href: "#",
-      onClick: (e) => e.preventDefault()
+      href: "/marketmap",
+      onClick: (e) => {
+        if (window.location.pathname === "/marketmap") {
+          e.preventDefault();
+        }
+      }
     },
     {
       label: "AI Blog",
@@ -93,6 +97,19 @@ const MobileHeader = () => {
             )}
           </button>
         </div>
+      </div>
+
+      {/* Center title - added for the main title */}
+      <div className="text-center pb-4 relative z-10 px-4">
+        <h1 className="text-3xl font-bold">
+          {isMarketMap ? "AI Marketmap" : "AI Advantage"}
+        </h1>
+        <p className="text-sm opacity-80 mt-1">
+          {isMarketMap
+            ? "Explore the AI tools ecosystem"
+            : "Resources for sports professionals"
+          }
+        </p>
       </div>
 
       {/* Dropdown menu - using same dark overlay */}
