@@ -111,7 +111,7 @@ const BlogSection = () => {
   };
 
   return (
-    <section className="w-full py-20 text-white relative">
+    <section className="w-full py-30 text-white relative">
       <div
         style={{
           position: 'absolute',
@@ -142,13 +142,13 @@ const BlogSection = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Adjusted padding: less above, more below */}
-        <div className={`text-center ${isMobile ? 'pt-1 pb-15' : 'my-12'}`}>
+        <div className={`text-center ${isMobile ? 'pt-1 pb-6' : 'my-12'}`}>
           <h2 className={`${isMobile ? "text-3xl font-bold" : "text-4xl font-bold"}`}>
             AI Blog from TwinBrain.ai
           </h2>
           {!isMobile && (
             <p className="text-xl mt-4 max-w-4xl mx-auto">
-              Get perspectives from Sports Innovation Lab & Microsoft's partnership with TwinBrain to help your business grow
+              Get perspectives from Sports Innovation Lab &amp; Microsoft&apos;s partnership with TwinBrain to help your business grow
             </p>
           )}
         </div>
