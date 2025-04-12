@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const useNewsletterForm = () => {
   const [email, setEmail] = useState('');
@@ -9,17 +9,8 @@ const useNewsletterForm = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Clean up any pending timers when the component unmounts
-  useEffect(() => {
-    return () => {
-      // This effect cleanup will run when the component unmounts
-      // and handle any pending state updates
-    };
-  }, []);
-
-  const handleSubscribe = async (e) => {
-    // We don't call preventDefault here anymore - it will be handled by the component
-
+  // Simplified submit function that doesn't expect an event
+  const handleSubmit = async () => {
     // Don't allow multiple simultaneous submissions
     if (isSubmitting) return;
 
@@ -27,7 +18,7 @@ const useNewsletterForm = () => {
     setError('');
     setMessage('');
 
-    // Check for online status first - critical for mobile
+    // Check for online status first
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
       setError('You appear to be offline. Please check your connection.');
       setMessage('You appear to be offline. Please check your connection.');
@@ -72,14 +63,10 @@ const useNewsletterForm = () => {
         setEmail("");
 
         // Hide success message after 5 seconds
-        // Use a variable to capture the timeout ID
-        const timeoutId = setTimeout(() => {
+        setTimeout(() => {
           setIsSuccess(false);
           setMessage("");
         }, 5000);
-
-        // We return a cleanup function that the useEffect in the component can use
-        return () => clearTimeout(timeoutId);
       }
     } catch (err) {
       // Handle exceptions (network errors, etc.)
@@ -100,7 +87,7 @@ const useNewsletterForm = () => {
     isSubmitting,
     isSuccess,
     error,
-    handleSubscribe
+    handleSubmit // Return the renamed function
   };
 };
 
