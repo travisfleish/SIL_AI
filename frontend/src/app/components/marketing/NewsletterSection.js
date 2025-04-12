@@ -19,7 +19,7 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
     isSubmitting,
     isSuccess,
     error,
-    handleSubmit // Use renamed function
+    handleSubscribe
   } = useNewsletterForm();
 
   useEffect(() => {
@@ -36,17 +36,6 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
     // Cleanup
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // Consistent form submission handler
-  const onSubmit = (e) => {
-    if (e) {
-      e.preventDefault(); // Always prevent default form submission
-      console.log('Form submitted on', isMobile ? 'mobile' : 'desktop');
-    }
-
-    // Call the handle submit function (no event passed)
-    handleSubmit();
-  };
 
   // Base wrapper classes and styles - significantly reduced padding for mobile
   const wrapperClasses = isFixed
@@ -121,11 +110,10 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
         <div className="md:w-1/2 w-full">
           <form
             className={`flex ${isMobile ? 'flex-col gap-2' : 'flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2'}`}
-            onSubmit={onSubmit}
+            onSubmit={handleSubscribe}
           >
             <input
               type="email"
-              inputMode="email"
               placeholder="Your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

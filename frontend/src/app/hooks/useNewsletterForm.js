@@ -9,30 +9,17 @@ const useNewsletterForm = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Simplified submit function that doesn't expect an event
-  const handleSubmit = async () => {
-    // Don't allow multiple simultaneous submissions
-    if (isSubmitting) return;
-
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
     setIsSubmitting(true);
     setError('');
     setMessage('');
-
-    // Check for online status first
-    if (typeof navigator !== 'undefined' && !navigator.onLine) {
-      setError('You appear to be offline. Please check your connection.');
-      setMessage('You appear to be offline. Please check your connection.');
-      setIsSubmitting(false);
-      return;
-    }
 
     try {
       // Validate email
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         throw new Error('Please enter a valid email address');
       }
-
-      console.log('Submitting email:', email);
 
       // Make API call
       const response = await fetch(`/api/subscribe`, {
@@ -41,10 +28,7 @@ const useNewsletterForm = () => {
         body: JSON.stringify({ email }),
       });
 
-      console.log('Response status:', response.status);
-
       const data = await response.json();
-      console.log('Response data:', data);
 
       if (!response.ok) {
         // Handle HTTP error responses (4xx, 5xx)
@@ -87,7 +71,7 @@ const useNewsletterForm = () => {
     isSubmitting,
     isSuccess,
     error,
-    handleSubmit // Return the renamed function
+    handleSubscribe
   };
 };
 
