@@ -44,7 +44,7 @@ const Footer = () => {
         </a>
       </div>
       <p className={copyrightClass}>
-        &copy; {new Date().getFullYear()} | A collaboration between TwinBrain & Sports Innovation Lab
+        &copy; {new Date().getFullYear()} | A collaboration between TwinBrain AI & Sports Innovation Lab
       </p>
     </footer>
   );
