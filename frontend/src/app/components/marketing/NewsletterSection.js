@@ -11,12 +11,7 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
   // Detect if we're on mobile
   const [isMobile, setIsMobile] = useState(false);
 
-  // For the simpler mobile form
-  const [mobileEmail, setMobileEmail] = useState('');
-  const [mobileMessage, setMobileMessage] = useState('');
-  const [mobileSubmitting, setMobileSubmitting] = useState(false);
-
-  // Use the newsletter form hook for desktop
+  // Use the newsletter form hook for all devices
   const {
     email,
     setEmail,
@@ -41,38 +36,6 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
     // Cleanup
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // Direct form handler for mobile that doesn't rely on hooks
-  const handleMobileSubmit = async (e) => {
-    // Always prevent default behavior
-    e.preventDefault();
-
-    if (mobileSubmitting || !mobileEmail) return;
-
-    try {
-      setMobileSubmitting(true);
-
-      // Make direct API call
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: mobileEmail })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setMobileMessage(data.message || 'Thank you for subscribing!');
-        setMobileEmail('');
-      } else {
-        setMobileMessage('Subscription failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Form error:', error);
-      setMobileMessage('Connection error. Please try again later.');
-    } finally {
-      setMobileSubmitting(false);
-    }
-  };
 
   // Base wrapper classes and styles - significantly reduced padding for mobile
   const wrapperClasses = isFixed
@@ -109,6 +72,15 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
     ? "text-sm font-medium text-center mb-2" // Smaller subtext on mobile
     : "text-lg md:text-xl font-semibold text-center";
 
+  // Form input padding adjustments for mobile
+  const inputClass = isMobile
+    ? "px-3 py-2 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent w-full sm:w-auto flex-grow text-base shadow-md"
+    : "px-6 py-3 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent w-full sm:w-auto flex-grow text-base shadow-md";
+
+  const buttonClass = isMobile
+    ? "px-3 py-2 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap"
+    : "px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap";
+
   return (
     <section
       id={sectionId}
@@ -136,70 +108,36 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
 
         {/* Right section - Form */}
         <div className="md:w-1/2 w-full">
-          {isMobile ? (
-            // SIMPLE MOBILE FORM
-            <>
-              <form onSubmit={handleMobileSubmit} className="w-full">
-                <div className="flex flex-col gap-2">
-                  <input
-                    type="email"
-                    placeholder="Your email address"
-                    value={mobileEmail}
-                    onChange={(e) => setMobileEmail(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 shadow-md"
-                    disabled={mobileSubmitting}
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="w-full px-3 py-2 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md"
-                    disabled={mobileSubmitting}
-                  >
-                    {mobileSubmitting ? 'Sending...' : 'Request Now'}
-                  </button>
-                </div>
-              </form>
+          <form
+            className={`flex ${isMobile ? 'flex-col gap-2' : 'flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2'}`}
+            onSubmit={(e) => {
+              e.preventDefault(); // This is critical to prevent page refresh
+              handleSubscribe(e);
+            }}
+          >
+            <input
+              type="email"
+              placeholder="Your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={inputClass}
+              required
+              disabled={isSubmitting}
+            />
+            <button
+              type="submit"
+              className={buttonClass}
+              style={isFloating ? { animation: 'pulse 2s infinite' } : {}}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Request Now"}
+            </button>
+          </form>
 
-              {mobileMessage && (
-                <p className="text-sm mt-2 font-medium text-center text-white">
-                  {mobileMessage}
-                </p>
-              )}
-            </>
-          ) : (
-            // DESKTOP FORM
-            <>
-              <form
-                className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2"
-                onSubmit={(e) => {
-                  e.preventDefault(); // This is critical to prevent page refresh
-                  handleSubscribe(e);
-                }}
-              >
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="px-6 py-3 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent w-full sm:w-auto flex-grow text-base shadow-md"
-                  required
-                  disabled={isSubmitting}
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Submitting..." : "Request Now"}
-                </button>
-              </form>
-
-              {message && (
-                <p className={`text-sm sm:text-base mt-2 font-medium text-center sm:text-left ${isSuccess ? 'text-green-300' : 'text-white'}`}>
-                  {message}
-                </p>
-              )}
-            </>
+          {message && (
+            <p className={`text-sm sm:text-base mt-2 font-medium text-center sm:text-left ${isSuccess ? 'text-green-300' : 'text-white'}`}>
+              {message}
+            </p>
           )}
         </div>
       </div>
