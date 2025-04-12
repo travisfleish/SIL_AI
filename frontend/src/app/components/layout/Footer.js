@@ -28,20 +28,6 @@ const Footer = () => {
   return (
     <footer className="w-full bg-gray-500 text-white py-5 flex flex-col items-center space-y-2">
       <div className="flex items-center justify-center space-x-4 mt-3 mb-3">
-        <a
-          href="https://www.twinbrain.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-col items-center"
-        >
-          <Image
-            src="/AI_Advantage.png"
-            alt="AI Advantage Logo"
-            width={isMobile ? 40 : 100}
-            height={isMobile ? 40 : 80}
-            className="h-auto"
-          />
-        </a>
         <span className={`text-gray-300 font-bold ${isMobile ? 'text-lg' : 'text-xl'} mr-7 mx-1`}>×</span>
         <a
           href="https://www.sportsinnovationlab.com"
