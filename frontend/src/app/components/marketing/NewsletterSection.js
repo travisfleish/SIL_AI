@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import useNewsletterForm from '../../hooks/useNewsletterForm';
 
 const NewsletterSection = ({ variant = "fixed", onClose }) => {
@@ -10,6 +10,9 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
 
   // Detect if we're on mobile
   const [isMobile, setIsMobile] = useState(false);
+
+  // Keep track of timeouts for cleanup
+  const timeoutRef = useRef(null);
 
   // Use the newsletter form hook for all devices
   const {
@@ -34,8 +37,35 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
     window.addEventListener('resize', checkMobile);
 
     // Cleanup
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      // Clear any pending timeouts
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, []);
+
+  // Form submission handler - consolidated for both mobile and desktop
+  const onSubmit = (e) => {
+    // Ensure we stop the form submission event
+    e.preventDefault();
+
+    console.log('Form submission triggered on:', isMobile ? 'mobile' : 'desktop');
+
+    // Optional validation before calling handleSubscribe
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmail(email.trim()); // Trim any whitespace that might be causing issues
+    }
+
+    // Call the handle subscribe function (without passing the event)
+    const cleanup = handleSubscribe();
+
+    // Store any returned cleanup function for later
+    if (typeof cleanup === 'function') {
+      timeoutRef.current = cleanup;
+    }
+  };
 
   // Base wrapper classes and styles - significantly reduced padding for mobile
   const wrapperClasses = isFixed
@@ -110,32 +140,35 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
         <div className="md:w-1/2 w-full">
           <form
             className={`flex ${isMobile ? 'flex-col gap-2' : 'flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2'}`}
-            onSubmit={(e) => {
-              e.preventDefault(); // This is critical to prevent page refresh
-              handleSubscribe(e);
-            }}
+            onSubmit={onSubmit} // Single function for both mobile and desktop
+            noValidate // Disable browser validation to use our custom validation
           >
             <input
               type="email"
+              inputMode="email" // Add input mode for better mobile keyboards
               placeholder="Your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={inputClass}
               required
               disabled={isSubmitting}
+              aria-label="Email address"
             />
             <button
               type="submit"
               className={buttonClass}
               style={isFloating ? { animation: 'pulse 2s infinite' } : {}}
               disabled={isSubmitting}
+              aria-label="Subscribe to newsletter"
             >
               {isSubmitting ? "Submitting..." : "Request Now"}
             </button>
           </form>
 
           {message && (
-            <p className={`text-sm sm:text-base mt-2 font-medium text-center sm:text-left ${isSuccess ? 'text-green-300' : 'text-white'}`}>
+            <p className={`text-sm sm:text-base mt-2 font-medium text-center sm:text-left ${isSuccess ? 'text-green-300' : 'text-white'}`}
+               role="status"
+               aria-live="polite">
               {message}
             </p>
           )}
