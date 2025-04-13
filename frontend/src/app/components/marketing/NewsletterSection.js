@@ -4,14 +4,10 @@ import React, { useState, useEffect } from 'react';
 import useNewsletterForm from '../../hooks/useNewsletterForm';
 
 const NewsletterSection = ({ variant = "fixed", onClose }) => {
-  // Different styles based on variant
-  const isFixed = variant === "fixed";
-  const isFloating = variant === "floating";
-
-  // Detect if we're on mobile
+  // Keep your existing component code...
   const [isMobile, setIsMobile] = useState(false);
 
-  // Use the newsletter form hook for all devices
+  // Use the enhanced newsletter form hook
   const {
     email,
     setEmail,
@@ -19,9 +15,15 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
     isSubmitting,
     isSuccess,
     error,
-    handleSubscribe
+    handleSubscribe,
+    runDiagnostic,
+    debugInfo
   } = useNewsletterForm();
 
+  // Add debug mode state
+  const [showDebug, setShowDebug] = useState(false);
+
+  // Your existing useEffect for mobile detection...
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -37,7 +39,18 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Base wrapper classes and styles - significantly reduced padding for mobile
+  // Add toggle debug function
+  const toggleDebug = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!showDebug) {
+      await runDiagnostic();
+    }
+    setShowDebug(!showDebug);
+  };
+
+  // Keep your existing component variables and styles...
   const wrapperClasses = isFixed
     ? `w-full ${isMobile ? 'py-8' : 'py-40'} flex flex-col items-center shadow-md mt-10 px-4 sm:px-8 relative overflow-hidden`
     : "fixed bottom-0 w-full text-white py-16 shadow-xl z-50 overflow-hidden";
@@ -63,23 +76,7 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
   // Create a unique ID for the newsletter section
   const sectionId = isFixed ? "fixed-newsletter" : "floating-newsletter";
 
-  // Heading and subheading text sizes adjustments for mobile
-  const headingClass = isMobile
-    ? "text-2xl mb-3 font-bold text-white" // Smaller title on mobile
-    : "text-4xl md:text-5xl mb-10 font-bold text-white";
-
-  const subtextClass = isMobile
-    ? "text-sm font-medium text-center mb-2" // Smaller subtext on mobile
-    : "text-lg md:text-xl font-semibold text-center";
-
-  // Form input padding adjustments for mobile
-  const inputClass = isMobile
-    ? "px-3 py-2 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent w-full sm:w-auto flex-grow text-base shadow-md"
-    : "px-6 py-3 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent w-full sm:w-auto flex-grow text-base shadow-md";
-
-  const buttonClass = isMobile
-    ? "px-3 py-2 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap"
-    : "px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap";
+  // Your existing style classes...
 
   return (
     <section
@@ -136,6 +133,39 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
               {message}
             </p>
           )}
+
+          {/* Debug panel - hidden by default */}
+          <div className="w-full mt-4">
+            {/* Hidden debug trigger - subtle on the page */}
+            <button
+              onClick={toggleDebug}
+              className="text-[8px] text-gray-400 opacity-30 hover:opacity-100 transition-opacity"
+              aria-label={showDebug ? "Hide diagnostic information" : "Show diagnostic information"}
+            >
+              Diagnostic
+            </button>
+
+            {showDebug && (
+              <div className="mt-2 p-3 bg-black/70 text-gray-300 rounded text-xs overflow-auto max-h-40">
+                <div className="flex justify-between mb-2">
+                  <h4 className="font-bold text-xs">Diagnostic Information</h4>
+                  <button
+                    onClick={runDiagnostic}
+                    className="text-xs underline text-blue-300"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                {debugInfo ? (
+                  <pre className="text-[10px] whitespace-pre-wrap">
+                    {JSON.stringify(debugInfo, null, 2)}
+                  </pre>
+                ) : (
+                  <p>No diagnostic information available</p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
