@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react';
 import useNewsletterForm from '../../hooks/useNewsletterForm';
 
 const NewsletterSection = ({ variant = "fixed", onClose }) => {
+  // Get variant flags
+  const isFixed = variant === "fixed";
+  const isFloating = variant === "floating";
+
   // Keep your existing state
   const [isMobile, setIsMobile] = useState(false);
 
