@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { Inter } from 'next/font/google';
 import MobileMenu from './MobileMenu';
@@ -198,14 +199,14 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
           {/* Left: Combined Logos */}
           <div className="flex flex-col items-center gap-1 ml-15 mt-10">
             <div className="flex items-center space-x-3 ml-5">
-              <a href="/">
+              <Link href="/">
                 <Image
                   src="/AI_Advantage.png"
                   alt="AI Advantage Logo"
                   width={isMobile ? 40 : 100}
                   height={isMobile ? 40 : 80}
                 />
-              </a>
+              </Link>
               <span className="text-white font-bold text-2xl mr-6">×</span>
               <a
                 href="https://www.sportsilab.com"
@@ -224,18 +225,35 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
 
           {/* Desktop Nav - UPDATED: Changed text sizes to be much larger */}
           <nav className="hidden sm:flex gap-6 text-xl sm:text-2xl md:text-xl text-white font-semibold mr-16">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target={item.target}
-                rel={item.rel}
-                onClick={item.onClick}
-                className="hover:underline"
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              // Check if this is an internal route
+              if (!item.target) {
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={item.onClick}
+                    className="hover:underline"
+                  >
+                    {item.label}
+                  </Link>
+                );
+              }
+
+              // External links remain as <a> tags
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target={item.target}
+                  rel={item.rel}
+                  onClick={item.onClick}
+                  className="hover:underline"
+                >
+                  {item.label}
+                </a>
+              );
+            })}
           </nav>
 
           {/* Mobile Hamburger */}
