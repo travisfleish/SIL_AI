@@ -16,6 +16,47 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
   const [isMobile, setIsMobile] = useState(false);
   const headerRef = useRef(null);
 
+  // State for typing animation
+  const [displayText, setDisplayText] = useState('');
+  const [typingComplete, setTypingComplete] = useState(false);
+
+  // State for animated word
+  const [showSportsWord, setShowSportsWord] = useState(false);
+
+  // Define text to type based on isMarketMap
+  const fullText = isMarketMap ? "AI Marketmap" : "AI Advantage Resources";
+  const typingSpeed = 100; // milliseconds per character
+
+  // Typing animation effect
+  useEffect(() => {
+    let currentIndex = 0;
+    let timer;
+
+    const typeText = () => {
+      if (currentIndex <= fullText.length) {
+        setDisplayText(fullText.substring(0, currentIndex));
+        currentIndex++;
+        timer = setTimeout(typeText, typingSpeed);
+      } else {
+        setTypingComplete(true);
+
+        // Show sports word with delay after typing completes
+        setTimeout(() => setShowSportsWord(true), 400);
+      }
+    };
+
+    // Start typing animation after a short delay
+    const startDelay = setTimeout(() => {
+      typeText();
+    }, 500);
+
+    // Cleanup function
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(startDelay);
+    };
+  }, [fullText]);
+
   // Navigation items
   const navItems = [
     {
@@ -51,6 +92,65 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
     const newMenuState = !menuOpen;
     setMenuOpen(newMenuState);
     onMenuToggle?.(newMenuState);
+  };
+
+  // Parse display text to apply different styles for marketmap
+  const renderMarketmapTitle = () => {
+    // Split "AI Marketmap" into parts for styling
+    const aiPart = displayText.startsWith('AI') ? 'AI ' : displayText;
+    const marketmapPart = displayText.length > 3 ? displayText.substring(3) : '';
+
+    return (
+      <>
+        <span className="font-normal text-white">{aiPart}</span>
+        {marketmapPart && <span className="font-bold text-white">{marketmapPart}</span>}
+        {!typingComplete && <span className="inline-block w-[2px] h-[1em] bg-white ml-1 animate-[blink_1s_step-end_infinite]"></span>}
+      </>
+    );
+  };
+
+  // Parse display text to apply different styles for advantage resources
+  const renderAdvantageTitle = () => {
+    // Split "AI Advantage Resources" into parts for styling
+    const aiPart = displayText.startsWith('AI') ? 'AI ' : displayText;
+    const advantagePart = displayText.length > 3 && displayText.includes('Advantage')
+      ? 'Advantage ' : '';
+    const resourcesPart = displayText.includes('Resources') ? 'Resources' : '';
+
+    // Calculate where each part starts in the string
+    const advantageStart = fullText.indexOf('Advantage');
+    const resourcesStart = fullText.indexOf('Resources');
+
+    return (
+      <>
+        <span className="font-normal text-white">{aiPart}</span>
+        {displayText.length > advantageStart && (
+          <span className="font-bold text-white">
+            {displayText.substring(advantageStart, resourcesStart).trim() + ' '}
+          </span>
+        )}
+        {displayText.length > resourcesStart && (
+          <span className="font-normal text-white">
+            {displayText.substring(resourcesStart)}
+          </span>
+        )}
+        {!typingComplete && <span className="inline-block w-[2px] h-[1em] bg-white ml-1 animate-[blink_1s_step-end_infinite]"></span>}
+      </>
+    );
+  };
+
+  // Animation styles for the bouncing word
+  const bounceAnimationStyle = {
+    transform: 'translateY(-20px)',
+    opacity: 0,
+    display: 'inline-block',
+    fontWeight: 'bold',
+  };
+
+  const visibleBounceStyle = {
+    transform: 'translateY(0)',
+    opacity: 1,
+    transition: 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease'
   };
 
   return (
@@ -98,12 +198,14 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
           {/* Left: Combined Logos */}
           <div className="flex flex-col items-center gap-1 ml-15 mt-10">
             <div className="flex items-center space-x-3 ml-5">
-              <Image
-                src="/AI_Advantage.png"
-                alt="AI Advantage Logo"
-                width={isMobile ? 40 : 100}
-                height={isMobile ? 40 : 80}
-              />
+              <a href="/">
+                <Image
+                  src="/AI_Advantage.png"
+                  alt="AI Advantage Logo"
+                  width={isMobile ? 40 : 100}
+                  height={isMobile ? 40 : 80}
+                />
+              </a>
               <span className="text-white font-bold text-2xl mr-6">×</span>
               <a
                 href="https://www.sportsilab.com"
@@ -144,27 +246,41 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
           </div>
         </div>
 
-        {/* Title Section */}
+        {/* Title Section with Typing Animation */}
         <div className="text-center mt-4 pb-8 md:pb-12">
           <h1 className={`${inter.className} text-5xl sm:text-7xl md:text-5xl leading-tight mt-15 mb-3 tracking-tight`}>
+            {isMarketMap ? renderMarketmapTitle() : renderAdvantageTitle()}
+          </h1>
+
+          {/* Subtitle with animated sports word */}
+          <p className={`hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0'}`}>
             {isMarketMap ? (
               <>
-                <span className="font-normal text-white">AI </span>
-                <span className="font-bold text-white">Marketmap</span>
+                Explore the AI tools ecosystem for{' '}
+                <span
+                  style={{
+                    ...bounceAnimationStyle,
+                    ...(showSportsWord ? visibleBounceStyle : {})
+                  }}
+                >
+                  sports
+                </span>{' '}
+                professionals
               </>
             ) : (
               <>
-                <span className="font-normal text-white">AI </span>
-                <span className="font-bold text-white">Advantage </span>
-                <span className="font-normal text-white">Resources</span>
+                Discover the best AI tools for{' '}
+                <span
+                  style={{
+                    ...bounceAnimationStyle,
+                    ...(showSportsWord ? visibleBounceStyle : {})
+                  }}
+                >
+                  sports
+                </span>{' '}
+                professionals
               </>
             )}
-          </h1>
-          <p className={`hidden sm:block text-lg sm:text-xl md:text-2xl mt-2 font-light`}>
-            {isMarketMap
-              ? "Explore the AI tools ecosystem for sports professionals"
-              : "Discover the best AI tools for sports professionals"
-            }
           </p>
         </div>
       </div>

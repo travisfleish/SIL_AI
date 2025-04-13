@@ -20,8 +20,12 @@ const inter = Inter({
 const CustomMobileHeader = ({ isMarketMap = false }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Navigation items
+  // Navigation items - Added Home link as the first item
   const navItems = [
+    {
+      label: "Home",
+      href: "/",
+    },
     {
       label: "AI Marketmap",
       href: "/marketmap",
@@ -73,9 +77,11 @@ const CustomMobileHeader = ({ isMarketMap = false }) => {
 
       {/* Main header bar */}
       <div className="flex items-center justify-between px-4 py-4 relative z-10">
-        {/* Title text - made smaller */}
+        {/* Title text - made smaller and clickable */}
         <div className="flex items-center">
-          <h3 className="text-sm font-medium">AI Advantage Program</h3>
+          <Link href="/">
+            <h3 className="text-sm font-medium">AI<span className="font-bold">Advantage</span>Program</h3>
+          </Link>
         </div>
 
         {/* Empty middle space */}
@@ -150,7 +156,8 @@ const CustomMobileHeader = ({ isMarketMap = false }) => {
             />
           </div>
 
-          <nav className="flex flex-col py-3 relative z-10">
+          {/* Reduced spacing between nav links */}
+          <nav className="flex flex-col py-1 mb-6 relative z-10">
             {navItems.map((item) => (
               <a
                 key={item.label}
@@ -161,7 +168,7 @@ const CustomMobileHeader = ({ isMarketMap = false }) => {
                   if (item.onClick) item.onClick(e);
                   setMenuOpen(false);
                 }}
-                className="px-6 py-4 hover:bg-black/30 text-base font-medium text-center"
+                className="px-6 py-1 hover:bg-black/30 text-base font-medium text-center"
               >
                 {item.label}
               </a>
@@ -376,14 +383,8 @@ export default function MarketMapPage() {
           </div>
         </ScrollAnimation>
 
-        {/* Instructions for mobile users - Reduced width and more spacing */}
-        {isMobile && (
-          <div className="text-center mx-auto mt-8 p-4 bg-blue-50 rounded-lg shadow-sm" style={{ maxWidth: "85%" }}>
-            <p className="text-blue-800">
-              Download the PDF version of below.
-            </p>
-          </div>
-        )}
+        {/* REMOVED: Instructions for mobile users */}
+        {/* This section has been removed as requested */}
 
         {/* Extended area with download button - reduced space before Blog section */}
         <div className={`${isMobile ? 'py-8 pb-6' : 'py-16'} relative`} style={{ backgroundColor: "#2a50a3" }}>
@@ -394,7 +395,7 @@ export default function MarketMapPage() {
               className={`${isMobile ? 'px-5 py-3' : 'px-10 py-4'} ${isMobile ? 'mb-2' : 'mb-10'} rounded-lg transition-all bg-yellow-500 hover:bg-yellow-600 text-white font-bold ${isMobile ? 'text-base' : 'text-xl'} shadow-lg flex items-center space-x-3 mx-auto transform hover:scale-105 duration-300 cursor-pointer`}
             >
               <Download size={isMobile ? 20 : 28} />
-              <span>{isMobile ? "Download PDF" : "Download AI For Sports Market Map PDF"}</span>
+              <span>{isMobile ? "Download PDF" : "Download AI For Sports Marketmap PDF"}</span>
             </button>
           </div>
         </div>
