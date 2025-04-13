@@ -55,7 +55,7 @@ const useNewsletterForm = () => {
       let response;
       try {
         console.log('Sending fetch request to API...');
-        response = await fetch(`/api/subscribe-kv`, {
+        response = await fetch(`/api/subscribe-redis`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),

@@ -1,12 +1,26 @@
 // src/app/api/admin/subscribers/route.js
-import { kv } from '@vercel/kv';
+import { createClient } from 'redis';
 import { NextResponse } from 'next/server';
 
-// Note: In production, you should add authentication to this endpoint
+// Create Redis client
+const getRedisClient = async () => {
+  const client = createClient({
+    url: process.env.REDIS_URL || process.env.KV_REST_API_URL
+  });
+
+  await client.connect();
+  return client;
+};
+
 export async function GET() {
+  let client;
+
   try {
+    // Connect to Redis
+    client = await getRedisClient();
+
     // Get all subscribers
-    const subscribers = await kv.hgetall('subscribers');
+    const subscribers = await client.hGetAll('subscribers');
 
     // Format as array with timestamps
     const subscriberList = Object.entries(subscribers || {}).map(([email, timestamp]) => ({
@@ -31,5 +45,10 @@ export async function GET() {
       success: false,
       error: error.message
     }, { status: 500 });
+  } finally {
+    // Close Redis connection
+    if (client) {
+      await client.quit().catch(console.error);
+    }
   }
 }
