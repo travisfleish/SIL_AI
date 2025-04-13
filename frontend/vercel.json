@@ -6,6 +6,13 @@
     }
   ],
   "env": {
-    "NODE_OPTIONS": "--openssl-legacy-provider"
-  }
+    "NODE_OPTIONS": "--openssl-legacy-provider",
+    "CRON_SECRET": "your-secret-key-here"
+  },
+  "crons": [
+    {
+      "path": "/api/cron/sync-sheets",
+      "schedule": "0 */6 * * *"
+    }
+  ]
 }
