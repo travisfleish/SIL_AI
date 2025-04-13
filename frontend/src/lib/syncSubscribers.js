@@ -18,7 +18,7 @@ async function syncSubscribersToGoogleSheet() {
     const data = await response.json();
 
     if (!data.subscribers || data.subscribers.length === 0) {
-      console.log('No subscribers found via API');
+      console.log('No subscriber found via API');
       return { success: true, message: 'No subscribers to sync', count: 0 };
     }
 
