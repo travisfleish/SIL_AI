@@ -21,13 +21,13 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
   if (categoryTools.length === 0) {
     return (
       <div className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-110
-       hover:shadow-xl overflow-hidden border border-gray-200">
+       hover:shadow-xl overflow-hidden border border-gray-200 h-[460px]">
         <div className="w-full bg-blue-100 py-2 px-3 text-center mb-2 relative">
           <span className="font-bold text-blue-800 text-lg">
             {category}
           </span>
         </div>
-        <div className="p-4 flex flex-col items-center justify-center h-48 w-full">
+        <div className="p-4 flex flex-col items-center justify-center h-[300px] w-full">
           <p className="text-gray-600">No tools available for this category.</p>
         </div>
       </div>
@@ -64,7 +64,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
   return (
     <>
       <div
-        className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-102 hover:shadow-xl overflow-hidden border border-gray-200 cursor-pointer"
+        className="relative rounded-lg shadow-md bg-white flex flex-col items-center text-center transform transition-all duration-300 hover:scale-102 hover:shadow-xl overflow-hidden border border-gray-200 cursor-pointer h-[460px]"
         onClick={handleCardClick}
       >
         {/* Category header bar */}
@@ -86,8 +86,8 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
           </button>
         </div>
 
-        {/* Full width image container with no padding/margins */}
-        <div className="w-full relative">
+        {/* Full width image container with significantly increased height */}
+        <div className="w-full h-[350px] relative bg-gray-100 overflow-hidden">
           {/* Navigation arrows - only show if multiple tools and modal is closed */}
           {hasMultipleTools && !isModalOpen && (
             <>
@@ -123,13 +123,13 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
             </>
           )}
 
-          {/* Tool image - full width with no padding */}
+          {/* Tool image - with object-fit cover for consistency */}
           <Image
             src={imageUrl}
             alt={`${currentTool.name} Screenshot`}
             width={1280}
             height={800}
-            className="w-full h-auto"
+            className="w-full h-full object-cover"
             unoptimized
           />
 
@@ -141,28 +141,30 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
           )}
         </div>
 
-        {/* Tool info section */}
-        <div className="p-4 flex flex-col items-center w-full">
-          {/* Tool name and link */}
-          <h3 className="text-lg font-bold flex items-center">
+        {/* Tool info section with reduced padding and height */}
+        <div className="p-3 flex flex-col items-center w-full flex-grow">
+          {/* Tool name and link - FIXED: icon inside the <a> tag */}
+          <h3 className="text-lg font-bold mb-1">
             <a
               href={currentTool.source_url}
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 hover:underline flex items-center"
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()} // Prevent opening modal when clicking link
             >
-              {currentTool.name}
-              <ExternalLink className="ml-2 w-4 h-4 text-gray-500" />
+              <span className="truncate max-w-[200px]">{currentTool.name}</span>
+              <ExternalLink className="ml-2 min-w-4 h-4 text-gray-500 flex-shrink-0" />
             </a>
           </h3>
 
-          {/* Tool description */}
-          <p className="text-gray-600 text-center mt-2">{currentTool.short_description}</p>
+          {/* Tool description with reduced height and less margin */}
+          <p className="text-gray-600 text-center mt-1 h-[60px] overflow-hidden line-clamp-3 text-sm">
+            {currentTool.short_description}
+          </p>
 
-          {/* Pagination dots - only for actual tools and when modal is closed */}
+          {/* Pagination dots - condensed with less margin */}
           {hasMultipleTools && !isModalOpen && (
-            <div className="flex justify-center mt-3 space-x-1">
+            <div className="flex justify-center mt-2 space-x-1">
               {displayTools.map((_, index) => (
                 <button
                   key={index}
