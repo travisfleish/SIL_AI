@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
-import { Inter } from 'next/font/google';
+import { Red_Hat_Display } from 'next/font/google';
 import MobileMenu from './MobileMenu';
 
 // Configure font
-const inter = Inter({
+const redHat = Red_Hat_Display({
   subsets: ['latin'],
+  weight: ['700'],  // You can adjust weights as needed
   display: 'swap',
 });
 
@@ -266,7 +267,7 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
 
         {/* Title Section with Typing Animation */}
         <div className="text-center mt-4 pb-8 md:pb-12">
-          <h1 className={`${inter.className} text-5xl sm:text-7xl md:text-5xl leading-tight mt-15 mb-3 tracking-tight`}>
+          <h1 className={`${redHat.className} text-5xl sm:text-7xl md:text-7xl leading-tight mt-15 mb-3 tracking-tight`}>
             {isMarketMap ? renderMarketmapTitle() : renderAdvantageTitle()}
           </h1>
 

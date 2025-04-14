@@ -5,15 +5,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Footer from '../components/layout/Footer';
 import BlogSection from '../components/marketing/BlogSection';
-import { Inter } from 'next/font/google';
+import { Red_Hat_Display } from 'next/font/google';
 import { Download } from 'lucide-react';
 import useMediaQuery from '../hooks/useMediaQuery';
 import ScrollAnimation from '../components/ui/ScrollAnimation';
 import MobileHeader from '../components/layout/MobileHeader'; // Import MobileHeader component
 
 // Configure font
-const inter = Inter({
+const redHat = Red_Hat_Display({
   subsets: ['latin'],
+  weight: ['400', '500', '700'],
   display: 'swap',
 });
 
@@ -34,7 +35,7 @@ export default function MarketMapPage() {
 
   // Magnification parameters
   const zoom = 2.0;
-  const magnifierSize = 300;
+  const magnifierSize = 700;
 
   // Handle mouse movement
   const handleMouseMove = (e) => {
@@ -131,7 +132,7 @@ export default function MarketMapPage() {
             {/* Title and Magnifier Button - only in desktop header */}
             <ScrollAnimation animation="fade-down" duration={800}>
               <div className="text-center mb-6">
-                <h1 className={`${inter.className} text-4xl sm:text-5xl font-semibold tracking-tight mt-12 mb-15`}>
+                <h1 className={`${redHat.className} text-4xl sm:text-6xl font-semibold tracking-tight mt-12 mb-15`}>
                   AI For Sports <span className="font-extrabold">Marketmap</span>
                 </h1>
 

@@ -1,24 +1,27 @@
-import { Overpass, Roboto } from "next/font/google";
+// In src/app/layout.js
+import { Overpass, Red_Hat_Display } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+// Define Red Hat Display with appropriate weights
+const redHatDisplay = Red_Hat_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-red-hat",
+});
+
+// Keep Overpass for body text
 const overpass = Overpass({
-  variable: "--font-overpass",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
-});
-
-const roboto = Roboto({
-  variable: "--font-roboto",
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  display: "swap",
+  variable: "--font-overpass",
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 export const metadata = {
@@ -30,7 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${overpass.variable} ${roboto.variable} ${geistMono.variable} antialiased`}
+        className={`${overpass.variable} ${redHatDisplay.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>
