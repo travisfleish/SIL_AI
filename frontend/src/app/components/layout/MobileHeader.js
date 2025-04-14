@@ -234,7 +234,13 @@ const MobileHeroSection = ({ isMarketMap }) => {
         {renderAdvantageTitle()}
       </h1>
       <p className={`text-base ${isMarketMap ? 'text-gray-100' : 'text-gray-700'} font-normal mb-3 mx-auto max-w-lg leading-relaxed`}>
-        Top AI tools and services curated to help <span className={`${accentColor} font-bold`}>sports</span> <span className={`${accentColor} font-bold`}>professionals</span> unlock new possibilities and become leaders in their industry
+        {isMarketMap ? (
+          // Use this text for market map page
+          <>Explore the AI tools ecosystem for <span className={`${accentColor} font-bold`}>sports</span> professionals</>
+        ) : (
+          // Keep the existing text for other pages
+          <>Top AI tools and services curated to help <span className={`${accentColor} font-bold`}>sports</span> <span className={`${accentColor} font-bold`}>professionals</span> unlock new possibilities and become leaders in their industry</>
+        )}
       </p>
     </section>
   );
