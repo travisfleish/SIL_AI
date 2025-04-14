@@ -145,12 +145,12 @@ export default function MarketMapPage() {
 
           {/* Title and Subtitle with Fixed Height and Spacing */}
           <div className="text-center mt-0 pb-4 md:pb-6">
-            <h1 className={`${redHat.className} text-5xl sm:text-6xl md:text-6xl leading-tight mt-8 mb-2 tracking-tight`}>
+            <h1 className={`${redHat.className} text-5xl sm:text-6xl md:text-6xl leading-tight mt-18 mb-2 tracking-tight`}>
               AI For Sports <span className="font-extrabold">Marketmap</span>
             </h1>
 
             {/* Subtitle to match main page structure - reduced vertical spacing */}
-            <p className="text-base sm:text-lg md:text-xl mt-0 mb-8 font-light mx-auto max-w-3xl">
+            <p className="text-base sm:text-lg md:text-xl mt-0 mb-10 mt-4 font-light mx-auto max-w-3xl">
               Explore the AI tools ecosystem for <span className="font-semibold">sports</span> professionals
             </p>
 
