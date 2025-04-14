@@ -81,74 +81,91 @@ export default function MarketMapPage() {
         <MobileHeader isMarketMap={true} />
       ) : (
         /* Desktop Header - keep the original implementation */
-        <header className="w-full relative text-white shadow-lg">
-          {/* Background Image and Overlay */}
-          <div className="absolute inset-0 z-0"
-            style={{
-              backgroundImage: "url('/SIL_bg.jpg')",
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              filter: 'grayscale(100%)',
-            }}
-          />
-          <div className="absolute inset-0 bg-black/70 z-1" />
+      <header
+        className="relative w-full text-white shadow-lg px-4 pt-0 pb-12 md:pb-20 lg:pb-24 xl:pb-24"
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          height: isMobile ? 'auto' : '444px' // Fixed height to match main page
+        }}
+      >
+        {/* Background Image and Overlay */}
+        <div className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: "url('/SIL_bg.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'grayscale(100%)',
+          }}
+        />
+        <div className="absolute inset-0 bg-black/70 z-1" />
 
-          <div className="relative z-10 px-4 py-6 mb-6">
-            {/* Top: Logo + Nav */}
-            <div className="flex items-center justify-between w-full mb-6">
-              {/* Left: Combined Logos */}
-              <div className="flex items-center space-x-3 ml-8 mt-5">
-                <Link href="/" className="transition-opacity hover:opacity-90">
+        {/* Content container */}
+        <div style={{ position: 'relative', zIndex: 3 }}>
+          {/* Top: Logo + Nav */}
+          <div className="flex items-center justify-between w-full mb-6 md:mb-10">
+            {/* Left: Combined Logos */}
+            <div className="flex items-center ml-8">
+              <Link href="/" className="transition-opacity hover:opacity-90">
+                <div className="flex items-center">
                   <Image
                     src="/AI_Advantage.png"
                     alt="AI Advantage Logo"
-                    width={isMobile ? 40 : 100}
+                    width={isMobile ? 40 : 120}
                     height={isMobile ? 40 : 80}
+                    className="object-contain relative top-0"
+                    style={{ transform: 'translateY(2px)' }}
                   />
-                </Link>
-                <span className="text-white font-bold text-xl">×</span>
-                <a
-                  href="https://www.sportsilab.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image
-                    src="/sil-logo.png"
-                    alt="Sports Innovation Lab Logo"
-                    width={isMobile ? 70 : 140}
-                    height={isMobile ? 25 : 60}
-                  />
-                </a>
-              </div>
-
-              {/* Navigation links */}
-              <nav className="hidden sm:flex gap-6 mr-10 text-lg text-white font-semibold">
-                <Link href="/" className="hover:text-blue-300 transition-colors">Home</Link>
-                <Link href="/marketmap" className="text-blue-300">AI Marketmap</Link>
-                <a href="https://www.twinbrain.ai/blog" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300 transition-colors">AI Blog</a>
-              </nav>
+                </div>
+              </Link>
+              <span className="text-white font-bold text-2xl mx-4 ml-2.5">×</span>
+              <a
+                href="https://www.sportsilab.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center"
+              >
+                <Image
+                  src="/sil-logo.png"
+                  alt="Sports Innovation Lab Logo"
+                  width={isMobile ? 70 : 140}
+                  height={isMobile ? 25 : 60}
+                  className="object-contain"
+                />
+              </a>
             </div>
 
-            {/* Title and Magnifier Button - only in desktop header */}
-            <ScrollAnimation animation="fade-down" duration={800}>
-              <div className="text-center mb-6">
-                <h1 className={`${redHat.className} text-4xl sm:text-6xl font-semibold tracking-tight mt-12 mb-15`}>
-                  AI For Sports <span className="font-extrabold">Marketmap</span>
-                </h1>
-
-                {/* Toggle Magnifier Button */}
-                <div className="mt-4">
-                  <button
-                    onClick={toggleMagnifier}
-                    className={`px-4 py-2 rounded-lg transition-colors ${magnifierEnabled ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-600 hover:bg-blue-700'} text-white font-semibold shadow-md cursor-pointer`}
-                  >
-                    {magnifierEnabled ? 'Disable Magnifying Glass' : 'Enable Magnifying Glass'}
-                  </button>
-                </div>
-              </div>
-            </ScrollAnimation>
+            {/* Navigation links - adjusted to match main header */}
+            <nav className="hidden sm:flex gap-6 text-lg md:text-xl text-white font-semibold mr-16">
+              <Link href="/" className="hover:text-blue-300 transition-colors">Home</Link>
+              <Link href="/marketmap" className="text-blue-300">AI Marketmap</Link>
+              <a href="https://www.twinbrain.ai/blog" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300 transition-colors">AI Blog</a>
+            </nav>
           </div>
-        </header>
+
+          {/* Title and Subtitle with Fixed Height and Spacing */}
+          <div className="text-center mt-0 pb-4 md:pb-6">
+            <h1 className={`${redHat.className} text-5xl sm:text-6xl md:text-6xl leading-tight mt-8 mb-2 tracking-tight`}>
+              AI For Sports <span className="font-extrabold">Marketmap</span>
+            </h1>
+
+            {/* Subtitle to match main page structure - reduced vertical spacing */}
+            <p className="text-base sm:text-lg md:text-xl mt-0 mb-8 font-light mx-auto max-w-3xl">
+              Explore the AI tools ecosystem for <span className="font-semibold">sports</span> professionals
+            </p>
+
+            {/* Toggle Magnifier Button - closer to subtitle */}
+            <div className="mt-2">
+              <button
+                onClick={toggleMagnifier}
+                className="px-4 py-2 rounded-lg transition-colors bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md cursor-pointer"
+              >
+                {magnifierEnabled ? 'Disable Magnifying Glass' : 'Enable Magnifying Glass'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
       )}
 
       {/* For mobile, add padding between header and map using the #213f99 color */}

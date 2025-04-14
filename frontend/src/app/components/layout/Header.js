@@ -158,7 +158,7 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
   return (
     <header
       ref={headerRef}
-      className="relative w-full text-white shadow-lg px-4 pt-1 pb-8 md:pt- md:pb-20"
+      className="relative w-full text-white shadow-lg px-4 pt-0 pb-8 md:pt- md:pb-20"
       style={{
         position: 'relative',
         overflow: 'hidden'
@@ -198,32 +198,35 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
         {/* Top: Logo + Hamburger + Nav */}
         <div className="flex items-center justify-between w-full mb-6 md:mb-8">
           {/* Left: Combined Logos */}
-          <div className="flex flex-col items-center gap-1 ml-15 mt-10">
-            <div className="flex items-center space-x-3 ml-5">
-              <Link href="/">
+          <div className="flex items-center ml-8">
+            <Link href="/">
+              <div className="flex items-center">
                 <Image
                   src="/AI_Advantage.png"
                   alt="AI Advantage Logo"
-                  width={isMobile ? 40 : 100}
+                  width={isMobile ? 40 : 120}
                   height={isMobile ? 40 : 80}
+                  className="object-contain relative top-0"
+                  style={{ transform: 'translateY(2px)' }} // Fine-tune vertical position
                 />
-              </Link>
-              <span className="text-white font-bold text-2xl mr-6">×</span>
-              <a
-                href="https://www.sportsilab.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src="/sil-logo.png"
-                  alt="Sports Innovation Lab Logo"
-                  width={isMobile ? 70 : 140}
-                  height={isMobile ? 25 : 60}
-                />
-              </a>
-            </div>
+              </div>
+            </Link>
+            <span className="text-white font-bold text-2xl mx-4 ml-2.5">×</span>
+            <a
+              href="https://www.sportsilab.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+            >
+              <Image
+                src="/sil-logo.png"
+                alt="Sports Innovation Lab Logo"
+                width={isMobile ? 70 : 140}
+                height={isMobile ? 25 : 60}
+                className="object-contain"
+              />
+            </a>
           </div>
-
           {/* Desktop Nav - UPDATED: Changed text sizes to be much larger */}
           <nav className="hidden sm:flex gap-6 text-xl sm:text-2xl md:text-xl text-white font-semibold mr-16">
             {navItems.map((item) => {
