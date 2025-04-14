@@ -227,13 +227,13 @@ const MobileHeroSection = ({ isMarketMap }) => {
 
   return (
     <section
-      className={`${bgColorClass} pt-16 px-4 text-center z-10`}
+      className={`${bgColorClass} pt-16 px-2 text-center z-10`}
       style={sectionStyle}
     >
       <h1 className="text-4xl font-bold mb-8">
         {renderAdvantageTitle()}
       </h1>
-      <p className={`text-base ${isMarketMap ? 'text-gray-100' : 'text-gray-700'} font-normal mb-3 mx-auto max-w-lg leading-relaxed`}>
+      <p className={`text-base ${isMarketMap ? 'text-gray-100' : 'text-gray-700'} font-normal mb-0 mx-auto max-w-lg leading-relaxed`}>
         {isMarketMap ? (
           // Use this text for market map page
           <>Explore the AI tools ecosystem for <span className={`${accentColor} font-bold`}>sports</span> professionals</>
