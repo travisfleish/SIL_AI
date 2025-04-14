@@ -61,11 +61,11 @@ const MobileHeader = ({ isMarketMap = false }) => {
 
           {/* AI Advantage Logo - Centered */}
           <div className="flex items-center justify-center w-1/3">
-            <div className="flex items-center justify-center overflow-visible mt-3">
+            <div className="flex items-center justify-center overflow-visible mt-3.5">
               <img
                 src="/AI_Advantage.png"
                 alt="AI Advantage Logo"
-                className="w-[80px] h-auto" // Fixed width with auto height
+                className="w-[100px] h-auto" // Fixed width with auto height
                 style={{
                   filter: 'brightness(1.2) contrast(1.1)',
                   objectFit: 'contain'  // Ensure proper scaling
