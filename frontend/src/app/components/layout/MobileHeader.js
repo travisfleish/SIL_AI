@@ -6,7 +6,8 @@ import { X } from 'lucide-react';
 
 const MobileHeader = ({ isMarketMap = false }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(true);
+  const [aiLogoLoaded, setAiLogoLoaded] = useState(true);
+  const [silLogoLoaded, setSilLogoLoaded] = useState(true);
 
   // Navigation items
   const navItems = [
@@ -40,24 +41,39 @@ const MobileHeader = ({ isMarketMap = false }) => {
           <div className="flex items-center">
             <div className="flex items-center space-x-2">
               <div className="h-10 w-10 flex items-center justify-center">
-                <Image
-                  src="/AI_Advantage.png"
-                  alt="AI Advantage Logo"
-                  width={40}
-                  height={40}
-                  className="object-contain"
-                  onError={() => setImageLoaded(false)}
-                />
+                {aiLogoLoaded ? (
+                  <Image
+                    src="/AI_Advantage.png"
+                    alt="AI Advantage Logo"
+                    width={40}
+                    height={40}
+                    className="object-contain"
+                    onError={() => setAiLogoLoaded(false)}
+                    priority={true}
+                  />
+                ) : (
+                  <div className="h-10 w-10 bg-gray-800 rounded flex items-center justify-center">
+                    <span className="text-xs text-white">AI</span>
+                  </div>
+                )}
               </div>
               <span className="text-white font-bold text-lg mx-1">×</span>
               <div className="h-8 flex items-center">
-                <Image
-                  src="/sil-logo.png"
-                  alt="Sports Innovation Lab Logo"
-                  width={70}
-                  height={25}
-                  className="object-contain"
-                />
+                {silLogoLoaded ? (
+                  <Image
+                    src="/sil-logo.png"
+                    alt="Sports Innovation Lab Logo"
+                    width={70}
+                    height={25}
+                    className="object-contain"
+                    onError={() => setSilLogoLoaded(false)}
+                    priority={true}
+                  />
+                ) : (
+                  <div className="h-8 w-[70px] bg-gray-800 rounded flex items-center justify-center">
+                    <span className="text-xs text-white">SIL</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -88,7 +104,7 @@ const MobileHeader = ({ isMarketMap = false }) => {
 
             <nav className="flex flex-col py-4 mb-4 relative z-10">
               {navItems.map((item) => (
-                <a
+              <a
                   key={item.label}
                   href={item.href}
                   target={item.target}
