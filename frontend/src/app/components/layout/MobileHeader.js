@@ -40,24 +40,24 @@ const MobileHeader = ({ isMarketMap = false }) => {
           {/* Logo area with proper vertical alignment */}
           <div className="flex items-center">
             <div className="flex items-center space-x-2">
-              <div className="h-10 w-10 flex items-center justify-center">
-                {aiLogoLoaded ? (
-                  <Image
-                    src="/AI_Advantage.png"
-                    alt="AI Advantage Logo"
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                    onError={() => setAiLogoLoaded(false)}
-                    priority={true}
-                  />
-                ) : (
-                  <div className="h-10 w-10 bg-gray-800 rounded flex items-center justify-center">
-                    <span className="text-xs text-white">AI</span>
-                  </div>
-                )}
-              </div>
-              <span className="text-white font-bold text-lg mx-1">×</span>
+              {/*<div className="h-10 w-10 flex items-center justify-center">*/}
+              {/*  {aiLogoLoaded ? (*/}
+              {/*    <Image*/}
+              {/*      src="/AI_Advantage.png"*/}
+              {/*      alt="AI Advantage Logo"*/}
+              {/*      width={40}*/}
+              {/*      height={40}*/}
+              {/*      className="object-contain"*/}
+              {/*      onError={() => setAiLogoLoaded(false)}*/}
+              {/*      priority={true}*/}
+              {/*    />*/}
+              {/*  ) : (*/}
+              {/*    <div className="h-10 w-10 bg-gray-800 rounded flex items-center justify-center">*/}
+              {/*      <span className="text-xs text-white">AI</span>*/}
+              {/*    </div>*/}
+              {/*  )}*/}
+              {/*</div>*/}
+              {/*<span className="text-white font-bold text-lg mx-1">×</span>*/}
               <div className="h-8 flex items-center">
                 {silLogoLoaded ? (
                   <Image
