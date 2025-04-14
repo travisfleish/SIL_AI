@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
 
@@ -34,52 +34,46 @@ const MobileHeader = ({ isMarketMap = false }) => {
 
   return (
     <>
-      {/* Simplified header with black background */}
-      <header className="relative w-full py-4 bg-black text-white shadow-sm z-20">
-        <div className="flex items-center justify-between px-4">
-          {/* Logo area with proper vertical alignment */}
-          <div className="flex items-center">
-            <div className="flex items-center space-x-2">
-              {/*<div className="h-10 w-10 flex items-center justify-center">*/}
-              {/*  {aiLogoLoaded ? (*/}
-              {/*    <Image*/}
-              {/*      src="/AI_Advantage.png"*/}
-              {/*      alt="AI Advantage Logo"*/}
-              {/*      width={40}*/}
-              {/*      height={40}*/}
-              {/*      className="object-contain"*/}
-              {/*      onError={() => setAiLogoLoaded(false)}*/}
-              {/*      priority={true}*/}
-              {/*    />*/}
-              {/*  ) : (*/}
-              {/*    <div className="h-10 w-10 bg-gray-800 rounded flex items-center justify-center">*/}
-              {/*      <span className="text-xs text-white">AI</span>*/}
-              {/*    </div>*/}
-              {/*  )}*/}
-              {/*</div>*/}
-              {/*<span className="text-white font-bold text-lg mx-1">×</span>*/}
-              <div className="h-8 flex items-center">
-                {silLogoLoaded ? (
-                  <Image
-                    src="/sil-logo.png"
-                    alt="Sports Innovation Lab Logo"
-                    width={70}
-                    height={25}
-                    className="object-contain"
-                    onError={() => setSilLogoLoaded(false)}
-                    priority={true}
-                  />
-                ) : (
-                  <div className="h-8 w-[70px] bg-gray-800 rounded flex items-center justify-center">
-                    <span className="text-xs text-white">SIL</span>
-                  </div>
-                )}
-              </div>
+      {/* Fixed-height header with black background */}
+      <header className="relative w-full h-[60px] py-0 bg-black text-white shadow-sm z-20 flex items-center">
+        <div className="flex items-center justify-between px-4 w-full">
+          {/* Logo area with three-column layout */}
+          <div className="flex items-center w-1/3">
+            {/* SIL Logo - On the left */}
+            <div className="flex items-center h-[40px]">
+              {silLogoLoaded ? (
+                <Image
+                  src="/sil-logo.png"
+                  alt="Sports Innovation Lab Logo"
+                  width={70}
+                  height={25}
+                  className="object-contain w-auto h-[28px]"
+                  onError={() => setSilLogoLoaded(false)}
+                  priority={true}
+                />
+              ) : (
+                <div className="h-[28px] w-[70px] bg-gray-800 rounded flex items-center justify-center">
+                  <span className="text-xs text-white">SIL</span>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Menu button with two parallel lines */}
-          <div className="flex justify-end">
+          {/* AI Advantage Logo - Centered */}
+          <div className="flex items-center justify-center w-1/3">
+            <div className="flex items-center h-[40px] mt-3.5">
+              <img
+                src="/AI_Advantage.png"
+                alt="AI Advantage Logo"
+                className="h-[120px] w-auto"
+                style={{ filter: 'brightness(1.2) contrast(1.1)' }}
+                onError={() => setAiLogoLoaded(false)}
+              />
+            </div>
+          </div>
+
+          {/* Menu button - On the right */}
+          <div className="flex justify-end w-1/3">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="text-white focus:outline-none p-1"
@@ -97,46 +91,47 @@ const MobileHeader = ({ isMarketMap = false }) => {
           </div>
         </div>
 
-        {/* Dropdown menu with black background */}
-        {menuOpen && (
-          <div className="absolute w-full z-50">
-            <div className="absolute inset-0 z-0 bg-black"></div>
+        {/* Dropdown menu with Tailwind CSS transitions */}
+        <div
+          className={`absolute w-full top-[60px] z-50 transform transition-all duration-300 ease-in-out ${
+            menuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+          }`}
+        >
+          <div className="absolute inset-0 z-0 bg-black"></div>
 
-            <nav className="flex flex-col py-4 mb-4 relative z-10">
-              {navItems.map((item) => (
-              <a
-                  key={item.label}
-                  href={item.href}
-                  target={item.target}
-                  rel={item.rel}
-                  onClick={(e) => {
-                    if (item.onClick) item.onClick(e);
-                    setMenuOpen(false);
-                  }}
-                  className="px-6 py-3 text-white hover:bg-gray-800 text-base font-medium text-center transition-colors"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-          </div>
-        )}
+          <nav className="flex flex-col py-4 mb-4 relative z-10">
+            {navItems.map((item) => (
+            <a
+                key={item.label}
+                href={item.href}
+                target={item.target}
+                rel={item.rel}
+                onClick={(e) => {
+                  if (item.onClick) item.onClick(e);
+                  setMenuOpen(false);
+                }}
+                className="px-6 py-3 text-white hover:bg-gray-800 text-base font-medium text-center transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
       </header>
 
-      {/* Mobile Hero Section - with adjusted padding */}
+      {/* Mobile Hero Section */}
       <MobileHeroSection isMarketMap={isMarketMap} />
     </>
   );
 };
 
-// Mobile Hero Section Component with adjusted padding
+// Mobile Hero Section Component with updated title and subheading
 const MobileHeroSection = ({ isMarketMap }) => {
   const [displayText, setDisplayText] = useState('');
   const [typingComplete, setTypingComplete] = useState(false);
-  const [showSportsWord, setShowSportsWord] = useState(false);
 
   // Define text to type based on isMarketMap
-  const fullText = isMarketMap ? "AI Marketmap" : "AI Advantage";
+  const fullText = isMarketMap ? "AI Marketmap" : "Empowering Sports Innovation";
   const typingSpeed = 80; // milliseconds per character
 
   // Typing animation effect
@@ -151,9 +146,6 @@ const MobileHeroSection = ({ isMarketMap }) => {
         timer = setTimeout(typeText, typingSpeed);
       } else {
         setTypingComplete(true);
-
-        // Show sports word with delay after typing completes
-        setTimeout(() => setShowSportsWord(true), 300);
       }
     };
 
@@ -169,52 +161,77 @@ const MobileHeroSection = ({ isMarketMap }) => {
     };
   }, [fullText]);
 
-  // Animation styles for the bouncing word
-  const bounceAnimationStyle = {
-    transform: 'translateY(-20px)',
-    opacity: 0,
-    display: 'inline-block',
-    fontWeight: 'bold',
-  };
-
-  const visibleBounceStyle = {
-    transform: 'translateY(0)',
-    opacity: 1,
-    transition: 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease'
-  };
-
   // Parse display text to apply different styles
   const renderAdvantageTitle = () => {
-    // Split text into parts for styling
-    const aiPart = displayText.startsWith('AI') ? 'AI ' : displayText;
-    const secondPart = displayText.length > 3 ? displayText.substring(3) : '';
+    // Text color classes based on isMarketMap
+    const textClass = isMarketMap ? "text-white" : "text-gray-900";
+    const cursorColor = isMarketMap ? "bg-white" : "bg-gray-900";
 
-    return (
-      <>
-        <span className="font-normal text-gray-900">{aiPart}</span>
-        {secondPart && <span className="font-bold text-gray-900">{secondPart}</span>}
-        {!typingComplete && <span className="inline-block w-[2px] h-[1em] bg-gray-900 ml-1 animate-[blink_1s_step-end_infinite]"></span>}
-      </>
-    );
+    if (isMarketMap) {
+      return (
+        <>
+          <span className={`font-normal ${textClass}`}>{displayText}</span>
+          {!typingComplete && <span className={`inline-block w-[2px] h-[1em] ${cursorColor} ml-1 animate-[blink_1s_step-end_infinite]`}></span>}
+        </>
+      );
+    } else {
+      // Split the text at each character to check if we need to bold parts of it
+      const parts = [];
+      let innovationStarted = false;
+
+      // Go through each character and determine if it should be bold
+      // This handles the case where Innovation is partially typed
+      for (let i = 0; i < displayText.length; i++) {
+        const currentChar = displayText[i];
+
+        // Check if we're starting to type "Innovation"
+        if (!innovationStarted && displayText.substring(i).startsWith("I")) {
+          // Check if the substring from this point could be the start of "Innovation"
+          const restOfWord = "Innovation".substring(0, displayText.length - i);
+          if ("Innovation".startsWith(restOfWord)) {
+            innovationStarted = true;
+          }
+        }
+
+        // Add the character with appropriate styling
+        parts.push(
+          <span
+            key={i}
+            className={`${innovationStarted ? 'font-bold' : 'font-normal'} ${textClass}`}
+          >
+            {currentChar}
+          </span>
+        );
+      }
+
+      return (
+        <>
+          {parts}
+          {!typingComplete && <span className={`inline-block w-[2px] h-[1em] ${cursorColor} ml-1 animate-[blink_1s_step-end_infinite]`}></span>}
+        </>
+      );
+    }
   };
 
+  // Determine the background color based on isMarketMap
+  const bgColorClass = isMarketMap ? "" : "bg-gray-100";
+
+  // Create dynamic background style for marketmap
+  const sectionStyle = isMarketMap ? { backgroundColor: "#213f99" } : {};
+
+  // Define the accent color for sports/professionals
+  const accentColor = isMarketMap ? 'text-yellow-400' : 'text-blue-700';
+
   return (
-    <section className="bg-gray-100 text-gray-900 pt-16 px-4 text-center z-10">
-      <h1 className="text-4xl font-bold mb-2">
+    <section
+      className={`${bgColorClass} pt-16 px-4 text-center z-10`}
+      style={sectionStyle}
+    >
+      <h1 className="text-4xl font-bold mb-8">
         {renderAdvantageTitle()}
       </h1>
-      <p className="text-base text-gray-700 font-normal flex justify-center items-center mb-5">
-        Resources for{' '}
-        <span
-          style={{
-            ...bounceAnimationStyle,
-            ...(showSportsWord ? visibleBounceStyle : {})
-          }}
-          className="mx-1 text-blue-700"
-        >
-          sports
-        </span>{' '}
-        professionals
+      <p className={`text-base ${isMarketMap ? 'text-gray-100' : 'text-gray-700'} font-normal mb-3 mx-auto max-w-lg leading-relaxed`}>
+        Top AI tools and services curated to help <span className={`${accentColor} font-bold`}>sports</span> <span className={`${accentColor} font-bold`}>professionals</span> unlock new possibilities and become leaders in their industry
       </p>
     </section>
   );
