@@ -152,24 +152,6 @@ const NewsletterSection = ({ variant = "fixed", onClose }) => {
               {message}
             </p>
           )}
-
-          {/* Simple debug toggle and panel */}
-          <div className="mt-3">
-            <button
-              onClick={toggleDebug}
-              className="text-[8px] text-gray-400 opacity-30 hover:opacity-100 transition-opacity"
-            >
-              Diagnostic
-            </button>
-
-            {showDebug && debugInfo && (
-              <div className="mt-2 p-2 bg-black/70 text-gray-300 rounded text-xs overflow-auto max-h-40">
-                <pre className="text-[10px] whitespace-pre-wrap">
-                  {JSON.stringify(debugInfo, null, 2)}
-                </pre>
-              </div>
-            )}
-          </div>
         </div>
       </div>
 

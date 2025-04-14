@@ -112,7 +112,8 @@ const BlogSection = () => {
   };
 
   return (
-    <section className="w-full py-20 text-white relative">
+    // MODIFIED: Reduced the overall section padding, especially for mobile
+    <section className="w-full py-12 md:py-16 text-white relative">
       <div
         style={{
           position: 'absolute',
@@ -142,18 +143,19 @@ const BlogSection = () => {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Adjusted padding: less above, more below */}
-        <div className={`text-center ${isMobile ? 'pt-1 pb-4' : 'pb-6 my-8'}`}>
-          <h2 className={`${isMobile ? "text-4xl font-bold" : "text-5xl"} flex items-center ${isMobile ? "justify-center" : "justify-center gap-3"}`}>
+        {/* MODIFIED: Reduced top padding for mobile and smaller font size */}
+        <div className={`text-center ${isMobile ? 'pt-0 pb-3' : 'pb-6 my-8'}`}>
+          <h2 className={`${isMobile ? "text-3xl font-bold" : "text-5xl"} flex items-center ${isMobile ? "justify-center" : "justify-center gap-3"}`}>
               {isMobile ? (
-                <div className="flex items-center gap-2">
-                  AI Blog {' '}
-                  <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer" className="ml-1 flex items-center">
-                    <span className="mx-1">by</span>
+                <div className="flex flex-col items-center">
+                  <div className="text-3xl font-bold mb-0">
+                    AI Blog: Neural Notes
+                  </div>
+                  <a href="https://www.twinbrain.ai" target="_blank" rel="noopener noreferrer" className="flex items-center mt-0">
                     <Image
                       src="/TwinBrain_White_Transparent.png"
                       alt="TwinBrain Logo"
-                      width={90}
+                      width={160}
                       height={30}
                       className="inline"
                     />

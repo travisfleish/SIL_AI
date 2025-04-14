@@ -8,8 +8,12 @@ const MobileHeader = ({ isMarketMap = false }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(true);
 
-  // Navigation items
+  // Navigation items - Added Home link as the first item
   const navItems = [
+    {
+      label: "Home",
+      href: "/",
+    },
     {
       label: "AI Marketmap",
       href: "/marketmap",
@@ -100,13 +104,13 @@ const MobileHeader = ({ isMarketMap = false }) => {
       </div>
 
       {/* Center title - added for the main title */}
-      <div className="text-center pb-4 relative z-10 px-4">
+      <div className="text-center pb-4 relative z-10 px-4 mt-3">
         <h1 className="text-3xl font-bold">
           {isMarketMap ? "AI Marketmap" : "AI Advantage"}
         </h1>
-        <p className="text-sm opacity-80 mt-1">
+        <p className="text-sm opacity-80 mt-1 mb-2 font-normal">
           {isMarketMap
-            ? "Explore the AI tools ecosystem"
+            ? "Explore the AI tools ecosystem for sports professionals"
             : "Resources for sports professionals"
           }
         </p>
@@ -144,7 +148,7 @@ const MobileHeader = ({ isMarketMap = false }) => {
             />
           </div>
 
-          <nav className="flex flex-col py-3 relative z-10">
+          <nav className="flex flex-col py-1 mb-4 relative z-10">
             {navItems.map((item) => (
               <a
                 key={item.label}
@@ -155,7 +159,7 @@ const MobileHeader = ({ isMarketMap = false }) => {
                   if (item.onClick) item.onClick(e);
                   setMenuOpen(false);
                 }}
-                className="px-6 py-4 hover:bg-black/30 text-base font-medium text-center"
+                className="px-6 py-1 hover:bg-black/30 text-base font-medium text-center"
               >
                 {item.label}
               </a>

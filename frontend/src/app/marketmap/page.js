@@ -9,176 +9,13 @@ import { Inter } from 'next/font/google';
 import { Download } from 'lucide-react';
 import useMediaQuery from '../hooks/useMediaQuery';
 import ScrollAnimation from '../components/ui/ScrollAnimation';
+import MobileHeader from '../components/layout/MobileHeader'; // Import MobileHeader component
 
 // Configure font
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
 });
-
-// Custom Mobile Header with smaller text
-const CustomMobileHeader = ({ isMarketMap = false }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  // Navigation items - Added Home link as the first item
-  const navItems = [
-    {
-      label: "Home",
-      href: "/",
-    },
-    {
-      label: "AI Marketmap",
-      href: "/marketmap",
-      onClick: (e) => {
-        if (window.location.pathname === "/marketmap") {
-          e.preventDefault();
-        }
-      }
-    },
-    {
-      label: "AI Blog",
-      href: "https://www.twinbrain.ai/blog",
-      target: "_blank",
-      rel: "noopener noreferrer"
-    }
-  ];
-
-  return (
-    <header className="relative w-full text-white shadow-lg">
-      {/* Background with SIL_bg.jpg */}
-      <div className="absolute inset-0 z-0">
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: "url('/SIL_bg.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'grayscale(100%)',
-            zIndex: 0
-          }}
-        />
-        {/* Dark overlay to ensure text is readable */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            zIndex: 1
-          }}
-        />
-      </div>
-
-      {/* Main header bar */}
-      <div className="flex items-center justify-between px-4 py-4 relative z-10">
-        {/* Title text - made smaller and clickable */}
-        <div className="flex items-center">
-          <Link href="/">
-            <h3 className="text-sm font-medium">AI<span className="font-bold">Advantage</span>Program</h3>
-          </Link>
-        </div>
-
-        {/* Empty middle space */}
-        <div className="flex-1"></div>
-
-        {/* Menu button with two parallel lines */}
-        <div className="flex justify-end">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="text-white focus:outline-none p-1"
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? (
-              <div className="w-6 h-6 flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </div>
-            ) : (
-              <div className="flex flex-col space-y-2">
-                <div className="w-7 h-0.5 bg-white"></div>
-                <div className="w-7 h-0.5 bg-white"></div>
-              </div>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Center title - added for the main title */}
-      <div className="text-center pb-4 relative z-10 px-4">
-        <h1 className="text-3xl font-bold">
-          {isMarketMap ? "AI Marketmap" : "AI Advantage"}
-        </h1>
-        <p className="text-sm opacity-80 mt-1 mb-0 font-normal">
-          {isMarketMap
-            ? "Explore the sports AI tools ecosystem"
-            : "Resources for sports professionals"
-          }
-        </p>
-      </div>
-
-      {/* Dropdown menu - using same dark overlay */}
-      {menuOpen && (
-        <div className="absolute w-full z-50 relative">
-          {/* Use same background and overlay for consistency */}
-          <div className="absolute inset-0 z-0">
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundImage: "url('/SIL_bg.jpg')",
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: 'grayscale(100%)',
-                zIndex: 0
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                zIndex: 1
-              }}
-            />
-          </div>
-
-          {/* Reduced spacing between nav links */}
-          <nav className="flex flex-col py-1 mb-6 relative z-10">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target={item.target}
-                rel={item.rel}
-                onClick={(e) => {
-                  if (item.onClick) item.onClick(e);
-                  setMenuOpen(false);
-                }}
-                className="px-6 py-1 hover:bg-black/30 text-base font-medium text-center"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-      )}
-    </header>
-  );
-};
 
 export default function MarketMapPage() {
   const isMobile = useMediaQuery();
@@ -237,10 +74,10 @@ export default function MarketMapPage() {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#2a50a3" }}>
-      {/* Conditionally render either the custom mobile header or the original desktop header */}
+      {/* Conditionally render either the mobile header or the original desktop header */}
       {isMobile ? (
-        /* Mobile Header - use the CustomMobileHeader component */
-        <CustomMobileHeader isMarketMap={true} />
+        /* Mobile Header - use the MobileHeader component with isMarketMap flag */
+        <MobileHeader isMarketMap={true} />
       ) : (
         /* Desktop Header - keep the original implementation */
         <header className="w-full relative text-white shadow-lg">
@@ -382,9 +219,6 @@ export default function MarketMapPage() {
             </div>
           </div>
         </ScrollAnimation>
-
-        {/* REMOVED: Instructions for mobile users */}
-        {/* This section has been removed as requested */}
 
         {/* Extended area with download button - reduced space before Blog section */}
         <div className={`${isMobile ? 'py-8 pb-6' : 'py-16'} relative`} style={{ backgroundColor: "#2a50a3" }}>
