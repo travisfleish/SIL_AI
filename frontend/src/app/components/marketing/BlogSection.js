@@ -214,31 +214,10 @@ const BlogSection = () => {
             {/* Mobile Carousel View */}
             {isMobile ? (
               <div className="relative mx-auto max-w-md">
-                {/* Navigation arrows - positioned higher */}
-                {blogs.length > 1 && (
-                  <>
-                    <button
-                      onClick={prevSlide}
-                      className="absolute left-2 top-1/4 -translate-y-1/2 z-10 bg-black/80 p-2.5 rounded-full text-white hover:bg-black transition shadow-md"
-                      aria-label="Previous blog"
-                    >
-                      <ChevronLeft size={26} />
-                    </button>
-
-                    <button
-                      onClick={nextSlide}
-                      className="absolute right-2 top-1/4 -translate-y-1/2 z-10 bg-black/80 p-2.5 rounded-full text-white hover:bg-black transition shadow-md"
-                      aria-label="Next blog"
-                    >
-                      <ChevronRight size={26} />
-                    </button>
-                  </>
-                )}
-
                 {/* Carousel container */}
                 <div
                   ref={carouselRef}
-                  className="overflow-hidden"
+                  className="overflow-hidden relative"
                   onTouchStart={handleTouchStart}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
@@ -253,7 +232,7 @@ const BlogSection = () => {
                         key={blog.id || Math.random().toString(36).substring(2, 9)}
                         className="w-full flex-shrink-0 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex flex-col"
                       >
-                        {/* Image container */}
+                        {/* Image container - Make it a link to the blog post */}
                         <a
                           href={blog.url}
                           target="_blank"
@@ -284,15 +263,16 @@ const BlogSection = () => {
                           )}
                         </a>
 
-                        <div className="p-6 flex-grow flex flex-col">
+                        {/* Card content - smaller padding for mobile */}
+                        <div className="p-4 flex-grow flex flex-col">
                           <div className="mb-2 flex items-center text-sm text-gray-400">
                             {blog.author && (
-                              <span className="mr-2 text-sm">{blog.author}</span>
+                              <span className="mr-2 text-xs">{blog.author}</span>
                             )}
                             {blog.date && (
                               <>
                                 {blog.author && <span className="mr-2">•</span>}
-                                <span className="text-sm">{blog.date}</span>
+                                <span className="text-xs">{blog.date}</span>
                               </>
                             )}
                           </div>
@@ -303,41 +283,37 @@ const BlogSection = () => {
                             rel="noopener noreferrer"
                             className="hover:text-blue-300 transition-colors"
                           >
-                            <h3 className="text-xl font-bold mb-4">{blog.title}</h3>
+                            <h3 className="text-lg font-bold mb-2">{blog.title}</h3>
                           </a>
 
-                          <p className="text-gray-300 mb-6 flex-grow text-sm line-clamp-3">{blog.excerpt}</p>
+                          <p className="text-gray-300 flex-grow text-sm line-clamp-3">{blog.excerpt}</p>
 
-                          <div className="flex items-center justify-between mt-auto">
-                            <a
-                              href={blog.url}
-                              className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Read more <ArrowRight className="ml-2 h-4 w-4" />
-                            </a>
-
-                            {/* TwinBrain logo aligned with Read more - ENLARGED */}
-                            <a
-                              href="https://www.twinbrain.ai"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center"
-                            >
-                              <Image
-                                src="/TwinBrain_White_Transparent.png"
-                                alt="TwinBrain Logo"
-                                width={70}
-                                height={35}
-                                className="self-center"
-                              />
-                            </a>
-                          </div>
+                          {/* Read more button and logo removed from mobile view */}
                         </div>
                       </div>
                     ))}
                   </div>
+
+                  {/* Navigation arrows - MOVED DOWN near the bottom of the image */}
+                  {blogs.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevSlide}
+                        className="absolute left-2 bottom-[45%] z-10 bg-black/80 p-2 rounded-full text-white hover:bg-black transition shadow-md"
+                        aria-label="Previous blog"
+                      >
+                        <ChevronLeft size={24} />
+                      </button>
+
+                      <button
+                        onClick={nextSlide}
+                        className="absolute right-2 bottom-[45%] z-10 bg-black/80 p-2 rounded-full text-white hover:bg-black transition shadow-md"
+                        aria-label="Next blog"
+                      >
+                        <ChevronRight size={24} />
+                      </button>
+                    </>
+                  )}
                 </div>
 
                 {/* Pagination dots */}
@@ -347,7 +323,7 @@ const BlogSection = () => {
                       <button
                         key={index}
                         onClick={() => setCurrentIndex(index)}
-                        className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                        className={`w-2 h-2 rounded-full transition-colors ${
                           currentIndex === index ? 'bg-blue-500' : 'bg-gray-500'
                         }`}
                         aria-label={`Go to blog ${index + 1}`}
