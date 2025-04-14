@@ -64,7 +64,7 @@ const CategoryFilters = ({
   // Always use flex-row (side by side) layout for both mobile and desktop
   // Just adjust the padding and spacing based on screen size
   const sectionClass = isMobile
-    ? "p-3 pt-6 pb-6 flex flex-row justify-center items-center bg-gray-100 mb-4 gap-3"
+    ? "p-3 pt-2 pb-4 flex flex-row justify-center items-center bg-gray-100 mb-0 gap-3"
     : "p-6 pt-10 pb-10 flex flex-row justify-center items-center bg-gray-100 mb-6 gap-8";
 
   // On mobile, use smaller width for each dropdown

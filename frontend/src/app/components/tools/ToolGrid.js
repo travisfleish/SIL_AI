@@ -394,12 +394,6 @@ const ToolGrid = ({ tools, selectedFilter, selectedCategory }) => {
     // Mobile Enterprise View - Use Carousel
     return (
       <section className="px-4 py-6 w-full">
-        <div className="text-center mb-4">
-          <h3 className="text-xl font-semibold text-gray-700">
-            {tools.length} {tools.length === 1 ? 'Tool' : 'Tools'} Available
-          </h3>
-        </div>
-
         <EnterpriseToolCarousel tools={tools} />
       </section>
     );
