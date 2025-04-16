@@ -204,10 +204,10 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
                 <Image
                   src="/AI_Advantage.png"
                   alt="AI Advantage Logo"
-                  width={isMobile ? 40 : 120}
+                  width={isMobile ? 40 : 140}
                   height={isMobile ? 40 : 80}
                   className="object-contain relative top-0"
-                  style={{ transform: 'translateY(2px)' }} // Fine-tune vertical position
+                  style={{ transform: 'translateY(5px)' }} // Fine-tune vertical position
                 />
               </div>
             </Link>
@@ -217,6 +217,7 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center"
+              style={{ transform: 'translateY(-4px)' }}
             >
               <Image
                 src="/sil-logo.png"
@@ -224,6 +225,22 @@ const Header = ({ onMenuToggle, isMarketMap = false }) => {
                 width={isMobile ? 70 : 140}
                 height={isMobile ? 25 : 60}
                 className="object-contain"
+              />
+            </a>
+            <span className="text-white font-bold text-2xl mx-4 ml-2.5">×</span>
+            <a
+              href="https://www.microsoft.com/en-us/garage/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+            >
+              <Image
+                src="/microsoft-logo.png"
+                alt="Microsoft Logo"
+                width={isMobile ? 70 : 50}
+                height={isMobile ? 25 : 60}
+                className="object-contain"
+                style={{ transform: 'translateY(-4px)' }}
               />
             </a>
           </div>

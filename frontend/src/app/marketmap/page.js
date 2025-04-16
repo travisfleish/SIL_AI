@@ -106,34 +106,51 @@ export default function MarketMapPage() {
           <div className="flex items-center justify-between w-full mb-6 md:mb-10">
             {/* Left: Combined Logos */}
             <div className="flex items-center ml-8">
-              <Link href="/" className="transition-opacity hover:opacity-90">
-                <div className="flex items-center">
-                  <Image
-                    src="/AI_Advantage.png"
-                    alt="AI Advantage Logo"
-                    width={isMobile ? 40 : 120}
-                    height={isMobile ? 40 : 80}
-                    className="object-contain relative top-0"
-                    style={{ transform: 'translateY(2px)' }}
-                  />
-                </div>
-              </Link>
-              <span className="text-white font-bold text-2xl mx-4 ml-2.5">×</span>
-              <a
-                href="https://www.sportsilab.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center"
-              >
+            <Link href="/">
+              <div className="flex items-center">
                 <Image
-                  src="/sil-logo.png"
-                  alt="Sports Innovation Lab Logo"
-                  width={isMobile ? 70 : 140}
-                  height={isMobile ? 25 : 60}
-                  className="object-contain"
+                  src="/AI_Advantage.png"
+                  alt="AI Advantage Logo"
+                  width={isMobile ? 40 : 140}
+                  height={isMobile ? 40 : 80}
+                  className="object-contain relative top-0"
+                  style={{ transform: 'translateY(5px)' }} // Fine-tune vertical position
                 />
-              </a>
-            </div>
+              </div>
+            </Link>
+            <span className="text-white font-bold text-2xl mx-4 ml-2.5">×</span>
+            <a
+              href="https://www.sportsilab.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+              style={{ transform: 'translateY(-4px)' }}
+            >
+              <Image
+                src="/sil-logo.png"
+                alt="Sports Innovation Lab Logo"
+                width={isMobile ? 70 : 140}
+                height={isMobile ? 25 : 60}
+                className="object-contain"
+              />
+            </a>
+            <span className="text-white font-bold text-2xl mx-4 ml-2.5">×</span>
+            <a
+              href="https://www.microsoft.com/en-us/garage/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+            >
+              <Image
+                src="/microsoft-logo.png"
+                alt="Microsoft Logo"
+                width={isMobile ? 70 : 50}
+                height={isMobile ? 25 : 60}
+                className="object-contain"
+                style={{ transform: 'translateY(-4px)' }}
+              />
+            </a>
+          </div>
 
             {/* Navigation links - adjusted to match main header */}
             <nav className="hidden sm:flex gap-6 text-lg md:text-xl text-white font-semibold mr-16">

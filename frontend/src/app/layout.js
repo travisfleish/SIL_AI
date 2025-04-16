@@ -25,7 +25,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "SportsTech AI Tools | Sports Innovation Lab & TwinBrain AI",
+  title: "AI Advantage Program | Sports Innovation Lab x Microsoft",
   description: "Discover the latest AI tools for sports innovation, curated by Sports Innovation Lab and TwinBrain AI",
 };
 
