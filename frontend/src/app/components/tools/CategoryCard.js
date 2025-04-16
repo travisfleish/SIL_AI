@@ -142,7 +142,7 @@ const CategoryCard = ({ category, tools, categoryIndex, demoCategories }) => {
         </div>
 
         {/* Tool info section with reduced padding and height */}
-        <div className="p-3 flex flex-col items-center w-full flex-grow">
+        <div className="p-3 flex flex-col items-center w-full flex-grow justify-center">
           {/* Tool name and link - FIXED: icon inside the <a> tag */}
           <h3 className="text-lg font-bold mb-1">
             <a

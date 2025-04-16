@@ -22,23 +22,17 @@ const CardModal = ({
 
   // Detect screen size on mount and resize
   useEffect(() => {
-    const checkScreenSize = () => {
-      // Consider mobile for screens narrower than 768px
+    const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
-
-      // Get current viewport height
       setViewportHeight(window.innerHeight);
-
-      // Debug screen dimensions
-      console.log(`Modal - Screen size: ${window.innerWidth}x${window.innerHeight}`);
     };
 
     // Initial check
-    checkScreenSize();
+    checkMobile();
 
     // Listen for resize events
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Handle escape key to close modal and click outside
@@ -95,24 +89,15 @@ const CardModal = ({
   // Calculate optimal modal height based on viewport
   const maxModalHeight = viewportHeight * 0.9; // 90% of viewport height
 
-  // Calculate image height - maintain large size on desktop, only scale down on small screens
-  let imageHeight = 500; // Default large height for desktop
-
-  // Only reduce size if viewport is too small
-  if (viewportHeight < 800) {
-    // Dynamic scaling for smaller screens
-    imageHeight = Math.min(400, maxModalHeight * 0.6);
-  }
-
-  // Further reduce for true mobile devices
-  if (isMobile) {
-    imageHeight = Math.min(300, maxModalHeight * 0.5);
-  }
+  // Calculate image height dynamically (smaller on mobile)
+  const imageHeight = isMobile
+    ? Math.min(240, maxModalHeight * 0.5) // On mobile: 50% of modal height, max 240px
+    : Math.min(400, maxModalHeight * 0.6); // On desktop: 60% of modal height, max 400px
 
   return (
-    <div className="fixed inset-0 backdrop-blur-md bg-white/30 z-50 flex items-center justify-center p-2 sm:p-4 overflow-hidden">
-      {/* Outer container - Keep full size on large screens, only scale down when necessary */}
-      <div className="relative w-full max-w-6xl">
+    <div className="fixed inset-0 backdrop-blur-md bg-white/30 z-50 flex items-center justify-center p-3 md:p-4 overflow-hidden">
+      {/* Outer container - Adjusted for responsive design */}
+      <div className="relative w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl">
         {/* Navigation buttons - Responsive positioning and size */}
         {hasMultipleTools && (
           <>
@@ -169,12 +154,8 @@ const CardModal = ({
             </button>
           </div>
 
-          {/* Main content area with overflow scrolling - Use min-height for large screens */}
-          <div className="relative overflow-y-auto"
-               style={{
-                 maxHeight: `calc(${maxModalHeight}px - 100px)`,
-                 minHeight: isMobile ? 'auto' : '400px'
-               }}>
+          {/* Main content area with overflow scrolling */}
+          <div className="relative overflow-y-auto" style={{ maxHeight: `calc(${maxModalHeight}px - 100px)` }}>
             {/* Image container with dynamic height */}
             <div className="relative w-full bg-gray-100 overflow-hidden" style={{ height: `${imageHeight}px` }}>
               <Image
