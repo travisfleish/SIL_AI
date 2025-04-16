@@ -86,7 +86,7 @@ export default function MarketMapPage() {
         style={{
           position: 'relative',
           overflow: 'hidden',
-          height: isMobile ? 'auto' : '444px' // Fixed height to match main page
+          height: isMobile ? 'auto' : '464px' // Fixed height to match main page
         }}
       >
         {/* Background Image and Overlay */}
