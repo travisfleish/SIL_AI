@@ -237,13 +237,13 @@ const BlogSection = () => {
                           href={blog.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="h-60 bg-gray-700 relative block overflow-hidden"
+                          className="aspect-[3/2] bg-gray-700 relative block overflow-hidden"
                         >
                           {blog.imageUrl ? (
                             <img
                               src={blog.imageUrl}
                               alt={blog.title}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-contain"
                               onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.style.display = 'none';
@@ -345,13 +345,13 @@ const BlogSection = () => {
                       href={blog.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="h-96 bg-gray-700 relative block overflow-hidden hover:opacity-90 transition-opacity"
+                      className="aspect-[3/2] bg-gray-700 relative block overflow-hidden hover:opacity-90 transition-opacity"
                     >
                       {blog.imageUrl ? (
                         <img
                           src={blog.imageUrl}
                           alt={blog.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.style.display = 'none';
