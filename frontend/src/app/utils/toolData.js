@@ -554,10 +554,10 @@ export const TOOL_DATA = [
   },
   {
     "id": "56",
-    "name": "Pixellot",
-    "source_url": "https://pixellot.tv",
-    "short_description": "Automated sports video production powered by AI.",
-    "screenshot_url": "/screenshots/pixellot.png",
+    "name": "Spalk",
+    "source_url": "https://www.spalk.tv/ai/",
+    "short_description": "AI audio commentary generator & translator for live sports.",
+    "screenshot_url": "/screenshots/spalk.png",
     "category": "None",
     "type": "enterprise",
     "sector": "Advertising & Media"
