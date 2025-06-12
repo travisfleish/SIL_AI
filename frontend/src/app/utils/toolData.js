@@ -874,10 +874,10 @@ export const TOOL_DATA = [
   },
   {
     "id": "88",
-    "name": "AutoGPT",
-    "source_url": "https://github.com/Torantulino/Auto-GPT",
-    "short_description": "Autonomous GPT agents that complete tasks end-to-end.",
-    "screenshot_url": "/screenshots/autogpt.png",
+    "name": "Zapier",
+    "source_url": "https://zapier.com/app/home",
+    "short_description": "Connect apps and automate workflows without code.",
+    "screenshot_url": "/screenshots/zapier.png",
     "category": "None",
     "type": "enterprise",
     "sector": "Agent Builders"
