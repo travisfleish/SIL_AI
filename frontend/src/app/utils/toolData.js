@@ -184,20 +184,20 @@ export const TOOL_DATA = [
   },
   {
     "id": "19",
-    "name": "Tome",
-    "source_url": "https://tome.app",
-    "short_description": "Create interactive presentations with AI in minutes.",
-    "screenshot_url": "/screenshots/tome.png",
+    "name": "Gamma",
+    "source_url": "https://gamma.app",
+    "short_description": "AI presentation builder with beautiful, modern slides.",
+    "screenshot_url": "/screenshots/gamma.png",
     "category": "Deck Automation",
     "type": "personal",
     "sector": "N/A"
   },
   {
     "id": "20",
-    "name": "Gamma",
-    "source_url": "https://gamma.app",
-    "short_description": "AI presentation builder with beautiful, modern slides.",
-    "screenshot_url": "/screenshots/gamma.png",
+    "name": "Decktopus",
+    "source_url": "https://www.decktopus.com",
+    "short_description": "Smart slide generator for fast, branded presentations.",
+    "screenshot_url": "/screenshots/decktopus.png",
     "category": "Deck Automation",
     "type": "personal",
     "sector": "N/A"
