@@ -1,4 +1,3 @@
-// frontend/src/app/components/ui/SubscriptionForm.js
 import React from 'react';
 import { useNewsletterForm } from '../../hooks/useNewsletterForm';
 
@@ -7,9 +6,7 @@ const SubscriptionForm = ({ className }) => {
     email,
     message,
     setEmail,
-    handleSubscribe,
-    isSubmitting,
-    isSuccess
+    handleSubscribe
   } = useNewsletterForm();
 
   return (
@@ -25,18 +22,16 @@ const SubscriptionForm = ({ className }) => {
           onChange={(e) => setEmail(e.target.value)}
           className="px-6 py-3 rounded-lg text-gray-900 border-2 border-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent w-full sm:w-auto flex-grow text-base shadow-md"
           required
-          disabled={isSubmitting}
         />
         <button
           type="submit"
-          className="px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={isSubmitting}
+          className="px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition shadow-md w-full sm:w-auto whitespace-nowrap"
         >
-          {isSubmitting ? 'Submitting...' : 'Request Now'}
+          Request Now
         </button>
       </form>
       {message && (
-        <p className={`text-lg mt-2 font-medium text-center sm:text-left ${isSuccess ? 'text-green-300' : 'text-white'}`}>
+        <p className="text-lg mt-2 font-medium text-center sm:text-left text-white">
           {message}
         </p>
       )}

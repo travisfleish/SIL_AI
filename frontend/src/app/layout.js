@@ -1,6 +1,7 @@
 // In src/app/layout.js
 import { Overpass, Red_Hat_Display } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
+import { Providers } from './providers';
 import "./globals.css";
 
 // Define Red Hat Display with appropriate weights
@@ -35,7 +36,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${overpass.variable} ${redHatDisplay.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
